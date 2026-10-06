@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../ClipDownloader.Application/ClipDownloader.Application.csproj" />
+    <ProjectReference Include="../ClipMaker.Media.Core/ClipMaker.Media.Core.csproj" />
+    <ProjectReference Include="../ClipMaker.Media.Infrastructure/ClipMaker.Media.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
