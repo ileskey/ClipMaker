@@ -5,4 +5,5 @@
   <Project Path="src/ClipDownloader.Application/ClipDownloader.Application.csproj" />
   <Project Path="src/ClipDownloader.Infrastructure/ClipDownloader.Infrastructure.csproj" />
   <Project Path="tests/ClipMaker.Media.Infrastructure.Tests/ClipMaker.Media.Infrastructure.Tests.csproj" />
+  <Project Path="tests/ClipMaker.Media.Core.Tests/ClipMaker.Media.Core.Tests.csproj" />
 </Solution>
