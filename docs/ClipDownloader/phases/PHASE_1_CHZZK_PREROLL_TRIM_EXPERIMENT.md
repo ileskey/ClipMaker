@@ -4,6 +4,8 @@
 
 상태: **시작 부분 음성 보존 가설·목표 영상 PTS 집합·선택 PCM 수 대조 통과**. sample timestamp gap/overlap 처리, AAC presentation/padding 검증 정책과 일반화는 미확정이다. 제품 획득/처리 서비스·정밀 출력·전체 Phase 1 완료는 아니다.
 
+후속 [IN/포맷 확대 대조](PHASE_1_CHZZK_GENERALIZATION_EXPERIMENT.md): coverage·후보 target trim은 두 추가 사례에서 재현됐지만, 포맷별 stream start 최소값의 64ms 차이와 동일 audio payload 비교로 공통 원점 후보의 반례를 확인했다. 아래 source target은 해당 실험 경로의 관찰 기준으로 보존하며 사용자 원본 시간 0의 일반 계약으로 확정하지 않는다.
+
 ## 시작·실험 범위
 
 - branch `phase/1`, 시작 HEAD `a70f29638a44a2ba068b3638af859dafd8888d11`: `docs: Record CHZZK acquisition audio coverage loss`. 이전 진단 커밋과 깨끗한 작업 트리를 확인했다.

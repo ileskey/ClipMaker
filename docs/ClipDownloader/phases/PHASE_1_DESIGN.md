@@ -4,7 +4,7 @@
 
 최종 갱신일: 2026-10-11 (Asia/Seoul).
 
-상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK 여유 획득으로 target 음성 coverage를 확보하고 source-map trim의 영상 PTS 집합을 확인했으나 sample timestamp gap/overlap·AAC padding/표시 종료와 일반화 검증은 남아 있다. YouTube VP9 MP4 결과/분리 A/V 시간축·CFR·전체 미디어/사이트 검증도 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
+상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK coverage·후보 target trim은 추가 사례에서 재현했지만 포맷별 stream minimum을 공통 원점으로 쓰는 반례를 확인했다. 권위 있는 source 시간 기준·sample gap/overlap·AAC padding/표시 종료·일반화 검증은 남아 있다. YouTube VP9 MP4 결과/분리 A/V 시간축·CFR·전체 미디어/사이트 검증도 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
 ## 1. 목표와 범위
 
@@ -413,6 +413,8 @@ FPS는 선택한 영상 포맷에서 가져오며 FormatSelection에 중복 저�
 
 후속 [CHZZK 여유 획득·trim](PHASE_1_CHZZK_PREROLL_TRIM_EXPERIMENT.md): 47개 누락 packet·IN overlap을 확보하고 같은 source target clock으로 영상 PTS 600개·선택 PCM 및 AAC 유효 sample 수를 대조했다. 영상·음성의 local offset을 각자 STARTPTS로 없애지 않았다. source sample gap/overlap·padding·표시 종료와 일반화 검증은 남아 있어 4단계 제품 계약·전체 정확도/Phase 완료는 아직 확정하지 않는다.
 
+추가 [CHZZK IN/포맷 확대](PHASE_1_CHZZK_GENERALIZATION_EXPERIMENT.md): 두 포맷의 fractional IN에서 target coverage/후보 trim을 재현했지만, 동일 source audio payload의 raw PTS는 거의 같은데 stream minimum 후보가 64ms 달라짐을 확인했다. 화질과 독립적인 source 원점 근거가 필요하며 header start/임의 고정 2초를 원본 시간 0으로 채택하지 않는다.
+
 ### 4.23 준비 결과·실행 작업 모델 — 사용자 채택 완료
 
 2026-10-10 사용자가 확인 화면의 정보와 검증된 실행 데이터를 구분하는 다음 Downloader.Application 모델을 채택했다.
@@ -689,3 +691,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-11 CHZZK 음성 coverage 후속: HEAD `386d46efd21d211a2c1ea04c9de3e8946d2759e9`·phase/1·깨끗한 작업 트리와 이전 대조 커밋을 확인했다. [로컬 edit list·원본 packet 대조](PHASE_1_CHZZK_AV_TIMING_DIAGNOSIS.md)로 영상 600·음성 422 packet이 동일 payload와 일정 PTS 대응을 유지하고 원본 초기 음성 packet 47개는 파일에 없음을 확인했다. edit list를 무시해 전체 음성을 앞으로 이동하는 수정은 채택하지 않았다. 여유 구간 획득을 다음 대조로 정리하고 기록 커밋 지점에서 멈췄다. 제품 코드·Git 조작·전체 준비/구현/Phase 완료 선언은 하지 않았다.
 
 2026-10-11 CHZZK 여유 구간 후속: HEAD `a70f29638a44a2ba068b3638af859dafd8888d11`·phase/1·깨끗한 작업 트리와 이전 coverage 진단 커밋을 확인했다. [14초 여유 획득·공통 source-map trim](PHASE_1_CHZZK_PREROLL_TRIM_EXPERIMENT.md)에서 이전 누락 47개와 IN overlap packet을 모두 확보했다. 영상 PTS 600개는 원본 target 집합과 정확히 같았고 PCM 기준·AAC 유효 presentation sample 수는 479999로 일치했다. source sample gap/overlap와 raw AAC decode padding 257 samples를 별도 기록했다. 일반 sample/끝 경계 정책·다른 source·전체 Phase 완료는 확정하지 않았다. 제품 코드·Git 조작 없이 실험 기록 커밋 지점에서 멈췄다.
+
+2026-10-11 CHZZK 일반화 후속: HEAD `83d12122cd52982824b6517d8b5cb8daf202b9d4`·phase/1·깨끗한 작업 트리를 확인했다. [fractional IN/두 포맷 대조](PHASE_1_CHZZK_GENERALIZATION_EXPERIMENT.md)에서 각각 영상 600·음성 470 packet coverage와 후보 target의 PTS trim을 재현했다. 동일 source 음성 661개 payload의 PTS는 ±1 sample인데 stream minimum 후보는 64ms 달라져 품질별 target 선택이 3 AAC packet씩 달라지는 반례를 확인했다. 그 후보는 제품 원점으로 채택하지 않았다. 원본 공통 시간 기준·sample/끝 경계·다른 source 검증을 남기고 제품 코드/Git 조작 없이 기록 커밋 지점에서 멈췄다.
