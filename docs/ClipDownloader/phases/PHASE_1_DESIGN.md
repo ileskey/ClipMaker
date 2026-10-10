@@ -4,7 +4,7 @@
 
 최종 갱신일: 2026-10-11 (Asia/Seoul).
 
-상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK coverage·후보 target trim은 추가 사례에서 재현했지만 포맷별 stream minimum을 공통 원점으로 쓰는 반례를 확인했다. 권위 있는 source 시간 기준·sample gap/overlap·AAC padding/표시 종료·일반화 검증은 남아 있다. YouTube VP9 MP4 결과/분리 A/V 시간축·CFR·전체 미디어/사이트 검증도 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
+상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK coverage·후보 target trim은 추가 사례에서 재현했지만 포맷별 stream minimum을 공통 원점으로 쓰는 반례를 확인했다. playlist/PDT·초기 fragment 대조로도 공통 원점은 미확정이다. 실제 player 시간 매핑·sample gap/overlap·AAC padding/표시 종료·일반화 검증은 남아 있다. YouTube VP9 MP4 결과/분리 A/V 시간축·CFR·전체 미디어/사이트 검증도 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
 ## 1. 목표와 범위
 
@@ -693,3 +693,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-11 CHZZK 여유 구간 후속: HEAD `a70f29638a44a2ba068b3638af859dafd8888d11`·phase/1·깨끗한 작업 트리와 이전 coverage 진단 커밋을 확인했다. [14초 여유 획득·공통 source-map trim](PHASE_1_CHZZK_PREROLL_TRIM_EXPERIMENT.md)에서 이전 누락 47개와 IN overlap packet을 모두 확보했다. 영상 PTS 600개는 원본 target 집합과 정확히 같았고 PCM 기준·AAC 유효 presentation sample 수는 479999로 일치했다. source sample gap/overlap와 raw AAC decode padding 257 samples를 별도 기록했다. 일반 sample/끝 경계 정책·다른 source·전체 Phase 완료는 확정하지 않았다. 제품 코드·Git 조작 없이 실험 기록 커밋 지점에서 멈췄다.
 
 2026-10-11 CHZZK 일반화 후속: HEAD `83d12122cd52982824b6517d8b5cb8daf202b9d4`·phase/1·깨끗한 작업 트리를 확인했다. [fractional IN/두 포맷 대조](PHASE_1_CHZZK_GENERALIZATION_EXPERIMENT.md)에서 각각 영상 600·음성 470 packet coverage와 후보 target의 PTS trim을 재현했다. 동일 source 음성 661개 payload의 PTS는 ±1 sample인데 stream minimum 후보는 64ms 달라져 품질별 target 선택이 3 AAC packet씩 달라지는 반례를 확인했다. 그 후보는 제품 원점으로 채택하지 않았다. 원본 공통 시간 기준·sample/끝 경계·다른 source 검증을 남기고 제품 코드/Git 조작 없이 기록 커밋 지점에서 멈췄다.
+
+2026-10-11 CHZZK 원점 근거 후속: HEAD `2175903d15da76c533fb31bf2e00246084b4bddf`·phase/1·깨끗한 작업 트리를 확인했다. [playlist·초기 fragment 대조](PHASE_1_CHZZK_SOURCE_ORIGIN_EXPERIMENT.md)에서 두 품질의 1334개 playlist 시작/PDT 일치와 여섯 segment의 실제 PTS/DTS·tfdt 차이를 확인했다. 초기 공통 AAC payload 184개·중간 90개는 0~1 sample 차이를 유지했다. 초기화 정보·DATERANGE/API 날짜만으로 사용자 시간 원점 계약을 확정하지 않았다. 다음은 실제 player의 재생 시간/media timestamp 매핑 확인이며 제품 코드·Git 조작·4단계 준비 완료 선언 없이 실험 기록 커밋 지점에서 멈췄다.
