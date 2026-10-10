@@ -1,10 +1,16 @@
 namespace ClipDownloader.Application.Models;
 
 public enum FormatSelectionReason { RequestedBest, RequestedResolution }
+public enum FormatSelectionCriterion
+{
+    Height, FrameRate, Width, VideoCodecPreference, TransportPreference,
+    VideoBitrateEstimate, EmbeddedAudioPresence, AudioCodecPreference, AudioBitrateEstimate, OrdinalId
+}
 public enum FormatSelectionWarning
 {
     VideoStreamUnknown, AudioStreamUnknown, AudioSourceRequiresVerification,
-    ResolutionUnknown, FrameRateUnknown, VideoCodecUnknown, AudioCodecUnknown
+    ResolutionUnknown, FrameRateUnknown, VideoCodecUnknown, AudioCodecUnknown,
+    RankingMetadataIncomplete, StableIdTieBreak, DeclaredQualityOnly
 }
 
 // A proposed pair from a metadata snapshot, not proof of acquisition or mode compatibility.
@@ -15,20 +21,25 @@ public sealed class FormatSelection
     public VideoFormat? AudioFormat { get; }
     public FormatSelectionReason Reason { get; }
     public IReadOnlyList<FormatSelectionWarning> Warnings { get; }
+    public IReadOnlyList<FormatSelectionCriterion> RankingCriteria { get; }
 
     private FormatSelection(QualityOption quality, VideoFormat video, VideoFormat? audio,
-        FormatSelectionReason reason, IEnumerable<FormatSelectionWarning> warnings)
+        FormatSelectionReason reason, IEnumerable<FormatSelectionWarning> warnings,
+        IEnumerable<FormatSelectionCriterion> criteria)
     {
         RequestedQuality = quality;
         VideoFormat = video;
         AudioFormat = audio;
         Reason = reason;
         Warnings = Array.AsReadOnly(warnings.ToArray());
+        RankingCriteria = Array.AsReadOnly(criteria.ToArray());
     }
 
     // Validate an explicit proposal. Ranking and original-source audio verification belong to later steps.
     public static OperationResult<FormatSelection> Create(VideoInfo info, QualityOption quality,
-        VideoFormat video, VideoFormat? audio, FormatSelectionReason reason)
+        VideoFormat video, VideoFormat? audio, FormatSelectionReason reason,
+        IEnumerable<FormatSelectionWarning>? additionalWarnings = null,
+        IEnumerable<FormatSelectionCriterion>? rankingCriteria = null)
     {
         ArgumentNullException.ThrowIfNull(info);
         ArgumentNullException.ThrowIfNull(quality);
@@ -60,7 +71,17 @@ public sealed class FormatSelection
             warnings.Add(FormatSelectionWarning.VideoCodecUnknown);
         if ((audio ?? video).AudioStream != StreamPresence.Absent && (audio ?? video).AudioCodec is null)
             warnings.Add(FormatSelectionWarning.AudioCodecUnknown);
-        return OperationResult<FormatSelection>.Succeeded(new(quality, video, audio, reason, warnings));
+        if (additionalWarnings is not null)
+        {
+            var extra = additionalWarnings.ToArray();
+            if (extra.Any(warning => !Enum.IsDefined(warning)))
+                throw new ArgumentException("Warnings must be defined values.", nameof(additionalWarnings));
+            warnings.AddRange(extra);
+        }
+        var criteria = rankingCriteria?.ToArray() ?? [];
+        if (criteria.Any(criterion => !Enum.IsDefined(criterion)))
+            throw new ArgumentException("Criteria must be defined values.", nameof(rankingCriteria));
+        return OperationResult<FormatSelection>.Succeeded(new(quality, video, audio, reason, warnings.Distinct(), criteria));
     }
 
     private static bool IsUniqueMember(VideoInfo info, VideoFormat format) =>

@@ -89,7 +89,19 @@ public sealed class YtDlpMetadataParser
             if (width is null) InvalidOptional(widthField, "width", issues, item.Index);
             if (height is null) InvalidOptional(heightField, "height", issues, item.Index);
             if (fps is null) InvalidOptional(fpsField, "fps", issues, item.Index);
-            output.Add(new(item.Id, width, height, fps, videoCodec, audioCodec, video, audio));
+            var vbrField = Field(item.Value, "vbr", issues, item.Index);
+            var abrField = Field(item.Value, "abr", issues, item.Index);
+            decimal? vbr = video == StreamPresence.Absent ? null : MetadataNumbers.Bitrate(vbrField);
+            decimal? abr = audio == StreamPresence.Absent ? null : MetadataNumbers.Bitrate(abrField);
+            if (vbr is null && video != StreamPresence.Absent) InvalidOptional(vbrField, "vbr", issues, item.Index);
+            if (abr is null && audio != StreamPresence.Absent) InvalidOptional(abrField, "abr", issues, item.Index);
+            string? protocol = Text(Field(item.Value, "protocol", issues, item.Index), "protocol", issues, item.Index);
+            FormatTransport transport = protocol switch
+            {
+                "https" => FormatTransport.Https, "m3u8" or "m3u8_native" => FormatTransport.Hls,
+                null => FormatTransport.Unknown, _ => FormatTransport.Other
+            };
+            output.Add(new(item.Id, width, height, fps, videoCodec, audioCodec, video, audio, vbr, abr, transport));
         }
         return output;
     }

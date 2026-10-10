@@ -63,6 +63,20 @@ internal static class MetadataNumbers
         return result <= int.MaxValue ? (int)result : null;
     }
 
+    public static decimal? Bitrate(JsonElement value)
+    {
+        if (!TryPositiveParts(value, out var parts) || parts.Power < -28 || parts.Power > 28 ||
+            parts.Digits.Length > 29 || parts.Power >= 0 && parts.Digits.Length + parts.Power > 29) return null;
+        BigInteger coefficient = BigInteger.Parse(parts.Digits, CultureInfo.InvariantCulture);
+        if (parts.Power > 0) coefficient *= BigInteger.Pow(10, (int)parts.Power);
+        if (coefficient >= BigInteger.One << 96) return null;
+        uint low = (uint)(coefficient & uint.MaxValue);
+        uint middle = (uint)((coefficient >> 32) & uint.MaxValue);
+        uint high = (uint)(coefficient >> 64);
+        return new decimal(unchecked((int)low), unchecked((int)middle), unchecked((int)high), false,
+            (byte)Math.Max(0, -parts.Power));
+    }
+
     public static TimeSpan? Duration(JsonElement value, out bool rounded)
     {
         rounded = false;

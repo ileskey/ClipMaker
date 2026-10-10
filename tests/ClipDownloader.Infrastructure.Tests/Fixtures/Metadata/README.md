@@ -9,3 +9,5 @@
 - 숫자의 JSON 값과 per-format stream 정보는 관찰값이다. 포맷 순서 채택·Best 선택·CFR·다운로드 가능성의 검증 자료로 해석하지 않는다.
 
 테스트는 로컬 fixture만 읽으며 네트워크나 설치 도구를 호출하지 않는다.
+
+3c 후속 `selection-chzzk.json`/`selection-youtube.json`은 같은 source 재조회에서 확인한 vbr/abr/protocol만 추가한 정렬 fixture다. 기존 3b fixture는 보존했다. bitrate는 yt-dlp 선언 추정값이며 measured quality가 아니다. title/uploader는 계속 익명화했고 URL·headers·cookies·signature는 없다. 실제 획득/시간축 실패는 3c-2 결과 문서를 따른다.

@@ -8,6 +8,8 @@
 
 3c 후속: [3c-1 화질/선택 계약](PHASE_1_STAGE_3C1_RESULT.md)은 구현·검증했다. [실험 계획](PHASE_1_STAGE_3C_EXPERIMENT_PLAN.md)을 구체화했으나 영상 다운로드 제한은 유지한다. Best/codec 실험과 자동 FormatSelector는 아직 남아 있다.
 
+3c-2 후속: 사용자가 구간 다운로드를 허용했다. [실험·자동 선택 구현](PHASE_1_STAGE_3C2_RESULT.md)을 마치고 커밋 지점에서 멈췄다. CHZZK 획득 실패·VP9 MP4 결과 실패·분리 A/V 시간축을 4단계 선행 보완 사항으로 기록했다. Phase 1 전체 검증은 Pending이며 위 제한/미구현 설명은 당시 상태다.
+
 ## 1. 인계 목적과 첫 작업
 
 Phase 1 — CLI/Core Prototype을 담당할 context가 이전 대화 없이 기준 문서·채택 결정·남은 선행 작업을 확인할 수 있도록 한다. 상세 정책은 [Phase 1 설계](PHASE_1_DESIGN.md)를 기준으로 하며 이 요약으로 대체하지 않는다.

@@ -8,6 +8,8 @@
 
 3c는 [첫 계약 단위](PHASE_1_STAGE_3C1_RESULT.md)를 구현·검증했다. QualityOption/FormatSelection은 후보 조합 검사이며 자동 순위 계산이 아니다. Best/음성 순위·FormatSelector는 [실행 전 실험 계획](PHASE_1_STAGE_3C_EXPERIMENT_PLAN.md)의 근거 확보 후 구현한다.
 
+후속 [3c-2 실제 결과](PHASE_1_STAGE_3C2_RESULT.md): 자동 FormatSelector·최소 bitrate/transport·불변 ranking 기준을 구현·검증했다. 다섯 구간 요청에서 실패와 시간축 문제를 확인했으며 4단계 획득/처리 계약과 모드별 성공 정책은 계속 보완 대상이다. 위 미구현 상태는 3c-1 당시 기록이다.
+
 ## 1. 결과와 시간 계산
 
 - Application `OperationResult<T>`는 성공 데이터/실패 `OperationError`/취소 중 하나만 갖는다. `ClipJobResult`는 채택한 상태·작업 ID·성공 경로·오류·주의사항·잔존 경로를 보존한다. 실패·취소에 성공 경로를 넣지 않는다.
