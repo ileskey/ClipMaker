@@ -4,7 +4,7 @@
 
 최종 갱신일: 2026-10-10 (Asia/Seoul).
 
-상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~2단계 현재 대상 구현·검증 완료, 2c 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. YouTube JS/EJS·실제 조회·FPS 측정·시간축·미디어 생성 검증은 남아 있다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
+상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~2단계·3a URL 검증 완료, 3a 커밋 대기**. 3b/3c·전체 설계 확정·Phase 1 완료는 아니다. YouTube JS/EJS·실제 조회·FPS 측정·시간축·미디어 생성 검증은 남아 있다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
 ## 1. 목표와 범위
 
@@ -163,6 +163,8 @@ info는 `--url`이 필수다. clip은 `--url`, `--start`, `--end`, `--output`이
 - Shorts·embed·라이브·재생목록 전용 URL 등 다른 경로는 현재 지원하지 않는다. watch URL에 list가 있어도 v의 영상 하나만 처리한다. 중복 v는 모호한 입력으로 거부한다.
 - 정규화 결과는 https://chzzk.naver.com/video/{ID} 또는 https://www.youtube.com/watch?v={ID}다. 추적 파라미터·fragment·URL 시작 시간은 제거한다. 추출 시간은 --start/--end만 사용한다.
 - ID는 기본 문법만 검사한다. 실제 영상 존재·접근 가능 여부와 완료 영상 여부는 yt-dlp 조회로 확인한다. URL 문법 통과와 소스 조회 성공은 구분한다.
+
+3a에서 ID 문자·길이, 원문 경로/authority, percent decode/중복 key 경계를 구체화했다. 실제 구현·수정한 runtime 가정·테스트는 [3a 결과](PHASE_1_STAGE_3A_RESULT.md)를 따른다. YouTube는 11자리 ASCII 영문/숫자/_/-, CHZZK는 비어 있지 않은 ASCII 숫자 문자열이며 임의 영상 존재 여부를 추정하지 않는다.
 
 ### 4.9 메타데이터 누락 처리 — 사용자 채택 완료
 
@@ -661,3 +663,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-10 2b: 시작 HEAD `45daa40cad6452322d073076bfe14c4ee7fa630b`·phase/1·깨끗한 작업 트리를 확인했다. E3에서 중간 부모 선종료의 tree-kill 한계를 재현한 뒤 생성 시 Windows Job 연결·종료 accounting·독립 cleanup·startup rollback 종료 확인을 구현했다. [2b 실제 결과](PHASE_1_STAGE_2B_RESULT.md)에 최초 가정 오류·중간 회귀 실패·보완·최종 제한을 기록했다. 최종 승인된 빌드 경고/오류 0, Core 85·Infrastructure 73개 모두 통과했다. 2a의 임시 실행 중 취소/timeout TerminationFailed 정책을 종료 증거에 기반한 Cancelled/TimedOut으로 대체했으며 종료 미확인은 계속 TerminationFailed다. 2b 커밋 지점에서 멈췄고 Git 조작·2c·사이트/영상 명령은 수행하지 않았다.
 
 2026-10-10 2c: 시작 HEAD `f697f70a12a452795735ce85a289c88129d68cd1`·phase/1·깨끗한 작업 트리를 확인했다. 기존 파일 존재 진단과 별도의 실행/버전/요청 기능 진단을 구현했다. [2c 실제 결과](PHASE_1_STAGE_2C_RESULT.md)에 호출 범위·전체/개별 결과 의미·제한과 실제 설치 도구 통합 결과를 기록했다. 최종 빌드 경고/오류 0, Core 85·Media.Infrastructure 73·Downloader.Infrastructure 46개 모두 통과했다. 실제 yt-dlp 2026.08.19·FFmpeg/ffprobe 8.1의 진단, libx264/aac/mp4 목록, 명시 yt-dlp 누락 후 다른 도구 검사 지속을 확인했다. 임시 harness는 정리했고 커밋 지점에서 멈췄다. Git 조작·제품 CLI·사이트 조회/영상 다운로드·3단계 구현은 하지 않았다.
+
+2026-10-10 3a: 시작 HEAD `aafaac43833704525c322b1e67cecaee2cbb2828`·phase/1·깨끗한 작업 트리를 확인했다. 불변 canonical 소스 참조와 공식 URL parser를 구현하고 [3a 결과](PHASE_1_STAGE_3A_RESULT.md)에 Uri 관찰·초기 실패/보완·세부 경계를 기록했다. 최종 빌드 경고/오류 0, 총 314개(신규 3a 110개 포함) 모두 통과했다. 커밋 지점에서 멈췄으며 Git 조작·메타데이터/사이트 조회·영상 다운로드·3b/3c 구현은 하지 않았다.
