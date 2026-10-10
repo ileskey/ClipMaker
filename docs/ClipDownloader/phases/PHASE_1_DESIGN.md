@@ -4,7 +4,7 @@
 
 최종 갱신일: 2026-10-11 (Asia/Seoul).
 
-상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK coverage·후보 target trim은 추가 사례에서 재현했지만 포맷별 stream minimum을 공통 원점으로 쓰는 반례를 확인했다. playlist/PDT·초기 fragment 대조로도 공통 원점은 미확정이다. player 코드·buffer 경계는 품질별 offset 모델을 지지하지만 session initPTS 직접 측정은 못 했다. [source 시간 하위 계약안](PHASE_1_SOURCE_TIMELINE_CONTRACT_DRAFT.md)을 작성했으며 사용자 원점 의미는 선택 대기다. mapping 보증·sample gap/overlap·AAC padding/표시 종료·일반화 검증은 남아 있다. YouTube VP9 MP4 결과/분리 A/V 시간축·CFR·전체 미디어/사이트 검증도 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
+상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK coverage·후보 target trim은 추가 사례에서 재현했지만 포맷별 stream minimum을 공통 원점으로 쓰는 반례를 확인했다. playlist/PDT·초기 fragment 대조로도 공통 원점은 미확정이다. player 코드·buffer 경계는 품질별 offset 모델을 지지하지만 session initPTS 직접 측정은 못 했다. [source 시간 하위 계약안](PHASE_1_SOURCE_TIMELINE_CONTRACT_DRAFT.md)의 사용자 원점 의미 A(선택 포맷 기준)는 채택 완료다. G1의 로컬/초기 fragment 좌표 대조는 완료했으며 실제 획득 mapping(G2)·sample gap/overlap·AAC 값 차이/padding/표시 종료·일반화 검증은 남아 있다. YouTube VP9 MP4 결과/분리 A/V 시간축·CFR·전체 미디어/사이트 검증도 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
 ## 1. 목표와 범위
 
@@ -415,7 +415,7 @@ FPS는 선택한 영상 포맷에서 가져오며 FormatSelection에 중복 저�
 
 추가 [CHZZK IN/포맷 확대](PHASE_1_CHZZK_GENERALIZATION_EXPERIMENT.md): 두 포맷의 fractional IN에서 target coverage/후보 trim을 재현했지만, 동일 source audio payload의 raw PTS는 거의 같은데 stream minimum 후보가 64ms 달라짐을 확인했다. 화질과 독립적인 source 원점 근거가 필요하며 header start/임의 고정 2초를 원본 시간 0으로 채택하지 않는다.
 
-2026-10-11 해석 정리: 현재 요구사항은 품질 독립 원점이나 임의 browser 세션 시간의 정확한 재현을 명시하지 않는다. 앞선 공통 원점 실험은 추가 보증의 가능성을 조사한 기록이며 선택 포맷 상대 시간 정의 자체를 배제하는 근거는 아니다. [source 시간 하위 계약안](PHASE_1_SOURCE_TIMELINE_CONTRACT_DRAFT.md)에 선택 포맷 기준 권고·추가 보증 대안·mapping gate를 정리했다. 이 원점 의미는 아직 미채택이며 기존 일반 정책은 유지한다.
+2026-10-11 해석 정리: 현재 요구사항은 품질 독립 원점이나 임의 browser 세션 시간의 정확한 재현을 명시하지 않는다. 앞선 공통 원점 실험은 추가 보증의 가능성을 조사한 기록이며 선택 포맷 상대 시간 정의 자체를 배제하는 근거는 아니다. [source 시간 하위 계약안](PHASE_1_SOURCE_TIMELINE_CONTRACT_DRAFT.md)에 선택 포맷 기준 권고·추가 보증 대안·mapping gate를 정리했다. 후속 사용자 지시로 원점 의미 A(선택 포맷 기준)를 채택했다. 구체 측정·mapping·오류 확장안의 검증/통합과 기존 일반 정책은 별도로 유지한다.
 
 ### 4.23 준비 결과·실행 작업 모델 — 사용자 채택 완료
 
@@ -701,3 +701,7 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-11 CHZZK player 후속: HEAD `20b5ba3712b9f40a54beddc11573d0676b506301`·phase/1·깨끗한 작업 트리에서 [실제 player·공식 코드 대조](PHASE_1_CHZZK_PLAYER_TIMELINE_EXPERIMENT.md)를 수행했다. 720p→1080p 전환에서 native currentTime 93.964544는 같았고 buffered 경계는 각 품질의 시험 offset 99007/95935에 기존 packet 경계를 연결한 값과 1µs 이내로 맞았다. 초기 offset 계산/유지/reset 경로를 읽었지만 runtime initPTS·decoded payload mapping은 직접 확인하지 못했다. 품질 독립적인 원점을 확정하지 않았고 다음은 source 시간 기준·mapping 보증/실행 거절 조건의 하위 계약 정리다. 제품 코드·Git 조작·4단계 준비 완료 선언 없이 결과 기록 커밋 지점에서 멈췄다.
 
 2026-10-11 source 시간 하위 계약 정리: HEAD `481958d790c44bdd4d28356ced1d3ae6fb59540f`·phase/1·깨끗한 작업 트리에서 요구사항·실제 Core/Application·기존 실험을 대조했다. [계약안](PHASE_1_SOURCE_TIMELINE_CONTRACT_DRAFT.md)에 U/S/L 좌표·원점/stream mapping/coverage/정확도 분리·실행 gate·오류 의미 확장안·G0~G5 검증 순서를 작성했다. 품질 독립/player 세션 보증이 현재 명시 요구가 아님을 정리하고 선택 포맷 기준을 권고했지만 원점 의미는 사용자 선택 전 미채택이다. 실험 의존 알고리즘·sample 정책을 확정하지 않았고 새 원격/미디어/제품 코드·Git 조작 없이 문서 커밋 지점에서 멈췄다.
+
+2026-10-11 시간 의미 채택: 사용자가 선택 포맷 기준으로 진행하기로 결정했다. [하위 계약안](PHASE_1_SOURCE_TIMELINE_CONTRACT_DRAFT.md)의 G0/A 채택 상태를 갱신했다. 다음은 커밋 기준점 확인 후 G1 원점 측정·seek 좌표 검증이며 구체 알고리즘·mapping 실증·4단계 준비 완료는 아직 확정하지 않았다. 이번 세 문서의 staging/commit은 사용자가 진행할 수 있도록 수행하지 않았다.
+
+2026-10-11 G1 후속: 실제 시작 HEAD `481958d790c44bdd4d28356ced1d3ae6fb59540f`·phase/1에 이전 문서 세 개의 staged/unstaged 변경이 남아 있어 보존했다. [G1 결과](PHASE_1_G1_ORIGIN_SEEK_RESULT.md)에 비영점 A/V 두 NUT·priming/edit MP4·기존 CHZZK 초기 fragment 대조를 기록했다. 68개 도구 호출은 정상 종료했고 상대 seek의 frame/PCM 대조·음수 priming과 presentation 시작 구별·copyts 절대 seek 자동 trim 반례를 확인했다. AAC seek PCM은 최대 1 LSB 차이를 유지하며 통과 처리하지 않았다. 제한된 G1 좌표 대조를 마치고 G2 원점/도구 좌표를 실제 구간 획득에 연결하는 검증을 다음 단위로 남겼다. 제품 코드·Git staging/commit·전체 준비/Phase 완료 선언은 하지 않았다.
