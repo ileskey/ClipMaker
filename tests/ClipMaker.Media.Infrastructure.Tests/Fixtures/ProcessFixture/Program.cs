@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text;
 using System.Text.Json;
 
@@ -12,6 +13,9 @@ internal static class Program
                 return 0;
             case "directory":
                 Console.Write(Environment.CurrentDirectory);
+                return 0;
+            case "stdin-eof":
+                Console.Write((await Console.In.ReadToEndAsync()).Length);
                 return 0;
             case "exit":
                 Console.Write("stdout before exit");
@@ -39,11 +43,74 @@ internal static class Program
                     await stream.WriteAsync(new byte[] { 0xef, 0xbb, 0xbf, 0xff, 0xe2 });
                 return 0;
             case "wait":
+                Console.Write("READY");
+                Console.Out.Flush();
                 await Task.Delay(TimeSpan.FromSeconds(30));
                 return 0;
+            case "tree":
+            case "root-exit":
+            case "root-exit-silent":
+            case "root-exit-intermediate":
+                RecordPid(args[1]);
+                using (var child = StartChild(args[1], args[0] == "tree" ? 1 : 0,
+                    redirect: args[0] == "root-exit-silent",
+                    mode: args[0] == "root-exit-intermediate" ? "worker-exit" : "tree-worker"))
+                {
+                    int expected = args[0] is "tree" or "root-exit-intermediate" ? 3 : 2;
+                    var deadline = Stopwatch.StartNew();
+                    while (Directory.GetFiles(args[1], "process-*.json").Length < expected)
+                    {
+                        if (deadline.Elapsed > TimeSpan.FromSeconds(10)) return 3;
+                        await Task.Delay(10);
+                    }
+                    Console.Write("READY");
+                    Console.Out.Flush();
+                    if (args[0] == "root-exit-intermediate") await child.WaitForExitAsync();
+                    if (args[0] != "tree") return 0;
+                    await Task.Delay(TimeSpan.FromSeconds(60));
+                    return 0;
+                }
+            case "tree-worker":
+                RecordPid(args[1]);
+                if (int.Parse(args[2]) > 0)
+                    using (var child = StartChild(args[1], int.Parse(args[2]) - 1, redirect: false))
+                        await Task.Delay(TimeSpan.FromSeconds(60));
+                else await Task.Delay(TimeSpan.FromSeconds(60));
+                return 0;
+            case "worker-exit":
+                RecordPid(args[1]);
+                using (var child = StartChild(args[1], 0, redirect: false))
+                {
+                    while (Directory.GetFiles(args[1], "process-*.json").Length < 3) await Task.Delay(10);
+                    return 0;
+                }
             default:
                 return 2;
         }
+    }
+
+    private static void RecordPid(string directory)
+    {
+        using var current = Process.GetCurrentProcess();
+        string path = Path.Combine(directory, $"process-{current.Id}.json");
+        File.WriteAllText(path + ".tmp", JsonSerializer.Serialize(new
+        {
+            Id = current.Id, StartTicks = current.StartTime.ToUniversalTime().Ticks
+        }));
+        File.Move(path + ".tmp", path);
+    }
+
+    private static Process StartChild(string directory, int depth, bool redirect, string mode = "tree-worker")
+    {
+        var info = new ProcessStartInfo(Environment.ProcessPath!)
+        {
+            UseShellExecute = false, CreateNoWindow = true,
+            RedirectStandardOutput = redirect, RedirectStandardError = redirect
+        };
+        info.ArgumentList.Add(mode);
+        info.ArgumentList.Add(directory);
+        info.ArgumentList.Add(depth.ToString());
+        return Process.Start(info)!;
     }
 
     private static async Task WriteAsync(Stream stream, int count, byte value)

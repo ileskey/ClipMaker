@@ -18,6 +18,8 @@
 
 ## 2. ProcessRunner
 
+후속 실제 상태: [2a 결과](PHASE_1_STAGE_2A_RESULT.md), [2b 수명 결과](PHASE_1_STAGE_2B_RESULT.md). 아래 내용은 구현 전 구체화 기록이며 2b에서 수명 후보를 실험으로 보완했다. 현재 Windows 실행은 CreateProcessW의 생성 시 JOB_LIST/HANDLE_LIST와 CRT argv 인코딩을 사용한다. root·Job 활성 0·reader 정리 확인 후 Cancelled/TimedOut을 반환하며, 자연 종료와 정리 예산·시작 rollback·EOF 구분은 실제 결과 기록을 우선한다. 하위 호출 시그니처와 byte 수집 상한은 유지한다.
+
 정의·구현 위치는 Media.Infrastructure/ProcessExecution이다. 제안 호출은 다음과 같다.
 
 ```csharp

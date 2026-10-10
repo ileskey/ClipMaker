@@ -4,7 +4,7 @@
 
 최종 갱신일: 2026-10-10 (Asia/Seoul).
 
-상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1단계 완료, 2a 실행·출력 구현/검증 완료·커밋 대기**. 2단계 전체·전체 설계 확정·Phase 1 완료는 아니다. 실제 FPS 측정·시간축·사이트 검증은 남아 있다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
+상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1단계·2a/2b 구현·검증 완료, 2b 커밋 대기**. 2c 도구 실행 진단·전체 설계 확정·Phase 1 완료는 남아 있다. 실제 FPS 측정·시간축·사이트 검증은 미수행이다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
 ## 1. 목표와 범위
 
@@ -76,6 +76,7 @@ Phase 0 필수 차단 사항은 기록상 없으며 상세 설계를 시작할 �
 ### 4.4 프로세스·취소·진단
 
 - 공통 ProcessRunner를 Media.Infrastructure에 둔다. shell 없이 ArgumentList로 실행하고 stdout/stderr를 동시에 읽는다. 메타데이터 JSON과 진행률은 서로 다른 출력 계약으로 처리한다.
+  - 후속 2b E3 결과로 Windows backend는 생성 시 Job 연결이 가능한 CreateProcessW를 사용한다. argv 목록·shell 비사용 원칙은 유지하고 Windows CRT quoting을 실제 인자 보존 테스트로 검증한다. 근거·최종 수명 정책은 [2b 실제 결과](PHASE_1_STAGE_2B_RESULT.md)를 따른다.
 - 출력 누적은 상한을 둔다. JSON 상한 초과는 잘린 JSON을 파싱하지 않고 명시 실패로 처리한다. 다운로드 로그는 지속 drain과 제한된 진단 보관으로 메모리 증가를 막는다. 상한·타임아웃은 제4.11~4.12절의 채택한 값을 따른다.
 - Ctrl+C → 작업 token → 외부 프로세스 종료 요청 → 종료/스트림 정리 → staging 정리 → 결과 → 로거 정리 순서를 사용한다. 취소 token으로 정리 대기 자체를 즉시 중단하지 않는다.
 - `Kill(entireProcessTree: true)`와 root 종료 대기를 최소 구현 후보로 사용하되 자식 종료 보장으로 표현하지 않는다. 자식 생존·파이프 유지 사례를 별도 검증하고 잔존 문제가 있으면 Windows Job Object 등 보완을 검토한다. 지금부터 네이티브 수명 관리 전체를 선행 도입하지 않는다.
@@ -656,3 +657,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-10 1b: 시작 branch `phase/1`, 깨끗한 작업 트리와 1a 커밋 `5477f36e9a2aea61c44ebbf78dec6a9c84e09d35`를 확인했다. MediaTimeRange와 exact 길이 비교를 구현하고 [1b 실제 결과](PHASE_1_STAGE_1B_RESULT.md)에 기록했다. 승인된 솔루션 빌드 경고/오류 0, Core 85개(1a 61+1b 24)·기존 탐색 22개 모두 통과했다. 1단계 공유 시간 모델·입력/구간 검증을 마치고 논리적 커밋 지점에서 멈췄다. 실제 커밋·사이트/프로세스 실험·이후 단계 구현은 하지 않았다. 전체 설계의 실험 의존 항목·Phase 1 필수 검증은 미완료다.
 
 2026-10-10 2a: 시작 branch `phase/1`, 1b 커밋 `6c10f24e0ae07518149a3c3152bccf194ef55291`·깨끗한 작업 트리를 확인했다. 공통 ProcessRunner·bounded raw output·UTF-8 chunk callback과 패키지 없는 검증용 프로세스를 구현했다. [2a 실제 결과](PHASE_1_STAGE_2A_RESULT.md)에 API·변경 범위·제한·실제 검증을 기록했다. 승인된 솔루션 빌드 경고/오류 0, Core 85개·Infrastructure 45개(기존 22+신규 23) 모두 통과했다. 현재 실행 중 취소/timeout은 자식 종료 미확인으로 보수적 TerminationFailed를 반환하며 정상 취소·타임아웃·자식/파이프 증거와 경합은 2b에서 검증한다. 2a 논리적 커밋 지점에서 멈췄고 실제 staging/commit·사이트 명령·2b/2c 구현은 하지 않았다.
+
+2026-10-10 2b: 시작 HEAD `45daa40cad6452322d073076bfe14c4ee7fa630b`·phase/1·깨끗한 작업 트리를 확인했다. E3에서 중간 부모 선종료의 tree-kill 한계를 재현한 뒤 생성 시 Windows Job 연결·종료 accounting·독립 cleanup·startup rollback 종료 확인을 구현했다. [2b 실제 결과](PHASE_1_STAGE_2B_RESULT.md)에 최초 가정 오류·중간 회귀 실패·보완·최종 제한을 기록했다. 최종 승인된 빌드 경고/오류 0, Core 85·Infrastructure 73개 모두 통과했다. 2a의 임시 실행 중 취소/timeout TerminationFailed 정책을 종료 증거에 기반한 Cancelled/TimedOut으로 대체했으며 종료 미확인은 계속 TerminationFailed다. 2b 커밋 지점에서 멈췄고 Git 조작·2c·사이트/영상 명령은 수행하지 않았다.

@@ -140,6 +140,8 @@ FPS가 없으면 metadata/manifest/원격 probe에서 선택 포맷의 유리수
 
 ## 6. E3 프로세스 수명 spike와 2단계 검증
 
+아래는 최초 실행 전 계획이다. 2b에서 기존 테스트 fixture를 확장해 실제 baseline/수명 실험·검증을 수행했다. 질문·수정된 가정·실패/통과와 최종 구현 전략은 [2b 실제 결과](PHASE_1_STAGE_2B_RESULT.md)를 따른다. 이 절의 ‘아직 생성하지 않았다’는 작성 당시 기록이며 현재 상태를 뜻하지 않는다.
+
 제품 ProcessRunner 작성 전에 수명 전략만 검증하는 작은 .NET console 실험 fixture를 격리 root에 만들 계획이다. **아직 프로젝트·코드는 생성하지 않았다.** SDK 기존 runtime만 사용하고 패키지 설치·솔루션 등록은 하지 않는다. 생성/실행 요청 범위가 주어졌을 때 다음 프로토콜대로 작성한다.
 
 - controller: shell=false/ArgumentList/redirected streams/CreateNoWindow, stdout/stderr 각 byte drain, monotonic deadline, CancellationTokenSource, kill(entireProcessTree:true), 별도 10초 cleanup. 결과는 내부 구조와 PID·시작 시각만 저장한다. 새 프로세스에 대해서만 종료 요청한다.

@@ -34,7 +34,7 @@ public sealed class ProcessRunnerTests : IDisposable
         Assert.Null(result.Failure);
         Assert.True(result.RootExitConfirmed);
         Assert.True(result.StreamsDrained);
-        Assert.Null(result.DescendantExitConfirmed);
+        Assert.True(result.DescendantExitConfirmed);
         Assert.Equal("stdout before exit", Text(result.StandardOutput));
         Assert.Equal("stderr before exit", Text(result.StandardError));
     }
@@ -42,9 +42,10 @@ public sealed class ProcessRunnerTests : IDisposable
     [Fact]
     public async Task ArgumentListPreservesWhitespaceQuotesEmptyAndShellMetacharacters()
     {
-        string[] arguments = ["a b", "", "\"quoted\"", "한글😀", "& echo unexpected", "$(echo unexpected)", "trailing\\"];
+        string[] arguments = ["a b", "", "\"quoted\"", "한글😀", "& echo unexpected", "$(echo unexpected)",
+            "trailing\\", "before\\\"after", "two\\\\\"slashes", "tabs\tand\nlines"];
         var result = await Run(Request(new[] { "arguments" }.Concat(arguments)));
-        Assert.Equal(ProcessStatus.Exited, result.Status);
+        Assert.True(result.Status == ProcessStatus.Exited, result.Failure?.ToString());
         Assert.Equal(arguments, JsonSerializer.Deserialize<string[]>(Text(result.StandardOutput)));
     }
 
@@ -52,7 +53,7 @@ public sealed class ProcessRunnerTests : IDisposable
     public async Task UsesSpecifiedWorkingDirectory()
     {
         var result = await Run(Request(["directory"]));
-        Assert.Equal(ProcessStatus.Exited, result.Status);
+        Assert.True(result.Status == ProcessStatus.Exited, result.Failure?.ToString());
         Assert.Equal(Path.GetFullPath(root), Text(result.StandardOutput));
     }
 

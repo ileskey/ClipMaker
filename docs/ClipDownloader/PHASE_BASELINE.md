@@ -77,7 +77,7 @@ Tag는 Phase 완료점을 쉽게 찾기 위한 이름이며, Base와 Completion�
 | Phase # | 상태 | Base | Completion | Tag | Branch | 검증 | 관련문서 |
 |---|---|---|---|---|---|---|---|
 | Phase 0 | Completed | `fc96883b18c1d6856c92ad6b029d45e095e41e69` | `0759dc52475538df848f765ce30c005cf755107f` | `phase-0-complete` | `main` | Passed | [Phase 0 상세 설계·구현 및 검증 결과](phases/PHASE_0_DESIGN.md) |
-| Phase 1 | In Progress (1단계 완료·2a 실행/출력 검증 완료, 2b 수명 및 실험 의존 설계 미완료) | `0759dc52475538df848f765ce30c005cf755107f` | — | — | `phase/1` (사용자 선택, 구현 시작 시 확인) | Pending (Phase 전체 필수 검증 미완료) | [Phase 1 상세 설계](phases/PHASE_1_DESIGN.md), [1a 실제 결과](phases/PHASE_1_STAGE_1A_RESULT.md), [1b 실제 결과](phases/PHASE_1_STAGE_1B_RESULT.md), [2a 실제 결과](phases/PHASE_1_STAGE_2A_RESULT.md) |
+| Phase 1 | In Progress (1단계·2a/2b 검증 완료, 2c·미디어/사이트 실험 미완료) | `0759dc52475538df848f765ce30c005cf755107f` | — | — | `phase/1` (사용자 선택, 구현 시작 시 확인) | Pending (Phase 전체 필수 검증 미완료) | [Phase 1 상세 설계](phases/PHASE_1_DESIGN.md), [1a 실제 결과](phases/PHASE_1_STAGE_1A_RESULT.md), [1b 실제 결과](phases/PHASE_1_STAGE_1B_RESULT.md), [2a 실제 결과](phases/PHASE_1_STAGE_2A_RESULT.md), [2b 실제 결과](phases/PHASE_1_STAGE_2B_RESULT.md) |
 
 ## 4. 갱신 시점
 
