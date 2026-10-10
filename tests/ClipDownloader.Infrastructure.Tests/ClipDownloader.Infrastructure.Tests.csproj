@@ -13,4 +13,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <ProjectReference Include="../../src/ClipDownloader.Infrastructure/ClipDownloader.Infrastructure.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="Fixtures/Metadata/*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
