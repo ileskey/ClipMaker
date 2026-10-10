@@ -4,6 +4,8 @@
 
 상태: **획득 파일 앞부분의 음성 패킷 누락과 edit list의 역할 확인, 수정 실험 전**. 제품 코드·전역 시간 보정·4단계 서비스는 구현하지 않았다. 정확한 구간·전체 source 시간축·CFR·Phase 1 완료는 Pending이다.
 
+후속 [여유 획득·trim 대조](PHASE_1_CHZZK_PREROLL_TRIM_EXPERIMENT.md): [88,102)초에서 빠진 47개와 IN overlap packet을 모두 확보했다. 같은 source target으로 옮겨 영상 PTS 600개·선택 PCM 수·AAC 유효 sample 수를 대조했다. sample timestamp 불연속·padding·일반화 검증은 남아 있으며 위 수정 전 상태와 아래 계획은 최초 진단 당시 기록이다.
+
 ## 시작·범위
 
 - branch `phase/1`, 시작 HEAD `386d46efd21d211a2c1ea04c9de3e8946d2759e9`: `docs: Record CHZZK HLS diagnosis and option comparison`. 이전 진단/대조 커밋과 깨끗한 작업 트리를 확인했다.

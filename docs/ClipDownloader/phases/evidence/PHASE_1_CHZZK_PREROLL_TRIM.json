@@ -1,0 +1,419 @@
+{
+  "AcquisitionSummary": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "index": 0,
+        "codec_name": "h264",
+        "codec_type": "video",
+        "width": 1920,
+        "height": 1080,
+        "r_frame_rate": "60/1",
+        "avg_frame_rate": "60/1",
+        "time_base": "1/12000",
+        "start_time": "0.001000",
+        "duration": "14.000000"
+      },
+      {
+        "index": 1,
+        "codec_name": "aac",
+        "codec_type": "audio",
+        "r_frame_rate": "0/0",
+        "avg_frame_rate": "0/0",
+        "time_base": "1/48000",
+        "start_time": "1.002000",
+        "duration": "13.013333"
+      }
+    ],
+    "format": {
+      "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+      "start_time": "0.001000",
+      "duration": "14.014333"
+    }
+  },
+  "Files": [
+    {
+      "Bytes": 14333913,
+      "Name": "c1080.mp4"
+    },
+    {
+      "Bytes": 1317040,
+      "Name": "trimmed.mp4"
+    },
+    {
+      "Bytes": 1920074,
+      "Name": "audio-reference.wav"
+    },
+    {
+      "Bytes": 1920074,
+      "Name": "audio-presented.wav"
+    }
+  ],
+  "Executions": {
+    "output-decode-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 0
+    },
+    "audio-presentation-probe-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 253
+    },
+    "prefix-packets-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 435125
+    },
+    "output-audio-packets-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 64892
+    },
+    "audio-presentation-decode-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 0
+    },
+    "output-frames-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 174106
+    },
+    "trim-encode-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 0
+    },
+    "audio-reference-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 0
+    },
+    "audio-reference-probe-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 290
+    },
+    "prefix-audio-frames-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 69518
+    },
+    "output-summary-execution": {
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "IsComplete": true,
+      "IsTruncated": false,
+      "stdoutBytes": 863
+    }
+  },
+  "Acquisition": {
+    "stage": "c1080:preroll-88-102",
+    "Status": 0,
+    "ExitCode": 0,
+    "RootExitConfirmed": true,
+    "DescendantExitConfirmed": true,
+    "StreamsDrained": true,
+    "stdoutBytes": 455,
+    "stderrBytes": 135600,
+    "stdoutTruncated": false,
+    "stderrTruncated": false,
+    "seconds": 6.3202886,
+    "inputOptionBeforeInput": true
+  },
+  "Analysis": {
+    "output-audio-packet-boundaries": {
+      "count": 470,
+      "first": [
+        {
+          "pts": -1024,
+          "dts": -1024,
+          "duration": 1024,
+          "flags": "KD_",
+          "side_data_list": [
+            {
+              "side_data_type": "Skip Samples",
+              "skip_samples": 1024,
+              "discard_padding": 0
+            }
+          ]
+        },
+        {
+          "pts": 0,
+          "dts": 0,
+          "duration": 1024,
+          "flags": "K__"
+        },
+        {
+          "pts": 1024,
+          "dts": 1024,
+          "duration": 1024,
+          "flags": "K__"
+        }
+      ],
+      "last": [
+        {
+          "pts": 477184,
+          "dts": 477184,
+          "duration": 1024,
+          "flags": "K__"
+        },
+        {
+          "pts": 478208,
+          "dts": 478208,
+          "duration": 1024,
+          "flags": "K__"
+        },
+        {
+          "pts": 479232,
+          "dts": 479232,
+          "duration": 767,
+          "flags": "K__"
+        }
+      ]
+    },
+    "source-audio-sample-selection": {
+      "targetStart": 4415935,
+      "targetEnd": 4895935,
+      "timeBase": "1/48000",
+      "decodedFramesUsed": 470,
+      "selectedSamples": 479999,
+      "windowSamples": 480000,
+      "first": [
+        {
+          "Start": 4415935,
+          "End": 4416191
+        },
+        {
+          "Start": 4416191,
+          "End": 4417215
+        }
+      ],
+      "last": [
+        {
+          "Start": 4894399,
+          "End": 4895423
+        },
+        {
+          "Start": 4895424,
+          "End": 4895935
+        }
+      ],
+      "gaps": [
+        {
+          "startSourcePts": 4511423,
+          "endSourcePts": 4511424,
+          "samples": 1,
+          "relativeStart": 95488
+        },
+        {
+          "startSourcePts": 4895423,
+          "endSourcePts": 4895424,
+          "samples": 1,
+          "relativeStart": 479488
+        }
+      ],
+      "overlaps": [
+        {
+          "samples": 1
+        }
+      ]
+    },
+    "filter-plan": {
+      "targetStart": 4415935,
+      "targetEnd": 4895935,
+      "videoShift": 95983,
+      "audioShift": 95968,
+      "videoFilter": "settb=expr=1/48000,setpts=PTS-95983,trim=start_pts=0:end_pts=480000",
+      "audioFilter": "asettb=expr=1/48000,asetpts=PTS-95968,atrim=start_pts=0:end_pts=480000",
+      "commonTimeBase": "1/48000",
+      "outputOrigin": "source target start"
+    },
+    "output-summary": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "r_frame_rate": "60/1",
+          "avg_frame_rate": "60/1",
+          "time_base": "1/48000",
+          "start_time": "0.001354",
+          "duration": "10.000000"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "sample_rate": "48000",
+          "channels": 2,
+          "r_frame_rate": "0/0",
+          "avg_frame_rate": "0/0",
+          "time_base": "1/48000",
+          "start_time": "0.000000",
+          "duration": "9.999979"
+        }
+      ],
+      "format": {
+        "start_time": "0.000000",
+        "duration": "10.001354"
+      }
+    },
+    "audio-reference-summary": {
+      "programs": [],
+      "stream_groups": [],
+      "streams": [
+        {
+          "sample_rate": "48000",
+          "channels": 2,
+          "time_base": "1/48000",
+          "duration_ts": 479999,
+          "duration": "9.999979"
+        }
+      ]
+    },
+    "coverage-and-mapping": {
+      "sourceTargetStartAt48000": 4415935,
+      "sourceTargetEndAt48000": 4895935,
+      "videoOriginAt48000": 4319952,
+      "audioOriginAt48000": 4319967,
+      "originDifferenceAt48000": -15,
+      "mappings": [
+        {
+          "streamIndex": 0,
+          "localPacketCount": 840,
+          "uniqueMatches": 780,
+          "outsideReferenceOrChanged": 60,
+          "ambiguous": 0,
+          "originAt48000": 4319952,
+          "targetLocalStartAt48000": 95983,
+          "targetLocalEndAt48000": 575983,
+          "localTimeBase": "1/12000"
+        },
+        {
+          "streamIndex": 1,
+          "localPacketCount": 610,
+          "uniqueMatches": 563,
+          "outsideReferenceOrChanged": 47,
+          "ambiguous": 0,
+          "originAt48000": 4319967,
+          "targetLocalStartAt48000": 95968,
+          "targetLocalEndAt48000": 575968,
+          "localTimeBase": "1/48000"
+        }
+      ],
+      "previouslyMissingCount": 47,
+      "previouslyMissingRecovered": 47,
+      "overlapPackets": 1,
+      "overlapRecovered": 1,
+      "neededAudioPackets": 470,
+      "neededAudioRecovered": 470,
+      "expectedVideoPackets": 600,
+      "expectedVideoRecovered": 600
+    },
+    "output-boundary-check": {
+      "videoFrames": 600,
+      "expectedVideoFrames": 600,
+      "exactVideoPtsMatch": true,
+      "firstVideo": [
+        65,
+        833,
+        1649
+      ],
+      "lastVideo": [
+        477665,
+        478433,
+        479249
+      ],
+      "audioFrames": 469,
+      "decodedAudioSamples": 480256,
+      "firstAudio": {
+        "media_type": "audio",
+        "stream_index": 1,
+        "pts": 0,
+        "duration": 1024,
+        "nb_samples": 1024
+      },
+      "lastAudio": {
+        "media_type": "audio",
+        "stream_index": 1,
+        "pts": 479232,
+        "duration": 767,
+        "nb_samples": 1024
+      }
+    },
+    "audio-presented-count": {
+      "presentedEnd": 479999,
+      "selectedSourceSamples": 479999,
+      "result": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "sample_rate": "48000",
+            "channels": 2,
+            "time_base": "1/48000",
+            "duration_ts": 479999
+          }
+        ]
+      }
+    }
+  }
+}
