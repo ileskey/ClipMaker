@@ -2,7 +2,7 @@
 
 작성일: 2026-10-09 (Asia/Seoul).
 
-최종 갱신일: 2026-10-10 (Asia/Seoul).
+최종 갱신일: 2026-10-11 (Asia/Seoul).
 
 상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~3단계 선택 구현·자동 검증 완료, 후속 실험 기록 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. CHZZK의 제한된 입력 옵션 대조에서는 720p·1080p 획득/probe/decode가 통과했으나 PTS 간격·A/V 시작 차이와 YouTube VP9 MP4 결과/분리 A/V 시간축 문제는 남아 있다. CFR·정밀 처리·전체 미디어/사이트 검증은 미완료다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
@@ -409,6 +409,8 @@ FPS는 선택한 영상 포맷에서 가져오며 FormatSelection에 중복 저�
 
 추가 [CHZZK 옵션 대조](PHASE_1_CHZZK_HLS_COMPARISON.md): extension_picky 0을 FFmpeg 입력별로 전달해 같은 구간의 720p·1080p 획득/probe/decode를 확인했다. 720p 끝의 PTS 간격 점프·1080p의 약 1.007초 A/V 시작 차이를 관찰했다. 옵션은 실험에만 적용했으며 전역 제품 정책·정밀 구간/CFR/동기·전체 Phase 완료로 확정하지 않았다. 위 미수행 문구는 초기 진단 시점이다.
 
+2026-10-11 [CHZZK 음성 coverage 진단](PHASE_1_CHZZK_AV_TIMING_DIAGNOSIS.md): 1080p 영상 600·음성 422 packet의 source payload/PTS 대응을 확인했다. 요청 시작 근처의 원본 음성 packet 47개는 획득 파일에 없으며 edit list를 제거해 해결할 문제가 아니다. 여유 구간 획득·공통 source/local origin·정밀 구간/음성 sample 처리의 대조를 다음 단위로 남긴다.
+
 ### 4.23 준비 결과·실행 작업 모델 — 사용자 채택 완료
 
 2026-10-10 사용자가 확인 화면의 정보와 검증된 실행 데이터를 구분하는 다음 Downloader.Application 모델을 채택했다.
@@ -681,3 +683,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-10 3c-2: 시작 HEAD `fca5a64c6f697bef79b8ba7af9c5a2ab23735106`·phase/1·깨끗한 작업 트리를 확인했다. 사용자 다운로드 허용 후 계획된 다섯 구간 요청·로컬 합성 codec 비교를 실행했다. [3c-2 결과](PHASE_1_STAGE_3C2_RESULT.md)에 CHZZK 획득 실패·VP9 MP4 header 실패·분리 A/V 시작 차이·선택 정책의 근거와 한계를 기록했다. FormatSelector·최소 bitrate/transport 필드·ranking 기준을 구현했고 최종 빌드 경고/오류 0, 최종 검증 합계 451개 모두 통과했다. 실험 성공을 정확한 clip 성공으로 간주하지 않았다. 논리적 커밋 지점에서 멈췄으며 Git 조작·4단계 제품 서비스·전체 Phase 완료 선언은 하지 않았다.
 
 2026-10-10 CHZZK 후속 실험: HEAD `0c853b779c9a9e2df31d72cef0ab30b871de1aa1`·phase/1에서 기존 미커밋 진단 문서를 보존했다. 사용자 실험 계속 지시에 따라 extension_picky 0 입력 옵션만 바꿔 [720p/1080p 대조](PHASE_1_CHZZK_HLS_COMPARISON.md)를 수행했다. 두 획득·probe·decode는 성공했고 전체 로컬 PTS의 간격 변화·1080p 약 1.007초 A/V 시작 차이를 확인했다. 원래 인자 위치 검사기의 false와 다중 행 보완을 함께 기록했다. 제품 코드·전역 옵션을 바꾸지 않았고 정밀 구간/동기·전체 준비/Phase 완료를 선언하지 않았다. 실험 기록 커밋 지점에서 멈췄다.
+
+2026-10-11 CHZZK 음성 coverage 후속: HEAD `386d46efd21d211a2c1ea04c9de3e8946d2759e9`·phase/1·깨끗한 작업 트리와 이전 대조 커밋을 확인했다. [로컬 edit list·원본 packet 대조](PHASE_1_CHZZK_AV_TIMING_DIAGNOSIS.md)로 영상 600·음성 422 packet이 동일 payload와 일정 PTS 대응을 유지하고 원본 초기 음성 packet 47개는 파일에 없음을 확인했다. edit list를 무시해 전체 음성을 앞으로 이동하는 수정은 채택하지 않았다. 여유 구간 획득을 다음 대조로 정리하고 기록 커밋 지점에서 멈췄다. 제품 코드·Git 조작·전체 준비/구현/Phase 완료 선언은 하지 않았다.

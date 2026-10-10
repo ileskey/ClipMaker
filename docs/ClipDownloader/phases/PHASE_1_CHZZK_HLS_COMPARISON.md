@@ -4,6 +4,8 @@
 
 상태: **720p·1080p의 제한된 구간 획득·probe·decode 통과, 정밀 구간/시간축/A/V 동기 검증 미완료**. 제품 획득 서비스나 전역 옵션에 적용하지 않았다. Phase 1 전체 완료·4단계 전체 준비 완료를 선언하지 않는다.
 
+후속 [1080p 음성 coverage 추적](PHASE_1_CHZZK_AV_TIMING_DIAGNOSIS.md): 원본과 전체 packet hash/PTS를 대조하여 남은 음성의 대응은 보존되고 시작 부분 원본 음성 packet 47개는 획득 파일에 없음을 확인했다. 약 1초의 시작 차이를 전체 음성의 지연이나 edit list만의 문제로 해석하지 않는다. 여유 구간 획득 대조와 정확한 로컬 처리 검증은 아직 남아 있다.
+
 ## 시작과 대조 조건
 
 - branch `phase/1`, HEAD `0c853b779c9a9e2df31d72cef0ab30b871de1aa1`. 이전 [로그 진단](PHASE_1_CHZZK_HLS_DIAGNOSIS.md)과 증거 파일의 미커밋·미추적 변경을 보존했다. Git staging/commit/tag/branch 작업은 하지 않았다.

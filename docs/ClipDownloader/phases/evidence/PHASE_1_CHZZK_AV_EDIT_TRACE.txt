@@ -1,0 +1,5 @@
+FFprobe exit 0, local c1080.mp4:
+stream 0 empty edit: media_time=-1, duration=12, media timescale=12000
+stream 0 content edit: media_time=0, duration=120000
+stream 1 empty edit: media_time=-1, duration=48384, media timescale=48000
+stream 1 content edit: media_time=0, duration=432144
