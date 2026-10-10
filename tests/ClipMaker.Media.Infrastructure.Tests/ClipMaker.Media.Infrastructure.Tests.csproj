@@ -12,5 +12,15 @@
     <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0" PrivateAssets="all" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
     <ProjectReference Include="../../src/ClipMaker.Media.Infrastructure/ClipMaker.Media.Infrastructure.csproj" />
+    <ProjectReference Include="Fixtures/ProcessFixture/ProcessFixture.csproj" ReferenceOutputAssembly="false" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Fixtures/ProcessFixture/**/*.cs" />
+  </ItemGroup>
+  <Target Name="CopyProcessFixture" AfterTargets="Build">
+    <ItemGroup>
+      <_ProcessFixtureFiles Include="$(MSBuildProjectDirectory)/Fixtures/ProcessFixture/bin/$(Configuration)/net10.0/ClipMaker.ProcessFixture.*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(_ProcessFixtureFiles)" DestinationFolder="$(OutDir)ProcessFixture" />
+  </Target>
 </Project>
