@@ -6,6 +6,8 @@
 
 후속 실제 상태: 1~2단계·3a/3b는 구현·검증했다. 아래 목록은 최초 계획이며 실제 메타데이터 계약·Node/EJS 최소 설정·두 사이트 조회 결과는 [3b 실제 결과](PHASE_1_STAGE_3B_RESULT.md)를 따른다. 3c 선택·FPS/CFR·획득/시간축·처리 계약은 여전히 별도 실험·구현이 필요하다.
 
+3c는 [첫 계약 단위](PHASE_1_STAGE_3C1_RESULT.md)를 구현·검증했다. QualityOption/FormatSelection은 후보 조합 검사이며 자동 순위 계산이 아니다. Best/음성 순위·FormatSelector는 [실행 전 실험 계획](PHASE_1_STAGE_3C_EXPERIMENT_PLAN.md)의 근거 확보 후 구현한다.
+
 ## 1. 결과와 시간 계산
 
 - Application `OperationResult<T>`는 성공 데이터/실패 `OperationError`/취소 중 하나만 갖는다. `ClipJobResult`는 채택한 상태·작업 ID·성공 경로·오류·주의사항·잔존 경로를 보존한다. 실패·취소에 성공 경로를 넣지 않는다.

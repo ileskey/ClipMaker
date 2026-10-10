@@ -6,6 +6,8 @@
 
 후속 실제 상태(2026-10-10): 사용자 단계별 지시로 1~2단계·3a/3b를 구현·검증했다. 메타데이터 조회와 Node/EJS 최소 구성의 실제 증거는 [3b 결과](PHASE_1_STAGE_3B_RESULT.md)에 기록한다. 다음 단위는 3c이며 최초 준비 체크리스트를 그대로 현재 미완료 목록으로 해석하지 않는다. 전체 설계의 실험 의존 항목·Phase 1 완료는 미확정이다.
 
+3c 후속: [3c-1 화질/선택 계약](PHASE_1_STAGE_3C1_RESULT.md)은 구현·검증했다. [실험 계획](PHASE_1_STAGE_3C_EXPERIMENT_PLAN.md)을 구체화했으나 영상 다운로드 제한은 유지한다. Best/codec 실험과 자동 FormatSelector는 아직 남아 있다.
+
 ## 1. 인계 목적과 첫 작업
 
 Phase 1 — CLI/Core Prototype을 담당할 context가 이전 대화 없이 기준 문서·채택 결정·남은 선행 작업을 확인할 수 있도록 한다. 상세 정책은 [Phase 1 설계](PHASE_1_DESIGN.md)를 기준으로 하며 이 요약으로 대체하지 않는다.
