@@ -4,7 +4,7 @@
 
 최종 갱신일: 2026-10-10 (Asia/Seoul).
 
-상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1단계·2a/2b 구현·검증 완료, 2b 커밋 대기**. 2c 도구 실행 진단·전체 설계 확정·Phase 1 완료는 남아 있다. 실제 FPS 측정·시간축·사이트 검증은 미수행이다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
+상태: **일반 설계 채택 완료, 실험 의존 설계 미확정 — 1~2단계 현재 대상 구현·검증 완료, 2c 커밋 대기**. 전체 설계 확정·Phase 1 완료는 아니다. YouTube JS/EJS·실제 조회·FPS 측정·시간축·미디어 생성 검증은 남아 있다. 초기 설계 시 구현·도구 설치·영상 다운로드·실제 동작 검증은 수행하지 않았으며 후속 실제 수행은 제9절과 연결 결과 기록을 따른다.
 
 ## 1. 목표와 범위
 
@@ -659,3 +659,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-10 2a: 시작 branch `phase/1`, 1b 커밋 `6c10f24e0ae07518149a3c3152bccf194ef55291`·깨끗한 작업 트리를 확인했다. 공통 ProcessRunner·bounded raw output·UTF-8 chunk callback과 패키지 없는 검증용 프로세스를 구현했다. [2a 실제 결과](PHASE_1_STAGE_2A_RESULT.md)에 API·변경 범위·제한·실제 검증을 기록했다. 승인된 솔루션 빌드 경고/오류 0, Core 85개·Infrastructure 45개(기존 22+신규 23) 모두 통과했다. 현재 실행 중 취소/timeout은 자식 종료 미확인으로 보수적 TerminationFailed를 반환하며 정상 취소·타임아웃·자식/파이프 증거와 경합은 2b에서 검증한다. 2a 논리적 커밋 지점에서 멈췄고 실제 staging/commit·사이트 명령·2b/2c 구현은 하지 않았다.
 
 2026-10-10 2b: 시작 HEAD `45daa40cad6452322d073076bfe14c4ee7fa630b`·phase/1·깨끗한 작업 트리를 확인했다. E3에서 중간 부모 선종료의 tree-kill 한계를 재현한 뒤 생성 시 Windows Job 연결·종료 accounting·독립 cleanup·startup rollback 종료 확인을 구현했다. [2b 실제 결과](PHASE_1_STAGE_2B_RESULT.md)에 최초 가정 오류·중간 회귀 실패·보완·최종 제한을 기록했다. 최종 승인된 빌드 경고/오류 0, Core 85·Infrastructure 73개 모두 통과했다. 2a의 임시 실행 중 취소/timeout TerminationFailed 정책을 종료 증거에 기반한 Cancelled/TimedOut으로 대체했으며 종료 미확인은 계속 TerminationFailed다. 2b 커밋 지점에서 멈췄고 Git 조작·2c·사이트/영상 명령은 수행하지 않았다.
+
+2026-10-10 2c: 시작 HEAD `f697f70a12a452795735ce85a289c88129d68cd1`·phase/1·깨끗한 작업 트리를 확인했다. 기존 파일 존재 진단과 별도의 실행/버전/요청 기능 진단을 구현했다. [2c 실제 결과](PHASE_1_STAGE_2C_RESULT.md)에 호출 범위·전체/개별 결과 의미·제한과 실제 설치 도구 통합 결과를 기록했다. 최종 빌드 경고/오류 0, Core 85·Media.Infrastructure 73·Downloader.Infrastructure 46개 모두 통과했다. 실제 yt-dlp 2026.08.19·FFmpeg/ffprobe 8.1의 진단, libx264/aac/mp4 목록, 명시 yt-dlp 누락 후 다른 도구 검사 지속을 확인했다. 임시 harness는 정리했고 커밋 지점에서 멈췄다. Git 조작·제품 CLI·사이트 조회/영상 다운로드·3단계 구현은 하지 않았다.
