@@ -94,7 +94,7 @@ Fast도 사용자 target을 도구/로컬 좌표에 연결하는 기준이 필�
 | G1 초기 기준·도구 좌표 | 알려진 signed PTS·A/V 서로 다른 시작의 로컬 기준 입력에서 원점 측정과 input seek 비교; CHZZK 초기 fragment 대조와 연결 | 실제 O와 도구의 seek 기준 차이를 정수 time_base로 설명. 초기/중간 probe 기준 혼동 없음 | [G1 제한 대조 완료](PHASE_1_G1_ORIGIN_SEEK_RESULT.md), 범용/원격 측정은 후속 |
 | G2 획득·mapping·coverage | G1 원점으로 fractional IN·여유 획득을 변환해 source/local packet/frame 대응과 누락 대조 | 단일 Bᵢ 성립·모순/ambiguous 차단·필요 target coverage. 여유 폭을 기존 2초로 고정하지 않음 | [G2 한 source·두 포맷 대조 완료](PHASE_1_G2_COVERAGE_RESULT.md), 제품 경로 미구현 |
 | G3 Accurate video·audio 경계 | 알려진 frame/sample 입력·음성 gap/overlap·AAC priming/padding 대조 | video 선택 PTS 집합 일치. audio 정책/오차를 실험 전에 정하고 유효 presentation 끝 검증 | [G3a 값 차이 진단 완료](PHASE_1_G3A_AUDIO_VALUES_RESULT.md), [G3b 끝/gap 후보 대조 완료](PHASE_1_G3B_AUDIO_ENDS_RESULT.md), [G3c 비정렬/A/V 대조 완료](PHASE_1_G3C_AV_BOUNDARIES_RESULT.md), 새 경계/보정 계약 사용자 채택 완료, G4/G5 대기 |
-| G4 Fast·다른 source·분리 A/V | Fast copy의 실제 편차·codec 가능성, YouTube 분리 파일의 공통 시간 관계 | 모드/화질 자동 변경 없음. 원점 오차와 keyframe 편차 구별. 분리 입력 offset 보존 | [G4a Fast baseline 대조 완료](PHASE_1_G4A_FAST_RESULT.md), 공통 A/V 이동량·끝 반례 확인. 보완 경로·YouTube·codec/CFR 미완료 |
+| G4 Fast·다른 source·분리 A/V | Fast copy의 실제 편차·codec 가능성, YouTube 분리 파일의 공통 시간 관계 | 모드/화질 자동 변경 없음. 원점 오차와 keyframe 편차 구별. 분리 입력 offset 보존 | [G4a Fast baseline 대조 완료](PHASE_1_G4A_FAST_RESULT.md), 공통 A/V 이동량·끝 반례 확인. [G4a-2 제한된 보완 후보 검증](PHASE_1_G4A2_FAST_RESULT.md) 완료. YouTube·codec/CFR·일반화 미완료 |
 | G5 4단계 통합 시작 | G1~G4 결과로 필요한 타입·서비스·오류와 단위별 검증을 확정 | 독립적으로 시작 가능한 단위와 실험 의존 단위를 구별 | 전체 준비 미완료 |
 
 G1의 로컬 3입력·기존 CHZZK 초기 fragment 대조를 마쳤다. G2의 새 원점·실제 획득 mapping/coverage 대조를 한 source·두 포맷에서 마쳤다. G3a 값 차이 진단을 마쳤으며 G3b의 AAC 유효 끝·gap/overlap 후보 대조를 마쳤다. G3c 비정렬 sample/A/V 표시 끝 대조도 마쳤다. 새 경계·보정 계약은 사용자 채택 완료이며 G4/G5는 남아 있다. G1 통과만으로 모든 gate·4단계·Phase 1 완료를 선언하지 않는다. 채택된 6단계는 유지하고 4단계 내 획득/검사/처리의 논리적 커밋으로 이어간다.
@@ -132,3 +132,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 13. G4a Fast baseline 후속
 
 2026-10-11 [G4a Fast copy 대조](PHASE_1_G4A_FAST_RESULT.md)에서 합성 GOP/B-frame·7초 timestamp 이동군·기존 CHZZK prefix의 원본 packet/frame 대응을 확인했다. 비정렬 합성은 4352/240000초, CHZZK 단순 copy는 130/48000초의 video/audio 이동량 차이를 보였고 avoid_negative_ts disabled로도 바뀌지 않았다. keyframe 정렬 대조군의 공통 이동량만 일치했으며 decoded video 끝과 선언 끝은 별도 반례였다. 실행 성공·keyframe 편차·source 관계·전체 staging 검사를 구별한다. 다음 G4a-2는 공통 source 축·keyframe copy 후보와 MP4 끝 의미 대조다. YouTube 분리 A/V·VP9·codec/CFR·G5·전체 준비는 남아 있다.
+
+## 14. G4a-2 공통 시간축·MP4 presentation 끝 후속
+
+2026-10-11 [G4a-2 보완 대조](PHASE_1_G4A2_FAST_RESULT.md)에서 확인된 선행 keyframe K·Bᵢ 적용 packet 이동·입력 timestamp 축의 종료 인자를 연결했다. 종료 좌표 오류의 empty MP4/decode 실패를 보존했고, 보완 후보 6개는 공통 A/V 이동량·필수 target coverage·sample table/edit/decoded 끝을 통과했다. 대표 출력 decoded video hash도 source와 같았고 초기 audio 지연을 유지했다. ffprobe duration_ts만으로 표시 끝을 판정하지 않고 stts/ctts/elst 의미를 적용한다. 기본 CTS 후보가 통과하며 noedit 대조는 관계를 훼손했다. 제한된 native audio grid K·H.264/AAC 결과이며 제품 구현·전체 Fast 지원을 뜻하지 않는다. 다음은 G4b YouTube 분리 관계/VP9와 codec/CFR·G5다.

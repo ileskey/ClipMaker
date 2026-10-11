@@ -52,6 +52,8 @@ unaligned copy는 첫 video packet PTS -28028·DTS -32032 (1/60000), flags `KD_`
 
 ## 4. 표시 끝과 metadata 끝도 같다고 가정할 수 없다
 
+후속 [G4a-2 MP4 box 대조](PHASE_1_G4A2_FAST_RESULT.md)에서 ffprobe duration_ts와 edit 기반 presentation 끝을 구별했다. 아래 숫자는 당시 관찰을 유지한다. duration 값 차이만으로 metadata 오류를 판정하지 않으며, 이번 후속 후보는 실제 sample table/edit 끝과 decoded 끝이 일치했다. 기존 단순 copy의 A/V 이동량 반례는 별개로 유지한다.
+
 | 사례 | 요청 source OUT | mapped decoded video 마지막 frame 끝 | 출력 decoded video 끝 | 출력 video 선언 끝 |
 |---|---:|---:|---:|---:|
 | unaligned disabled | 3.45 | 3.6036 | 128128/60000 ≈ 2.135467 | 129216/60000 = 2.1536 |
