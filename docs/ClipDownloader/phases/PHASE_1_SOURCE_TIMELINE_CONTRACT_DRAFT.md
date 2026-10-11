@@ -93,11 +93,11 @@ Fast도 사용자 target을 도구/로컬 좌표에 연결하는 기준이 필�
 | G0 시간 의미 | A/B/C 중 사용자 시간 의미 선택 | 선택 이유·보증/제한을 기록. 기존 일반 정책 유지 | A 사용자 채택 완료 |
 | G1 초기 기준·도구 좌표 | 알려진 signed PTS·A/V 서로 다른 시작의 로컬 기준 입력에서 원점 측정과 input seek 비교; CHZZK 초기 fragment 대조와 연결 | 실제 O와 도구의 seek 기준 차이를 정수 time_base로 설명. 초기/중간 probe 기준 혼동 없음 | [G1 제한 대조 완료](PHASE_1_G1_ORIGIN_SEEK_RESULT.md), 범용/원격 측정은 후속 |
 | G2 획득·mapping·coverage | G1 원점으로 fractional IN·여유 획득을 변환해 source/local packet/frame 대응과 누락 대조 | 단일 Bᵢ 성립·모순/ambiguous 차단·필요 target coverage. 여유 폭을 기존 2초로 고정하지 않음 | [G2 한 source·두 포맷 대조 완료](PHASE_1_G2_COVERAGE_RESULT.md), 제품 경로 미구현 |
-| G3 Accurate video·audio 경계 | 알려진 frame/sample 입력·음성 gap/overlap·AAC priming/padding 대조 | video 선택 PTS 집합 일치. audio 정책/오차를 실험 전에 정하고 유효 presentation 끝 검증 | [G3a 값 차이 진단 완료](PHASE_1_G3A_AUDIO_VALUES_RESULT.md), G3b 끝/gap 정책 검증 대기 |
+| G3 Accurate video·audio 경계 | 알려진 frame/sample 입력·음성 gap/overlap·AAC priming/padding 대조 | video 선택 PTS 집합 일치. audio 정책/오차를 실험 전에 정하고 유효 presentation 끝 검증 | [G3a 값 차이 진단 완료](PHASE_1_G3A_AUDIO_VALUES_RESULT.md), [G3b 끝/gap 후보 대조 완료](PHASE_1_G3B_AUDIO_ENDS_RESULT.md), G3c 계약/비정렬·A/V 끝 대기 |
 | G4 Fast·다른 source·분리 A/V | Fast copy의 실제 편차·codec 가능성, YouTube 분리 파일의 공통 시간 관계 | 모드/화질 자동 변경 없음. 원점 오차와 keyframe 편차 구별. 분리 입력 offset 보존 | 미완료 |
 | G5 4단계 통합 시작 | G1~G4 결과로 필요한 타입·서비스·오류와 단위별 검증을 확정 | 독립적으로 시작 가능한 단위와 실험 의존 단위를 구별 | 전체 준비 미완료 |
 
-G1의 로컬 3입력·기존 CHZZK 초기 fragment 대조를 마쳤다. G2의 새 원점·실제 획득 mapping/coverage 대조를 한 source·두 포맷에서 마쳤다. G3a 값 차이 진단을 마쳤으며 다음은 G3b priming/padding·sample 끝·gap/overlap 대조다. G1 통과만으로 모든 gate·4단계·Phase 1 완료를 선언하지 않는다. 채택된 6단계는 유지하고 4단계 내 획득/검사/처리의 논리적 커밋으로 이어간다.
+G1의 로컬 3입력·기존 CHZZK 초기 fragment 대조를 마쳤다. G2의 새 원점·실제 획득 mapping/coverage 대조를 한 source·두 포맷에서 마쳤다. G3a 값 차이 진단을 마쳤으며 G3b의 AAC 유효 끝·gap/overlap 후보 대조를 마쳤다. 다음은 G3c sample-grid/끝 하위 계약·비정렬/A/V 표시 끝 대조다. G1 통과만으로 모든 gate·4단계·Phase 1 완료를 선언하지 않는다. 채택된 6단계는 유지하고 4단계 내 획득/검사/처리의 논리적 커밋으로 이어간다.
 
 ## 6. 이번 검토의 실제 결과·커밋 범위
 
@@ -116,3 +116,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 9. G3a 후속 실제 결과
 
 [G3a 음성 값 대조](PHASE_1_G3A_AUDIO_VALUES_RESULT.md)에서 G1의 작은 S16 차이는 float 단계부터 존재함을 확인했다. 직접 seek와 full-decode target의 시각/48000 sample 수는 같았지만 값은 달랐으며, 초기 528 samples의 큰 차이와 PNS-enabled noise의 지속 차이를 대조했다. 첫 PNS target 대조는 원인을 구분하지 못했고 noise 보완 대조가 decoder-history 구조를 지지했다. 원본 band/PRNG 직접 관찰과 numeric 허용 정책은 미확정이다. 전체 G3 완료를 선언하지 않으며 다음은 G3b AAC 유효 끝·gap/overlap 처리 후보 검증이다.
+
+## 10. G3b 후속 실제 결과
+
+[G3b AAC 끝·gap/overlap 후보](PHASE_1_G3B_AUDIO_ENDS_RESULT.md)에서 48001-sample 입력의 기본 movie-clock stream/edit 끝과 packet 끝 충돌을 확인했고 precise clock에서는 일치했다. G3a noise의 raw tail 512는 해당 파일의 확인된 유효 끝 밖임을 구별했다. timestamp 유지 AAC는 source 불연속 개수는 유지하지만 위치를 옮겨 정확한 union 보존에 실패했다. source 빈 시각을 0으로 채우고 중복에서 앞선 값을 유지하는 sample-grid 후보는 합성·CHZZK 두 입력의 lossless 모델과 정확히 같았다. 이 후보의 제품 채택·비정렬 boundary·A/V 마지막 표시 끝은 미확정이며 다음은 G3c 하위 계약/경계 대조다. 알려지지 않은 획득 누락을 보정으로 숨기지 않고 기존 mapping/coverage gate는 유지한다.
