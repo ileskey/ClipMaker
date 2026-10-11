@@ -92,12 +92,12 @@ Fast도 사용자 target을 도구/로컬 좌표에 연결하는 기준이 필�
 |---|---|---|---|
 | G0 시간 의미 | A/B/C 중 사용자 시간 의미 선택 | 선택 이유·보증/제한을 기록. 기존 일반 정책 유지 | A 사용자 채택 완료 |
 | G1 초기 기준·도구 좌표 | 알려진 signed PTS·A/V 서로 다른 시작의 로컬 기준 입력에서 원점 측정과 input seek 비교; CHZZK 초기 fragment 대조와 연결 | 실제 O와 도구의 seek 기준 차이를 정수 time_base로 설명. 초기/중간 probe 기준 혼동 없음 | [G1 제한 대조 완료](PHASE_1_G1_ORIGIN_SEEK_RESULT.md), 범용/원격 측정은 후속 |
-| G2 획득·mapping·coverage | G1 원점으로 fractional IN·여유 획득을 변환해 source/local packet/frame 대응과 누락 대조 | 단일 Bᵢ 성립·모순/ambiguous 차단·필요 target coverage. 여유 폭을 기존 2초로 고정하지 않음 | CHZZK 후보 기준 증거 있음, 제품 경로 미확정 |
+| G2 획득·mapping·coverage | G1 원점으로 fractional IN·여유 획득을 변환해 source/local packet/frame 대응과 누락 대조 | 단일 Bᵢ 성립·모순/ambiguous 차단·필요 target coverage. 여유 폭을 기존 2초로 고정하지 않음 | [G2 한 source·두 포맷 대조 완료](PHASE_1_G2_COVERAGE_RESULT.md), 제품 경로 미구현 |
 | G3 Accurate video·audio 경계 | 알려진 frame/sample 입력·음성 gap/overlap·AAC priming/padding 대조 | video 선택 PTS 집합 일치. audio 정책/오차를 실험 전에 정하고 유효 presentation 끝 검증 | 기존 한 source의 후보 trim 결과만 있음 |
 | G4 Fast·다른 source·분리 A/V | Fast copy의 실제 편차·codec 가능성, YouTube 분리 파일의 공통 시간 관계 | 모드/화질 자동 변경 없음. 원점 오차와 keyframe 편차 구별. 분리 입력 offset 보존 | 미완료 |
 | G5 4단계 통합 시작 | G1~G4 결과로 필요한 타입·서비스·오류와 단위별 검증을 확정 | 독립적으로 시작 가능한 단위와 실험 의존 단위를 구별 | 전체 준비 미완료 |
 
-G1의 로컬 3입력·기존 CHZZK 초기 fragment 대조를 마쳤다. 다음은 G2 구간 획득·mapping·coverage 검증이다. G1 통과만으로 모든 gate·4단계·Phase 1 완료를 선언하지 않는다. 채택된 6단계는 유지하고 4단계 내 획득/검사/처리의 논리적 커밋으로 이어간다.
+G1의 로컬 3입력·기존 CHZZK 초기 fragment 대조를 마쳤다. G2의 새 원점·실제 획득 mapping/coverage 대조를 한 source·두 포맷에서 마쳤다. 다음은 G3 audio/sample·끝 경계 검증이다. G1 통과만으로 모든 gate·4단계·Phase 1 완료를 선언하지 않는다. 채택된 6단계는 유지하고 4단계 내 획득/검사/처리의 논리적 커밋으로 이어간다.
 
 ## 6. 이번 검토의 실제 결과·커밋 범위
 
@@ -108,3 +108,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 7. G1 후속 실제 결과
 
 [선택 포맷 원점·seek 대조](PHASE_1_G1_ORIGIN_SEEK_RESULT.md)에서 두 비영점 입력의 기본 상대 seek는 기대한 영상 20 frame·PCM slice와 같았고 AAC priming packet 최소값은 presentation 원점이 아님을 확인했다. copyts/seek_timestamp/accurate_seek 조합의 추가 trim 반례를 기록했다. 원본 presentation 원점 O와 demuxer 시작 F를 구별하며 기본 상대 seek 인자는 Q=O+U−F로 대조한다. AAC의 첫 target PTS는 맞았지만 직접/여유 seek의 PCM 1 LSB 차이를 성공으로 바꾸지 않았다. G1의 제한된 좌표 대조만 완료이며 실제 획득(G2)·audio 값/끝 경계(G3)·범용/분리 입력은 남아 있다. 제품 API/오류 확장안을 이번 실험으로 일괄 채택하지 않는다.
+
+## 8. G2 후속 실제 결과
+
+[G2 실제 획득](PHASE_1_G2_COVERAGE_RESULT.md)에서 fresh initial decoded 시작·remote 입력 시작을 확인하고 Q=O+U−F 구간 인자를 실제 yt-dlp/FFmpeg 명령에 연결했다. 두 포맷 모두 target video 600·audio 470 packet, decoded video PTS 600개와 audio interval/union이 원본과 같았다. 720p audio 10개의 미확인 대응은 모두 target 밖으로 보존했고 필수 packet 제외/잘못된 offset 대조는 조건을 충족하지 못했다. source gap/overlap과 AAC 값/끝 정책(G3), 다른 source·분리 입력/Fast(G4), 계약 통합(G5)은 미완료다. 이번 범위의 G2 대조 완료를 제품 획득 서비스 구현·전체 준비 완료로 간주하지 않는다.

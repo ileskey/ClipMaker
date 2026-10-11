@@ -1,0 +1,664 @@
+{
+  "date": "2026-10-11",
+  "head": "6d8687245de1f0a9246e0d0b2e54601a0562d99d",
+  "branch": "phase/1",
+  "initialGit": "Clean",
+  "plan": {
+    "head": "6d8687245de1f0a9246e0d0b2e54601a0562d99d",
+    "userMeaning": "Selected-format presentation",
+    "requestedIn": 91.25,
+    "requestedOut": 101.25,
+    "acquisitionIn": 89.25,
+    "acquisitionOut": 103.25,
+    "criteria": [
+      "Fresh initial decoded presentation and stream origin must agree",
+      "Remote demuxer start and source starts must match initial evidence in their own clock",
+      "New local stream mapping must be unique and constant",
+      "Required target packets and decoded frame/sample intervals must be retained",
+      "Missing packet and perturbed mapping offline controls must fail"
+    ],
+    "note": "2s margins are case-specific trial values, not a product rule"
+  },
+  "metadata": {
+    "Status": 0,
+    "Error": null,
+    "state": 1,
+    "duration": 2667
+  },
+  "scope": "One CHZZK VOD, two selected formats, one initial segment and one 14-second prefix per format, independent bounded source reference",
+  "cases": [
+    {
+      "id": "c1080-fractional",
+      "criteria": {
+        "Id": "c1080-fractional",
+        "Format": "hls-8384",
+        "requestedIn": 91.25,
+        "requestedOut": 101.25,
+        "acquisitionIn": 89.25,
+        "acquisitionOut": 103.25,
+        "measuredOrigin": 1.9986458333333332,
+        "demuxStart": 1.998646,
+        "seekIn": 89.24999983333333,
+        "seekOut": 103.24999983333333,
+        "section": "*89.24999983333333333333333333-103.24999983333333333333333333",
+        "sourceReferenceInterval": "90%106",
+        "originPolicy": "Fresh initial presentation-confirmed selected-format origin; Q=O+U-F"
+      },
+      "initialFetch": {
+        "playlistBytes": 151707,
+        "initBytes": 1220,
+        "mediaBytes": 2049666,
+        "playlistHash": "8BDA8EA65F81C2A5AD31828A460F998BB26EE22BAF860B532687D1C8D3356281",
+        "initialFileHash": "47A11B8DCDA816CD89106D862682A7C6A6CCD6AF3BB516645E681125E747A9C5",
+        "mediaSequence": "#EXT-X-MEDIA-SEQUENCE:1",
+        "hasEndList": true
+      },
+      "sourceStreams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "time_base": "1/6000",
+          "start_pts": 12000,
+          "start_time": "2.000000"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "time_base": "1/48000",
+          "start_pts": 95935,
+          "start_time": "1.998646"
+        }
+      ],
+      "sourceFormat": {
+        "start_time": "1.998646"
+      },
+      "initialStreams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "time_base": "1/6000",
+          "start_pts": 12000,
+          "start_time": "2.000000"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "time_base": "1/48000",
+          "start_pts": 95935,
+          "start_time": "1.998646"
+        }
+      ],
+      "initialFirstFrames": [
+        {
+          "media_type": "video",
+          "stream_index": 0,
+          "pts": 12000
+        },
+        {
+          "media_type": "audio",
+          "stream_index": 1,
+          "pts": 95935,
+          "nb_samples": 1024
+        }
+      ],
+      "initialFormat": {
+        "start_time": "1.998646"
+      },
+      "coverage": {
+        "clock": 48000,
+        "sourceOriginCandidate": 95935,
+        "targetStart": 4475935,
+        "targetEnd": 4955935,
+        "streamOrigins": {
+          "0": 4380000,
+          "1": 4379935
+        },
+        "mappings": [
+          {
+            "streamIndex": 0,
+            "anchors": 855,
+            "relationOrigin": 4380000,
+            "localTargetStart": 95935,
+            "localTargetEnd": 575935,
+            "localPacketCount": 855,
+            "unknown": 0,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          },
+          {
+            "streamIndex": 1,
+            "anchors": 668,
+            "relationOrigin": 4379935,
+            "localTargetStart": 96000,
+            "localTargetEnd": 576000,
+            "localPacketCount": 668,
+            "unknown": 0,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          }
+        ],
+        "sourceStarts": [
+          {
+            "index": 0,
+            "pts": 12000,
+            "timeBase": "1/6000"
+          },
+          {
+            "index": 1,
+            "pts": 95935,
+            "timeBase": "1/48000"
+          }
+        ],
+        "neededVideo": 600,
+        "videoCovered": 600,
+        "neededAudio": 470,
+        "audioCovered": 470
+      },
+      "decodedCoverage": {
+        "originVerified": true,
+        "remoteDemuxStart": {
+          "start_time": "1.998646"
+        },
+        "expectedVideoCount": 600,
+        "mappedVideoCount": 600,
+        "exactVideoPts": true,
+        "referenceSelectedAudioSamples": 479999,
+        "mappedSelectedAudioSamples": 479999,
+        "referenceUnionSamples": 479998,
+        "mappedUnionSamples": 479998,
+        "sameAudioIntervals": true,
+        "sameAudioUnion": true,
+        "unknownTargetPackets": 0,
+        "audioSourceUnion": [
+          {
+            "Start": 4475935,
+            "End": 4511423
+          },
+          {
+            "Start": 4511424,
+            "End": 4895423
+          },
+          {
+            "Start": 4895424,
+            "End": 4955935
+          }
+        ],
+        "audioMappedUnion": [
+          {
+            "Start": 4475935,
+            "End": 4511423
+          },
+          {
+            "Start": 4511424,
+            "End": 4895423
+          },
+          {
+            "Start": 4895424,
+            "End": 4955935
+          }
+        ],
+        "controls": {
+          "dropRequiredVideoPacketRetained": 599,
+          "requiredVideoCount": 600,
+          "dropRequiredAudioPacketRetained": 469,
+          "requiredAudioCount": 470,
+          "shiftAudioMapBy1024MatchingAnchors": 0
+        },
+        "passed": true
+      },
+      "unknownLocalAudio": [],
+      "seekArguments": {
+        "commandObserved": true,
+        "ss": "89.24999983333333",
+        "t": "14.0",
+        "copyts": false,
+        "seekTimestamp": false,
+        "parser": "Whole sanitized multi-line command; original first-line-only parser did not capture options"
+      },
+      "files": [
+        {
+          "name": "initial.bin",
+          "bytes": 2050886,
+          "sha256": "47A11B8DCDA816CD89106D862682A7C6A6CCD6AF3BB516645E681125E747A9C5"
+        },
+        {
+          "name": "prefix.mp4",
+          "bytes": 15620453,
+          "sha256": "A643DFD4E667F18673276FE48A38A87DBE5F5212E310355E1349536BA4C9ECE6"
+        }
+      ],
+      "previousPrefixHash": "A643DFD4E667F18673276FE48A38A87DBE5F5212E310355E1349536BA4C9ECE6",
+      "prefixByteIdenticalToPrior": true,
+      "executions": [
+        {
+          "stage": "c1080-fractional-acquire-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 471
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:36.7733422+09:00"
+          }
+        },
+        {
+          "stage": "c1080-fractional-decoded-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 197681
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:41.53937+09:00"
+          }
+        },
+        {
+          "stage": "c1080-fractional-initial-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 31116
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:32.01699+09:00"
+          }
+        },
+        {
+          "stage": "c1080-fractional-local-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 457128
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:41.2889556+09:00"
+          }
+        },
+        {
+          "stage": "c1080-fractional-source-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 824554
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:33.6919484+09:00"
+          }
+        }
+      ]
+    },
+    {
+      "id": "c720-fractional",
+      "criteria": {
+        "Id": "c720-fractional",
+        "Format": "hls-3192",
+        "requestedIn": 91.25,
+        "requestedOut": 101.25,
+        "acquisitionIn": 89.25,
+        "acquisitionOut": 103.25,
+        "measuredOrigin": 2.0626458333333333,
+        "demuxStart": 2.062646,
+        "seekIn": 89.24999983333333,
+        "seekOut": 103.24999983333333,
+        "section": "*89.24999983333333333333333333-103.24999983333333333333333333",
+        "sourceReferenceInterval": "90%106",
+        "originPolicy": "Fresh initial presentation-confirmed selected-format origin; Q=O+U-F"
+      },
+      "initialFetch": {
+        "playlistBytes": 150332,
+        "initBytes": 1223,
+        "mediaBytes": 303738,
+        "playlistHash": "2A90875602A751963479000F648924A54C3C4FFF8D9C3E0B115C4291EA7A7D86",
+        "initialFileHash": "6DC4865270B2B89D10F5EA9D839D77014BFA3B33A856CE565111D615B6CC0BC9",
+        "mediaSequence": "#EXT-X-MEDIA-SEQUENCE:1",
+        "hasEndList": true
+      },
+      "sourceStreams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "time_base": "1/6000",
+          "start_pts": 12599,
+          "start_time": "2.099833"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "time_base": "1/48000",
+          "start_pts": 99007,
+          "start_time": "2.062646"
+        }
+      ],
+      "sourceFormat": {
+        "start_time": "2.062646"
+      },
+      "initialStreams": [
+        {
+          "index": 0,
+          "codec_name": "h264",
+          "codec_type": "video",
+          "time_base": "1/6000",
+          "start_pts": 12599,
+          "start_time": "2.099833"
+        },
+        {
+          "index": 1,
+          "codec_name": "aac",
+          "codec_type": "audio",
+          "time_base": "1/48000",
+          "start_pts": 99007,
+          "start_time": "2.062646"
+        }
+      ],
+      "initialFirstFrames": [
+        {
+          "media_type": "video",
+          "stream_index": 0,
+          "pts": 12599
+        },
+        {
+          "media_type": "audio",
+          "stream_index": 1,
+          "pts": 99007,
+          "nb_samples": 1024
+        }
+      ],
+      "initialFormat": {
+        "start_time": "2.062646"
+      },
+      "coverage": {
+        "clock": 48000,
+        "sourceOriginCandidate": 99007,
+        "targetStart": 4479007,
+        "targetEnd": 4959007,
+        "streamOrigins": {
+          "0": 4383192,
+          "1": 4383007
+        },
+        "mappings": [
+          {
+            "streamIndex": 0,
+            "anchors": 854,
+            "relationOrigin": 4383192,
+            "localTargetStart": 95815,
+            "localTargetEnd": 575815,
+            "localPacketCount": 854,
+            "unknown": 0,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          },
+          {
+            "streamIndex": 1,
+            "anchors": 657,
+            "relationOrigin": 4383007,
+            "localTargetStart": 96000,
+            "localTargetEnd": 576000,
+            "localPacketCount": 667,
+            "unknown": 10,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          }
+        ],
+        "sourceStarts": [
+          {
+            "index": 0,
+            "pts": 12599,
+            "timeBase": "1/6000"
+          },
+          {
+            "index": 1,
+            "pts": 99007,
+            "timeBase": "1/48000"
+          }
+        ],
+        "neededVideo": 600,
+        "videoCovered": 600,
+        "neededAudio": 470,
+        "audioCovered": 470
+      },
+      "decodedCoverage": {
+        "originVerified": true,
+        "remoteDemuxStart": {
+          "start_time": "2.062646"
+        },
+        "expectedVideoCount": 600,
+        "mappedVideoCount": 600,
+        "exactVideoPts": true,
+        "referenceSelectedAudioSamples": 480001,
+        "mappedSelectedAudioSamples": 480001,
+        "referenceUnionSamples": 479999,
+        "mappedUnionSamples": 479999,
+        "sameAudioIntervals": true,
+        "sameAudioUnion": true,
+        "unknownTargetPackets": 0,
+        "audioSourceUnion": [
+          {
+            "Start": 4479007,
+            "End": 4803263
+          },
+          {
+            "Start": 4803264,
+            "End": 4959007
+          }
+        ],
+        "audioMappedUnion": [
+          {
+            "Start": 4479007,
+            "End": 4803263
+          },
+          {
+            "Start": 4803264,
+            "End": 4959007
+          }
+        ],
+        "controls": {
+          "dropRequiredVideoPacketRetained": 599,
+          "requiredVideoCount": 600,
+          "dropRequiredAudioPacketRetained": 469,
+          "requiredAudioCount": 470,
+          "shiftAudioMapBy1024MatchingAnchors": 0
+        },
+        "passed": true
+      },
+      "unknownLocalAudio": [
+        {
+          "localPts": 661920,
+          "mappedSourcePts": 5044927,
+          "hash": "SHA256:fa64a4e96189a8c1b363809fbc4ad0345878552f31de78b20c2e90c782b96997",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 662944,
+          "mappedSourcePts": 5045951,
+          "hash": "SHA256:7dcf80c6829dcffb1e0646c2a8c1d22dfd630be046d427776d65e6919ad81c80",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 663968,
+          "mappedSourcePts": 5046975,
+          "hash": "SHA256:338ea068cb2772f6479dd26d80fd60ddd318e51c3616e741cf83173ddc4dce58",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 664992,
+          "mappedSourcePts": 5047999,
+          "hash": "SHA256:31eb492e9fd2d2e36fc04ebbcd56c9015efe9ca6ca35ba5dd4fbd0e74557d2fb",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 666016,
+          "mappedSourcePts": 5049023,
+          "hash": "SHA256:e1ec26b240a6ba46e656b42e7a2e6a8963ee18770508ccd66a13f92b751b85c4",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 667040,
+          "mappedSourcePts": 5050047,
+          "hash": "SHA256:0585c6cdc8f6e3038a6d0e7d0dcc9d43201b5abde36dba68896fd38b0ab354ac",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 668064,
+          "mappedSourcePts": 5051071,
+          "hash": "SHA256:310702c82e651f4beced5a0b71026680bc1b97dc3b8271f2e2847337488fbb64",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 669088,
+          "mappedSourcePts": 5052095,
+          "hash": "SHA256:42cec9fd48c60cdb7d03a9c6ffa9c3be7e3f1cc20a8520f78f84fbe848c2a277",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 670112,
+          "mappedSourcePts": 5053119,
+          "hash": "SHA256:ce4606a93828ed3e9f58de26ea0705fcb214d8edf63eb54d2b298ad040a3e1cc",
+          "outsideTarget": true
+        },
+        {
+          "localPts": 671136,
+          "mappedSourcePts": 5054143,
+          "hash": "SHA256:d73f2ee06656527a9709fdf42686882cb5651c24228acdfc7cb3666d3651fbc1",
+          "outsideTarget": true
+        }
+      ],
+      "seekArguments": {
+        "commandObserved": true,
+        "ss": "89.24999983333333",
+        "t": "14.0",
+        "copyts": false,
+        "seekTimestamp": false,
+        "parser": "Whole sanitized multi-line command; original first-line-only parser did not capture options"
+      },
+      "files": [
+        {
+          "name": "initial.bin",
+          "bytes": 304961,
+          "sha256": "6DC4865270B2B89D10F5EA9D839D77014BFA3B33A856CE565111D615B6CC0BC9"
+        },
+        {
+          "name": "prefix.mp4",
+          "bytes": 5931219,
+          "sha256": "92ED94CC127BA603AFC18FEA1B28560F6B620F6753828F0EC40D5016BE731594"
+        }
+      ],
+      "previousPrefixHash": "92ED94CC127BA603AFC18FEA1B28560F6B620F6753828F0EC40D5016BE731594",
+      "prefixByteIdenticalToPrior": true,
+      "executions": [
+        {
+          "stage": "c720-fractional-acquire-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 470
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:46.3706645+09:00"
+          }
+        },
+        {
+          "stage": "c720-fractional-decoded-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 197802
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:49.8884504+09:00"
+          }
+        },
+        {
+          "stage": "c720-fractional-initial-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 31267
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:43.8206848+09:00"
+          }
+        },
+        {
+          "stage": "c720-fractional-local-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 455607
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:49.6678635+09:00"
+          }
+        },
+        {
+          "stage": "c720-fractional-source-execution",
+          "result": {
+            "Status": 0,
+            "ExitCode": 0,
+            "RootExitConfirmed": true,
+            "DescendantExitConfirmed": true,
+            "StreamsDrained": true,
+            "IsComplete": true,
+            "IsTruncated": false,
+            "stdoutBytes": 902382
+          },
+          "start": {
+            "utc": "2026-10-11T13:54:44.0822039+09:00"
+          }
+        }
+      ]
+    }
+  ],
+  "packetDecodeValuesNotCompared": true,
+  "verdict": "Both cases satisfy fresh-origin identity, stream mapping, target encoded packet and decoded presentation interval coverage; G3 audio values/ends and generalization remain pending"
+}
