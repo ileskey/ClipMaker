@@ -167,3 +167,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 21. G5a 최소 descriptor·gate 통합안
 
 2026-10-12 [G5a 통합안](PHASE_1_G5A_DESCRIPTOR_GATE_DRAFT.md)은 origin·shared axis·native/local relation·필요 coverage·출력 expectation을 필수 항목별 상태/검사 범위로 분리했다. 사이트/source identity는 Application, local/native 시간과 render 계획은 Media.Core에 둔다. native 보정 후 B를 다시 계산해 이중 보정을 피하고 G3c audio ceil/render residual·video membership·Fast 공통K를 연결한다. 기존 오류 enum을 유지하며 요청 해상도 미제공 Input과 media 전략/검증 실패 Execution을 구별한다. G2/G3c 기존 좌표와 signed ceil·double 범위·오류명 문서 검산만 완료했다. CLR/API·지원 전략·FPS 검사·decoder 준비/빈 target 및 시작 조건은 G5b에 남았고 제품 구현·전체 준비는 아니다.
+
+
+## 22. G5b API·초기 전략·단위별 준비
+
+2026-10-12 [G5b API/readiness](PHASE_1_G5B_API_READINESS.md)에서 기존 시간모델을 유지한 signed/native/range API와 이후inspection/acquisition/probe/processing 경계를 정리했다. FPS 미확인은 사용자 확인후 source inspection으로 조사해 ClipJob 생성의 순환 의존을 피한다. empty media 집합은 초기전략 미지원으로 거절하고 audio partial support는 requested ceil render 기준의 지연/끝을 보존한다. 이 arithmetic 검토를 새 codec출력 성공으로 승격하지 않는다. 4a-1 기본형은 준비 완료지만 Accurate AAC decoder preparation·HTTP/source adapter·전체지원/준비는 미완료다. 다음 제품 구현은4a-1의3타입과 의미 테스트로 한정하고 논리적커밋마다 보고한다. 기존G3c/일반정책 재승인·제품코드/설치/미디어 작업은 이번에 하지 않았다.

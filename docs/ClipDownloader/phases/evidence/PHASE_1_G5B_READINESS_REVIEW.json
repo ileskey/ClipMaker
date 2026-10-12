@@ -1,0 +1,202 @@
+{
+  "date": "2026-10-12",
+  "head": "bf95fd2b3e4182fb5059bf45c3416b89da113b02",
+  "branch": "phase/1",
+  "scope": "G5b document/code compatibility and exact arithmetic review, not compiled API or new media verification",
+  "sdkQuery": {
+    "evidence": "Read-only exec_command performed in this turn, separate from this review script",
+    "exitCode": 0,
+    "observedVersion": "10.0.302",
+    "command": "dotnet --version"
+  },
+  "vectors": [
+    {
+      "d": 2,
+      "ceil": -1,
+      "floor": -2,
+      "n": -3
+    },
+    {
+      "d": 2,
+      "ceil": 0,
+      "floor": -1,
+      "n": -1
+    },
+    {
+      "d": 2,
+      "ceil": 0,
+      "floor": 0,
+      "n": 0
+    },
+    {
+      "d": 2,
+      "ceil": 1,
+      "floor": 0,
+      "n": 1
+    },
+    {
+      "d": 2,
+      "ceil": 2,
+      "floor": 1,
+      "n": 3
+    }
+  ],
+  "fractionalExactControl": {
+    "exactDenominator": 2,
+    "floor": 0,
+    "exactNumerator": 1,
+    "exactDecision": "OutOfRange",
+    "timeBaseDenominator": 1,
+    "ceil": 1,
+    "timeBaseNumerator": 1
+  },
+  "int64Boundary": {
+    "positiveOverflow": "9223372036854775808",
+    "negativeAllowed": "-9223372036854775808"
+  },
+  "frameRateBridge": {
+    "rate30000_1001Seconds": "1001/30000",
+    "timecode": "00:00:00:01",
+    "rate29_97Seconds": "100/2997",
+    "equal": false
+  },
+  "partialSupport": {
+    "renderDenominator": 48000,
+    "requestedOut": 9600,
+    "requestedIn": 4800,
+    "supportFirst": 6000,
+    "sampleRate": 48000,
+    "renderStartNumerator": 1200,
+    "selectedOut": 8400,
+    "selectedSamples": 2400,
+    "supportLast": 8400,
+    "renderEndNumerator": 3600,
+    "selectedIn": 6000
+  },
+  "initialStrategyDecisions": [
+    {
+      "category": "Execution",
+      "code": "UnsupportedFormat",
+      "status": "Initial strategy exclusion, no media run",
+      "case": "Accurate known empty video PTS in valid interval"
+    },
+    {
+      "category": "Execution",
+      "code": "VerificationFailed",
+      "status": "Contract decision, no media run",
+      "case": "Accurate apparent empty due to incomplete inspection"
+    },
+    {
+      "decision": "Existing silent video policy preserved",
+      "status": "Adopted general rule",
+      "case": "Confirmed original audio absent"
+    },
+    {
+      "category": "Execution",
+      "code": "UnsupportedFormat",
+      "status": "Initial strategy exclusion, no synthesized silence",
+      "case": "Audio present, no valid support intersects target"
+    },
+    {
+      "category": "Execution",
+      "code": "VerificationFailed",
+      "status": "Unresolved implementation gate, no universal preroll/tolerance",
+      "case": "Decoder preparation not demonstrated"
+    }
+  ],
+  "existingFeatureKinds": [
+    "Encoder",
+    "Muxer"
+  ],
+  "coreValueObjects": [
+    "FrameRate",
+    "MediaTimeRange",
+    "Timecode",
+    "TimecodeInput",
+    "TimeValidationError"
+  ],
+  "testPackages": [
+    {
+      "version": "4.0.1",
+      "name": "xunit.v3.mtp-off"
+    },
+    {
+      "version": "4.0.0",
+      "name": "xunit.runner.visualstudio"
+    },
+    {
+      "version": "18.10.1",
+      "name": "Microsoft.NET.Test.Sdk"
+    }
+  ],
+  "planned4a1Files": [
+    "src/ClipMaker.Media.Core/ValueObjects/SignedMediaTime.cs",
+    "src/ClipMaker.Media.Core/ValueObjects/NativeTimestamp.cs",
+    "src/ClipMaker.Media.Core/ValueObjects/PresentationRange.cs",
+    "tests/ClipMaker.Media.Core.Tests/SignedMediaTimeTests.cs",
+    "tests/ClipMaker.Media.Core.Tests/NativeTimestampTests.cs",
+    "tests/ClipMaker.Media.Core.Tests/PresentationRangeTests.cs"
+  ],
+  "readiness": {
+    "unit4a1": "Ready for scoped implementation; no package/project/media requirement",
+    "actual4a1Implementation": "Not started",
+    "knownRemaining": [
+      "Decoder preparation production proof for Accurate AAC",
+      "Bounded source/HTTP adapter operating policy and actual implementation",
+      "Partial/empty target codec/end integration examples",
+      "Other remote codec/native support and full Phase completion"
+    ],
+    "fullProcessingReadiness": "Incomplete"
+  },
+  "sourceReferences": [
+    {
+      "path": "src/ClipMaker.Media.Core/ClipMaker.Media.Core.csproj",
+      "sha256": "ea617a6bea4d9dfd3cebef9a49ed71b98a91f320a6b3c130b9ec3997e510acbd"
+    },
+    {
+      "path": "tests/ClipMaker.Media.Core.Tests/ClipMaker.Media.Core.Tests.csproj",
+      "sha256": "afcaf9a26cf2898e70f126fed7c7d03b634d820846ee0cb4dff9e15c8299e701"
+    },
+    {
+      "path": "src/ClipMaker.Media.Core/ValueObjects/Timecode.cs",
+      "sha256": "6aaeb9d93f8bb688a9a29ad71147d3e2cb73a9d4b3dd6213787ebf65ec8bb498"
+    },
+    {
+      "path": "src/ClipMaker.Media.Core/ValueObjects/MediaTimeRange.cs",
+      "sha256": "312967a9573e09d0ed48788512a3d1242bc2483c58a13ad9708e607c91467a13"
+    },
+    {
+      "path": "src/ClipMaker.Media.Core/ValueObjects/TimeValidationError.cs",
+      "sha256": "7cc4698da621c7c45797d287e3889eb9870f69b5b2ae2724ca5bf03cf550c64f"
+    },
+    {
+      "path": "src/ClipDownloader.Application/Models/OperationResult.cs",
+      "sha256": "e14c5731a6b38f2688ef846dcbfb42985a9a37b25691d7dc477d23dd10b6be3f"
+    },
+    {
+      "path": "src/ClipDownloader.Application/Models/ToolExecutionReport.cs",
+      "sha256": "ca23195a5272073d484b0bd0532ccbfefa347087c976fa1823d19f67ca6fd19d"
+    },
+    {
+      "path": "docs/ClipDownloader/phases/PHASE_1_G5A_DESCRIPTOR_GATE_DRAFT.md",
+      "sha256": "8fed4c92741a9d9d5743f0f77026367f8a87d9ea8ff724d858c8b325aa35027c"
+    },
+    {
+      "path": "docs/ClipDownloader/phases/evidence/PHASE_1_G5A_CONTRACT_REVIEW.json",
+      "sha256": "3752ce52ecdbf68dc66d84d86e85fbfe690e2cf8a616680a1b91452e763d3374"
+    },
+    {
+      "path": "docs/ClipDownloader/phases/PHASE_1_G3A_AUDIO_VALUES_RESULT.md",
+      "sha256": "95026e15192061559e5a760fa8284c2d82728c942675dd666b91ca0be76343d7"
+    },
+    {
+      "path": "docs/ClipDownloader/phases/PHASE_1_G4C2_CODEC_BOUNDARIES_RESULT.md",
+      "sha256": "c7be88cde531166d2db9ec9c34c4eaa6edf7f61827fd49733be1d61161a10783"
+    }
+  ],
+  "checks": "Signed floor/ceil, exact/native overflow vectors, rational rate distinction, partial support arithmetic, existing enum/project and future-file compatibility passed",
+  "reviewScript": {
+    "path": ".artifacts/phase1-g5b-readiness-20261012-01/Review.ps1",
+    "sha256": "6938a4a43910bcbee261ca63c8dbabe0d8f4719a26095df66b9c6dee68f06ace"
+  }
+}
