@@ -152,3 +152,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 18. G4b-2b provider group·content·movie 변환 후속
 
 2026-10-12 [공통 HLS presentation 대조](PHASE_1_G4B2B_SHARED_AXIS_RESULT.md)에서 master의 270→audio group 234 연결을 확인하고 선택 DASH137/140과 coded content/native timestamp를 대응했다. 영상 900개 값/PTS는 movie edit512/15360을 고려한 참조와 일치했고 AAC1293 frames/ID3 5개는 원본44.1kHz sample 진행과 floor90kHz projection에 대응했다. raw media와 selected movie 축을 구별하며 이미 edit 적용된 DASH에 1/30을 다시 더하지 않는다. 기존 A와 movie presentation 의미를 유지하고 단순한 두 시작값0만으로 판정하지 않는다. 제한된 관계 대조를 완료했으며 G4c와 G5 descriptor/API 통합·다른 pair 지원·전체 준비는 남아 있다.
+
+
+## 19. G4c-1 cadence와 movie 표현 한계
+
+2026-10-12 [CFR/VFR 대조](PHASE_1_G4C1_CADENCE_RESULT.md)에서 실제 VFR 입력의 r/avg30 일치 반례와 기본 movie1000의 sub-ms PTS 이동을 확인했다. native 유리수 PTS lattice·검사 창을 기록하고 declared FPS와 실제 frame 번호 보장을 구별한다. movie clock90000의 제한 후보 4개는 selected PTS를 모두 보존했으나 고정90000·전체 VFR Accurate 지원을 채택한 것은 아니다. G3c membership/공통 shift/표시 끝 계약은 유지한다. CHZZK1080의 upstream1ms 양자화는 가설이며 native clock의 허용 오차로 승격하지 않는다. 다음은 G4c-2 codec 경계와 G5 descriptor/최종 성공·거절 계약 통합이다. 전체 준비/제품 구현 완료는 아니다.
