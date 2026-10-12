@@ -733,3 +733,6 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 
 
 2026-10-12 G4c-2 후속: 시작 HEAD 6e595ce98224e6e911f0863d0d382de752b2e226·phase/1·clean에서 [codec 지원/거절 경계](PHASE_1_G4C2_CODEC_BOUNDARIES_RESULT.md)를 대조했다. 기존2초 H.264/AAC·VP9/Opus·AV1/Opus의 copy와 H.264/AAC encode/probe/decode capability를 확인했다. payload·영상180개는 유지했지만 coarse MKV copy3개에서 시작skip/PCM·tail 차이를 확인해 보존 성공을 거절했다. rawPCM과 유효끝을 구별하며 고정sample 보정·전체codec 지원을 채택하지 않았다. 도구38개 중 정상37개·없는encoder 통제실패1개 모두 종료/수집 확인, 하네스 빌드 경고/오류0. 다음은 G5a 최소 descriptor·gate·오류 통합이며 제품 변경·전체 준비/Phase 완료는 아니다.
+
+
+2026-10-12 G5a 후속: 시작 HEAD f48aa91062cdc82fe98bc3f8a377365c6e09d9b7·phase/1·clean에서 [최소 descriptor/gate 통합안](PHASE_1_G5A_DESCRIPTOR_GATE_DRAFT.md)을 작성했다. 현재 Timecode/FormatSelection/OperationResult와 G1~G4 근거를 대조해 signed/local/source 책임·origin/mapping/coverage/native/end 상태·공통 render와 audio ceil·오류 적용 시점을 정리했다. G2 좌표·G3c boundary·signed ceil·native correction 재계산·double 한계와 기존 enum을 문서 검산했고 초기 검산 script BigInteger 연산 오류를 수정했다. 새 media/tool 실행·제품 변경·build/test·전체 준비/Phase 완료는 아니다. 다음은 G5b CLR/API·지원 전략/FPS/decoder/빈 target 규칙·구현 커밋/검증 순서와 시작 조건 점검이다.
