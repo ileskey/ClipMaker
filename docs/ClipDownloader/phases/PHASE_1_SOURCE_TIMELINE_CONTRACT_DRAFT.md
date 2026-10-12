@@ -172,3 +172,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 22. G5b API·초기 전략·단위별 준비
 
 2026-10-12 [G5b API/readiness](PHASE_1_G5B_API_READINESS.md)에서 기존 시간모델을 유지한 signed/native/range API와 이후inspection/acquisition/probe/processing 경계를 정리했다. FPS 미확인은 사용자 확인후 source inspection으로 조사해 ClipJob 생성의 순환 의존을 피한다. empty media 집합은 초기전략 미지원으로 거절하고 audio partial support는 requested ceil render 기준의 지연/끝을 보존한다. 이 arithmetic 검토를 새 codec출력 성공으로 승격하지 않는다. 4a-1 기본형은 준비 완료지만 Accurate AAC decoder preparation·HTTP/source adapter·전체지원/준비는 미완료다. 다음 제품 구현은4a-1의3타입과 의미 테스트로 한정하고 논리적커밋마다 보고한다. 기존G3c/일반정책 재승인·제품코드/설치/미디어 작업은 이번에 하지 않았다.
+
+
+## 23. 4a-1 signed/native 기본형 구현
+
+2026-10-12 [4a-1 결과](PHASE_1_STAGE_4A1_RESULT.md)의 exact signed time/native PTS/half-open range를 구현하고 Core121개 및 솔루션빌드를 검증했다. 사용자시간타입을 음수local좌표에 재사용하지 않고 exact bridge·native rounding을 별도로 둔다. 이 수학/API 검증을 source mapping·coverage·codec preparation 성공으로 승격하지 않는다. 다음은4a-2 결과/관찰/획득 계약이며 치지직source adapter·처리 및 전체 준비/Phase완료는 아직 남아 있다.

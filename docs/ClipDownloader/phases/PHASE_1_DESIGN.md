@@ -739,3 +739,6 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 
 
 2026-10-12 G5b 후속: 시작 HEAD bf95fd2b3e4182fb5059bf45c3416b89da113b02·phase/1·clean에서 [API/단위별 readiness](PHASE_1_G5B_API_READINESS.md)를 정리했다. signed 시간3타입/native rounding·현재 결과/diagnostics 연결·확인후 FPS 검사·empty/partial support의 초기 전략 경계·4단계 커밋/검증 순서를 구체화했다. SDK10.0.302 조회와 기존 framework/패키지·signed arithmetic/rate/support/오류명 검토를 완료했다. 4a-1 exact signed 시간 기본형만 구현 준비 완료이며 실제제품 구현·build/test는 아직 없다. AAC decoder preparation 생산경로·HTTP adapter 운영/통합·전체처리 준비는 미완료다. 다음은 사용자 구현 지시에4a-1만 진행하고 이후 단위는 남은 gate와 함께 하나씩 수행한다. 전체설계/지원·Phase 완료 선언은 아니다.
+
+
+2026-10-12 4a-1: 시작 HEAD 21eee0281f4e188a6e48754044450d1f6cb4f768·phase/1·clean에서 [exact signed 시간 기본형](PHASE_1_STAGE_4A1_RESULT.md)을 구현했다. SignedMediaTime/NativeTimestamp/PresentationRange와 Exact/Floor/Ceiling, 테스트3파일을 추가했다. Core121개 모두통과·솔루션빌드 경고/오류0. 기존Timecode/FrameRate/범위 정책은 유지했고 source 획득·치지직adapter·media 실행은 하지 않았다. 4a-1 구현/관련검증 완료이며 다음4a-2 계약·후속source/native/decoder gate·4단계전체/Phase완료는 남아 있다. 논리적커밋에서 멈췄고 staging/commit은 하지 않았다.
