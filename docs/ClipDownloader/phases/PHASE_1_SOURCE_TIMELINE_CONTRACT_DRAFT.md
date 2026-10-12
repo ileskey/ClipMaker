@@ -197,3 +197,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 27. 4a-3b private locator/metadata 경계
 
 2026-10-12 [4a-3b](PHASE_1_STAGE_4A3B_LOCATOR_RESULT.md)는 기존 metadata 실행 정책을 내부 query로 재사용하고 같은 응답에서 선택 source/format과 raw locator/headers를 검증한다. public VideoInfo/snapshot에 signed URL을 추가하지 않으며 주소 갱신 자체를 asset generation/native 관계의 증명으로 쓰지 않는다. 초기 Unknown FPS 해소와 알려진 선택/FPS 변경을 구별했고 fake query/HTTP 연결 회귀354개·솔루션빌드를 검증했다. 다음 CHZZK HLS 초기/target 참조·native proof·실제 inspection/acquisition adapter 및 전체 준비는 미완료다.
+
+
+## 28. 4a-3c-1 HLS playlist 참조 계획
+
+2026-10-13 [4a-3c-1](PHASE_1_STAGE_4A3C1_HLS_RESULT.md)은 selected leaf 조회·제한된 media playlist 해석·exact EXTINF 참조/budget 계획을 구현했다. playlist 좌표는 source/native/user와 별개이며 선택 segment/sequence/date 자체가 mapping/coverage 증명은 아니다. synthetic/fake HTTP의 Downloader373개와 솔루션빌드를 검증했으나 원본fragment/native/파일snapshot·실제source adapter는 아직 없다. 다음 init/segment 참조수집·native proof에서 identity·origin·target 관계를 확인해야 하며 전체 준비/Phase완료는 미완료다.
