@@ -187,3 +187,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 25. 4a-2b selected source/획득 계약
 
 2026-10-12 [4a-2b](PHASE_1_STAGE_4A2B_RESULT.md)는 공용 scope/fact를 선택 snapshot·bounded inspection·source 원점/축/끝·acquisition 요청/결과에 연결했다. FPS 미확인 검사는 ClipJob/시간 범위 없이 요청하고, 확인된 rate와 같은 선택/workspace일 때 target 요청을 구성한다. 파일의 포맷 provenance·inspection/acquisition ID·native 기준·필요 frame/sample coverage와 offset scope를 구별한다. Unknown/Contradicted와 실제 확정을 혼합하지 않고 구조 검사를 source 사실 검증으로 승격하지 않는다. Downloader 307개와 솔루션 빌드를 검증했으며 다음 4a-3 adapter·coverage/native 증거 생산·최종 처리 gate는 남아 있다.
+
+
+## 26. 4a-3a bounded HTTP 기반
+
+2026-10-12 [4a-3a](PHASE_1_STAGE_4A3A_HTTP_RESULT.md)는 Infrastructure 내부 byte reader의 exact header/query 범위·bounded EOF·body 완전성·취소·safe failure를 구현했다. HTTP 자동 retry/fallback은 없고 기존 yt-dlp 정책과 별도로 scoped transport 정책을 명시했다. fake HTTP/stream 327개 테스트 및 솔루션 빌드를 검증했으나 실제 source bytes/native 관계·coverage/decoder 준비를 확인한 것은 아니다. 다음 private locator/headers와 초기/target source 해석·inspection/acquisition adapter에서 증거를 생산해야 한다. 전체 준비/Phase 완료는 아직 미완료다.
