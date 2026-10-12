@@ -157,3 +157,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 19. G4c-1 cadence와 movie 표현 한계
 
 2026-10-12 [CFR/VFR 대조](PHASE_1_G4C1_CADENCE_RESULT.md)에서 실제 VFR 입력의 r/avg30 일치 반례와 기본 movie1000의 sub-ms PTS 이동을 확인했다. native 유리수 PTS lattice·검사 창을 기록하고 declared FPS와 실제 frame 번호 보장을 구별한다. movie clock90000의 제한 후보 4개는 selected PTS를 모두 보존했으나 고정90000·전체 VFR Accurate 지원을 채택한 것은 아니다. G3c membership/공통 shift/표시 끝 계약은 유지한다. CHZZK1080의 upstream1ms 양자화는 가설이며 native clock의 허용 오차로 승격하지 않는다. 다음은 G4c-2 codec 경계와 G5 descriptor/최종 성공·거절 계약 통합이다. 전체 준비/제품 구현 완료는 아니다.
+
+
+## 20. G4c-2 codec capability와 sample 보존 경계
+
+2026-10-12 [codec 경계 대조](PHASE_1_G4C2_CODEC_BOUNDARIES_RESULT.md)에서 local3종 MP4 copy/encode capability와 payload/picture 보존을 확인했으나 native/coarse clock·skip/padding 차이로 단순copy의 audio 보존을 거절했다. AAC rawPCM 앞16개·Opus 시작24개 손실과 rawtail648개 차이를 대조했다. rawPCM 총수와 movie 유효끝을 혼동하지 않고 고정보정·전체codec 지원을 선언하지 않는다. Fast/Accurate의 필수 source/native·초기화·end gate와 기존 오류 코드 연결 후보를 G5a에 전달한다. 일반 정책과 G3c 계약은 유지하고 descriptor/API 확정·제품 구현·전체 준비는 아직 남아 있다.

@@ -730,3 +730,6 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 
 
 2026-10-12 G4c-1 후속: 시작 HEAD 90cfbae5b7a40be0b0556e8f1546bc0a6912d70a·phase/1·clean에서 [CFR/VFR·movie quantization](PHASE_1_G4C1_CADENCE_RESULT.md)을 대조했다. 4개 기준의 모든 생성 PTS와 precise 출력 membership을 확인했고, VFR 입력의 r/avg30 일치 반례 및 기본 movie1000의 PTS 이동 3개를 거절했다. 기존 YouTube900 frames·CHZZK target/prefix를 구별했으며 1080p의 1ms quantizer는 가설로 유지한다. ProcessRunner33개 정상 종료, 최종 하네스 빌드 경고/오류0. G4c-2 codec 지원 경계·G5와 full A/V 검증은 남아 있으며 제품 변경·전체 준비/Phase 완료는 아니다.
+
+
+2026-10-12 G4c-2 후속: 시작 HEAD 6e595ce98224e6e911f0863d0d382de752b2e226·phase/1·clean에서 [codec 지원/거절 경계](PHASE_1_G4C2_CODEC_BOUNDARIES_RESULT.md)를 대조했다. 기존2초 H.264/AAC·VP9/Opus·AV1/Opus의 copy와 H.264/AAC encode/probe/decode capability를 확인했다. payload·영상180개는 유지했지만 coarse MKV copy3개에서 시작skip/PCM·tail 차이를 확인해 보존 성공을 거절했다. rawPCM과 유효끝을 구별하며 고정sample 보정·전체codec 지원을 채택하지 않았다. 도구38개 중 정상37개·없는encoder 통제실패1개 모두 종료/수집 확인, 하네스 빌드 경고/오류0. 다음은 G5a 최소 descriptor·gate·오류 통합이며 제품 변경·전체 준비/Phase 완료는 아니다.
