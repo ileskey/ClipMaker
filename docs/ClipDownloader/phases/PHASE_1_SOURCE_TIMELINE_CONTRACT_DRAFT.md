@@ -182,3 +182,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 24. 4a-2a scoped 관찰/native 기본형
 
 2026-10-12 [4a-2a](PHASE_1_STAGE_4A2A_RESULT.md)의 공용결과·관찰 scope/fact·native relation/audio lattice를 구현하고 Core136개·솔루션빌드를 검증했다. snapshot/stream/검사 종류/범위와 demux/native 기준을 구별하고 partial·unknown·contradicted를 verified 범위와 혼합하지 않는다. constant correction 후 source B 재계산·phase를 보존한 sample-grid 산술을 검사했으나 실제source/native 증명·coverage·decoder 준비를 생성한 것은 아니다. 다음4a-2b는 Applicationinspection/acquisition 계약이며 4a-2전체·치지직adapter·미디어 처리/전체준비는 아직 남아 있다.
+
+
+## 25. 4a-2b selected source/획득 계약
+
+2026-10-12 [4a-2b](PHASE_1_STAGE_4A2B_RESULT.md)는 공용 scope/fact를 선택 snapshot·bounded inspection·source 원점/축/끝·acquisition 요청/결과에 연결했다. FPS 미확인 검사는 ClipJob/시간 범위 없이 요청하고, 확인된 rate와 같은 선택/workspace일 때 target 요청을 구성한다. 파일의 포맷 provenance·inspection/acquisition ID·native 기준·필요 frame/sample coverage와 offset scope를 구별한다. Unknown/Contradicted와 실제 확정을 혼합하지 않고 구조 검사를 source 사실 검증으로 승격하지 않는다. Downloader 307개와 솔루션 빌드를 검증했으며 다음 4a-3 adapter·coverage/native 증거 생산·최종 처리 gate는 남아 있다.
