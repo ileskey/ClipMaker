@@ -9,7 +9,9 @@ internal sealed class SourceHttpRequest
 {
     internal const int MaximumReadBytes = 32 * 1024 * 1024;
     private static readonly HashSet<string> allowedHeaders = new(StringComparer.OrdinalIgnoreCase)
-        { "User-Agent", "Accept", "Accept-Language", "Referer", "Origin" };
+        { "User-Agent", "Accept", "Accept-Language", "Referer", "Origin", "Sec-Fetch-Mode" };
+
+    internal static bool IsSupportedHeader(string name) => allowedHeaders.Contains(name);
 
     internal Uri Uri { get; }
     internal SourceHttpMode Mode { get; }

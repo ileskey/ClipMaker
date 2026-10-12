@@ -192,3 +192,8 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 26. 4a-3a bounded HTTP 기반
 
 2026-10-12 [4a-3a](PHASE_1_STAGE_4A3A_HTTP_RESULT.md)는 Infrastructure 내부 byte reader의 exact header/query 범위·bounded EOF·body 완전성·취소·safe failure를 구현했다. HTTP 자동 retry/fallback은 없고 기존 yt-dlp 정책과 별도로 scoped transport 정책을 명시했다. fake HTTP/stream 327개 테스트 및 솔루션 빌드를 검증했으나 실제 source bytes/native 관계·coverage/decoder 준비를 확인한 것은 아니다. 다음 private locator/headers와 초기/target source 해석·inspection/acquisition adapter에서 증거를 생산해야 한다. 전체 준비/Phase 완료는 아직 미완료다.
+
+
+## 27. 4a-3b private locator/metadata 경계
+
+2026-10-12 [4a-3b](PHASE_1_STAGE_4A3B_LOCATOR_RESULT.md)는 기존 metadata 실행 정책을 내부 query로 재사용하고 같은 응답에서 선택 source/format과 raw locator/headers를 검증한다. public VideoInfo/snapshot에 signed URL을 추가하지 않으며 주소 갱신 자체를 asset generation/native 관계의 증명으로 쓰지 않는다. 초기 Unknown FPS 해소와 알려진 선택/FPS 변경을 구별했고 fake query/HTTP 연결 회귀354개·솔루션빌드를 검증했다. 다음 CHZZK HLS 초기/target 참조·native proof·실제 inspection/acquisition adapter 및 전체 준비는 미완료다.
