@@ -243,3 +243,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 38. 4a-3c-5 bounded native sample gate
 
 [4a-3c-5](PHASE_1_STAGE_4A3C5_NATIVE_RESULT.md)는 최초 AVC/AAC-LC fMP4 전략의실제sample duration/CTS/defaults/bytes와packet/frame을대조한다. 성공은해당원본참조의timing 관계이며first source provenance와public O/FPS/axis 발행은caller 책임이다. decoder/history/PCM/CFR/target/전체끝을추정하지 않는다. edit/비zero skip/복합codec은첫 gate에서미지원이다. 최종546개·빌드와보존된CHZZK native sample/AAC edit실제대조를검증했다. public adapter/소유실패 인계와획득은남았다.
+
+## 39. 4a-3c-6 public inspection와resource 인계
+
+[4a-3c-6](PHASE_1_STAGE_4A3C6_INSPECTION_RESULT.md)는 same scoped instance의metadata/first HLS/native proof에서first selected O·scoped FPS·single mux axis를발행한다. whole native end/CFR/decoder history는추정하지 않는다. ISourceResourceAccess는실패/취소의owned files/cleanup/termination 상태를public OperationResult.Data와독립적으로인계한다. 최종555개·빌드와실제CHZZK first reference를검증했다. target/YouTube adapter·소유workspace cleanup/host 연결과전체4a 검증은남았다.
