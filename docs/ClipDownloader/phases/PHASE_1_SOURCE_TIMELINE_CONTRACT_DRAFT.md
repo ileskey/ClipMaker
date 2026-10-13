@@ -231,3 +231,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 35. 4a-3c-3c-3b-1 codec/decoded audio 관찰
 
 2026-10-13 [4a-3c-3c-3b-1](PHASE_1_STAGE_4A3C3C3B1_CODEC_RESULT.md)는 같은 파일의 FFprobe codec labels·sample parameters·extradata_size와 decoded frame audio parameters를 별도로 보존한다. 누락을 codec default/time_base/다른 관찰로 채우지 않는다. extradata 크기와 profile 관찰은 codec 설정 bytes·native/priming/지원 proof가 아니다. synthetic487개·빌드와 보존된 실제fixture의 codec/213frames를 확인했다. packet skip/padding·container sample presentation/native gate·inspector/획득은 남았다.
+
+## 36. 4a-3c-3c-3b-2 packet timing/skip 관찰
+
+[4a-3c-3c-3b-2](PHASE_1_STAGE_4A3C3C3B2_PACKET_RESULT.md)는 같은 파일의 packet/frame 결합 출력에서 signed PTS/DTS와 explicit skip/padding/reasons를 보존한다. missing clocks/side data를0으로 추정하지 않으며 unknown side는미해석으로 남긴다. 최종507개·빌드와local CHZZK/AAC edit oracle를 실제대조했다. 원시 음수 priming packet은O가 아니다. native/sample/codec gate·source inspector/획득 연결과전체 검증은남았다.

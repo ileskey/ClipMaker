@@ -45,8 +45,8 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
                 new UTF8Encoding(false, true).GetString(versionResult.StandardOutput.Bytes.Span));
             if (version is null) return Failed(OperationErrorCode.ProcessFailed);
             var probeResult = await runner.RunAsync(new(location.SelectedPath!,
-                ["-v", "error", "-protocol_whitelist", "file", "-format_whitelist", "mov", "-show_streams", "-show_frames",
-                    "-show_entries", "stream=index,id,codec_type,codec_name,profile,pix_fmt,sample_fmt,sample_rate,channels,extradata_size,time_base,start_pts,r_frame_rate,avg_frame_rate:frame=stream_index,media_type,pts,duration,nb_samples,sample_fmt,sample_rate,channels",
+                ["-v", "error", "-protocol_whitelist", "file", "-format_whitelist", "mov", "-show_streams", "-show_frames", "-show_packets",
+                    "-show_entries", "stream=index,id,codec_type,codec_name,profile,pix_fmt,sample_fmt,sample_rate,channels,extradata_size,time_base,start_pts,r_frame_rate,avg_frame_rate:frame=stream_index,media_type,pts,duration,nb_samples,sample_fmt,sample_rate,channels:packet=stream_index,pts,dts,duration,flags:packet_side_data=side_data_type,skip_samples,discard_padding,skip_reason,discard_reason",
                     "-of", "json", "-i", reference.File.Path], directory,
                 ProcessOutputMode.Full, ProcessOutputMode.Tail, TimeSpan.FromSeconds(60)), null, token).ConfigureAwait(false);
             failure = Check(probeResult);
@@ -57,6 +57,7 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
             var parsed = new InitialReferenceObservationParser().Parse(probeResult.StandardOutput.Bytes);
             token.ThrowIfCancellationRequested();
             if (parsed.Status != OperationStatus.Succeeded) return OperationResult<ProbedInitialReference>.Failed(parsed.Error!);
+            if (!parsed.Data!.PacketsObserved) return Failed(OperationErrorCode.InvalidMetadata, "PacketObservation");
             var streams = parsed.Data!.Streams;
             if (streams.Count != timing.Data!.Initialization.Tracks.Count) return Failed(OperationErrorCode.VerificationFailed, "TrackCount");
             var ids = new HashSet<uint>();

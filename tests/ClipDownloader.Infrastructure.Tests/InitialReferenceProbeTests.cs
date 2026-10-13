@@ -12,7 +12,7 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class InitialReferenceProbeTests
 {
-    private const string Json = """{"streams":[{"index":0,"id":"0x7","codec_type":"video","time_base":"1/6000"}],"frames":[]}""";
+    private const string Json = """{"streams":[{"index":0,"id":"0x7","codec_type":"video","time_base":"1/6000"}],"frames":[],"packets":[]}""";
     private static byte[] Box(string type, params byte[][] bodies)
     {
         byte[] body = bodies.SelectMany(b => b).ToArray(); byte[] result = new byte[8 + body.Length];
@@ -196,6 +196,17 @@ public sealed class InitialReferenceProbeTests
         Assert.Equal(OperationErrorCode.InvalidMetadata, result.Error!.Code); Assert.Null(result.Data);
         Assert.Empty(runner.Calls); Assert.True(File.Exists(fixture.Reference.File.Path));
     }
+    [Fact]
+    public async Task ProbeRequiresPacketObservationAndReturnsMixedPacketOutput()
+    {
+        using var fixture = new Fixture();
+        var runner = new Runner { Respond = request => Result(request.Arguments.Contains("-version") ? "ffprobe version 8.1" : Json.Replace(",\"packets\":[]", "")) };
+        Assert.Equal("PacketObservation", (await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken)).Error!.Field);
+        string mixed = Json.Replace("\"frames\":[],\"packets\":[]", "\"packets_and_frames\":[{\"type\":\"packet\",\"stream_index\":0,\"pts\":12000}]");
+        runner = new() { Respond = request => Result(request.Arguments.Contains("-version") ? "ffprobe version 8.1" : mixed) };
+        var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
+        Assert.Equal(12000, Assert.Single(result.Data!.Observations.Packets).Pts);
+    }
 
     [Fact]
     public async Task RunnerIoFailureIsDistinctFromFileIdentityFailure()
@@ -233,7 +244,7 @@ public sealed class InitialReferenceProbeTests
             Box("trak", Header("tkhd", 7), Box("mdia", Header("mdhd", 6000))),
             Box("trak", Header("tkhd", 9), Box("mdia", Header("mdhd", 6000))));
         using var fixture = new Fixture(media);
-        string json = """{"streams":[{"index":8,"id":"0x9","codec_type":"audio","time_base":"2/12000"},{"index":2,"id":"0x7","codec_type":"video","time_base":"1/6000"}],"frames":[]}""";
+        string json = """{"streams":[{"index":8,"id":"0x9","codec_type":"audio","time_base":"2/12000"},{"index":2,"id":"0x7","codec_type":"video","time_base":"1/6000"}],"frames":[],"packets":[]}""";
         if (duplicate) json = json.Replace("0x9", "0x7");
         var runner = new Runner { Respond = request => Result(request.Arguments.Contains("-version") ? "ffprobe version 8.1" : json) };
         var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);

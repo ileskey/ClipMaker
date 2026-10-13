@@ -13,17 +13,24 @@ internal sealed record InitialStreamObservation(int Index, MediaStreamKind Kind,
 
 internal sealed record InitialFrameObservation(int StreamIndex, long? Pts, long? Duration, int? SampleCount,
     string? SampleFormat, int? SampleRate, int? Channels);
+internal sealed record InitialPacketSkipObservation(uint? SkipSamples, uint? DiscardPadding, byte? SkipReason, byte? DiscardReason);
+internal sealed record InitialPacketObservation(int StreamIndex, long? Pts, long? Dts, long? Duration,
+    string? Flags, InitialPacketSkipObservation? Skip, bool HasUninterpretedSideData);
 
 internal sealed class InitialReferenceObservations
 {
     public MediaTimeBasis TimeBasis => MediaTimeBasis.Demux;
     public IReadOnlyList<InitialStreamObservation> Streams { get; }
     public IReadOnlyList<InitialFrameObservation> Frames { get; }
+    public IReadOnlyList<InitialPacketObservation> Packets { get; }
+    public bool PacketsObserved { get; }
 
     internal InitialReferenceObservations(IEnumerable<InitialStreamObservation> streams,
-        IEnumerable<InitialFrameObservation> frames)
+        IEnumerable<InitialFrameObservation> frames, IEnumerable<InitialPacketObservation> packets, bool packetsObserved)
     {
         Streams = Array.AsReadOnly(streams.ToArray());
         Frames = Array.AsReadOnly(frames.ToArray());
+        Packets = Array.AsReadOnly(packets.ToArray());
+        PacketsObserved = packetsObserved;
     }
 }
