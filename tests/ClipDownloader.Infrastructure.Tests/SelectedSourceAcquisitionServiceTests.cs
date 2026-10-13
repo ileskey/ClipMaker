@@ -8,13 +8,13 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class SelectedSourceAcquisitionServiceTests
 {
-    private sealed class Fixture:IDisposable
+    internal sealed class Fixture:IDisposable
     {
         internal string DirectoryPath {get;}=Path.Combine(Path.GetFullPath(".artifacts"),"source-service-tests",Guid.NewGuid().ToString("N"));
         internal SelectedSourceInspectionRequest Request {get;}
         internal SelectedSourceLocators Locators {get;}
         internal OwnedMediaFile File {get;}
-        internal Fixture(bool missingRate=false)
+        internal Fixture(bool missingRate=false,long bytes=4096,long span=4,SourceInspectionPurpose? purpose=null)
         {
             Directory.CreateDirectory(DirectoryPath);
             VideoSourceReference.TryCreate(VideoPlatform.Chzzk,"123",out var source);
@@ -22,7 +22,7 @@ public sealed class SelectedSourceAcquisitionServiceTests
             var info=new VideoInfo(source!,null,TimeSpan.FromSeconds(120),null,null,null,VideoState.Completed,[format],[]);
             var choice=FormatSelection.Create(info,QualityOption.Best,format,null,FormatSelectionReason.RequestedBest).Data!;
             var snapshot=SelectedSourceSnapshot.Create(Guid.NewGuid(),info,choice,ClipMode.Fast).Data!;
-            Request=new(Guid.NewGuid(),snapshot,SourceInspectionPurpose.FrameRate|SourceInspectionPurpose.SourceTimeline,DirectoryPath,new(4096,F.Time(4)));
+            Request=new(Guid.NewGuid(),snapshot,purpose??(SourceInspectionPurpose.FrameRate|SourceInspectionPurpose.SourceTimeline),DirectoryPath,new(bytes,F.Time(span)));
             Locators=new(snapshot,info,new(format,new("https://media.example/leaf.m3u8"),null,new Dictionary<string,string>()),null);
             File=new(Guid.NewGuid(),Path.Combine(DirectoryPath,"initial.mp4"),["v"]);
             System.IO.File.WriteAllBytes(File.Path,new byte[1116]);

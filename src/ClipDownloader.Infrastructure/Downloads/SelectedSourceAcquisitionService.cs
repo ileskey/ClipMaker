@@ -18,7 +18,7 @@ internal sealed class SourceInspectionContext(SelectedSourceInspection inspectio
 }
 
 // Scoped source operations; hosts register the same instance for inspection/resource access.
-public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceInspectionService, ISourceResourceAccess, IDisposable
+public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceInspectionService, IClipDownloadService, ISourceResourceAccess, IDisposable
 {
     private sealed class JobState(SelectedSourceInspectionRequest request)
     {
@@ -49,8 +49,9 @@ public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceIn
     }
     internal SelectedSourceAcquisitionService(
         Func<SelectedSourceSnapshot,CancellationToken,Task<OperationResult<SelectedSourceLocators>>> resolve,
-        Func<SelectedSourceInspectionRequest,SelectedSourceLocators,CancellationToken,Task<HlsInitialReferenceInspectionResult>> inspect)
-    { ArgumentNullException.ThrowIfNull(resolve); ArgumentNullException.ThrowIfNull(inspect); this.resolve=resolve; this.inspect=inspect; }
+        Func<SelectedSourceInspectionRequest,SelectedSourceLocators,CancellationToken,Task<HlsInitialReferenceInspectionResult>> inspect,
+        BoundedSourceHttpReader? http=null, InitialReferenceProbe? probe=null)
+    { ArgumentNullException.ThrowIfNull(resolve); ArgumentNullException.ThrowIfNull(inspect); this.resolve=resolve; this.inspect=inspect; this.http=http;this.probe=probe; }
 
     public SourceOwnedResources GetOwnedResources(Guid jobId)
     {

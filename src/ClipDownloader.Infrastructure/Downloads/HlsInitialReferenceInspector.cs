@@ -5,13 +5,14 @@ namespace ClipDownloader.Infrastructure.Downloads;
 
 // Resource handoff remains explicit even when the inspection failed or was cancelled.
 internal sealed class HlsInitialReferenceInspectionResult(OperationStatus status, ProbedInitialReference? data,
-    OperationError? error, IEnumerable<OwnedMediaFile>? remaining = null)
+    OperationError? error, IEnumerable<OwnedMediaFile>? remaining = null, HlsMediaPlaylist? playlist = null)
 {
     internal OperationStatus Status { get; } = status;
     internal ProbedInitialReference? Data { get; } = data;
     internal OperationError? Error { get; } = error;
     internal IReadOnlyList<OwnedMediaFile> RemainingFiles { get; } = Array.AsReadOnly((remaining ?? []).ToArray());
     internal string? CleanupWarning => RemainingFiles.Count == 0 ? null : "초기 참조 파일의 소유 수명을 호출자가 계속 관리해야 합니다.";
+    internal HlsMediaPlaylist? Playlist { get; } = playlist;
 }
 
 internal sealed class HlsInitialReferenceInspector
@@ -66,7 +67,7 @@ internal sealed class HlsInitialReferenceInspector
             if (token.IsCancellationRequested || result.Status == OperationStatus.Cancelled)
                 return new(OperationStatus.Cancelled, null, null, [owned]);
             if (!ReferenceEquals(result.Data!.Reference, collected.Data)) return Fail(OperationErrorCode.VerificationFailed, [owned]);
-            return new(OperationStatus.Succeeded, result.Data, null);
+            return new(OperationStatus.Succeeded, result.Data, null, playlist: playlist.Data);
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested)
         { return new(OperationStatus.Cancelled, null, null, [owned]); }

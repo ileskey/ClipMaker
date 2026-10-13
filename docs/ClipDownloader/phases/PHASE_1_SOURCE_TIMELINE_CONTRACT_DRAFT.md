@@ -247,3 +247,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 39. 4a-3c-6 public inspection와resource 인계
 
 [4a-3c-6](PHASE_1_STAGE_4A3C6_INSPECTION_RESULT.md)는 same scoped instance의metadata/first HLS/native proof에서first selected O·scoped FPS·single mux axis를발행한다. whole native end/CFR/decoder history는추정하지 않는다. ISourceResourceAccess는실패/취소의owned files/cleanup/termination 상태를public OperationResult.Data와독립적으로인계한다. 최종555개·빌드와실제CHZZK first reference를검증했다. target/YouTube adapter·소유workspace cleanup/host 연결과전체4a 검증은남았다.
+
+## 40. 4a-3c-7 HLS target acquisition
+
+[4a-3c-7](PHASE_1_STAGE_4A3C7_ACQUIRE_RESULT.md)는confirmed O를사용한참조후보를수집하고실제native cfg/clock/필요sample support를대조한scoped B0 mapping을반환한다. first hash재확인과누적budget/소유registry를유지하며failure/cancel Data=null에서도files를인계한다. PCM/decoder history/CFR/최종output proof와다르다. 최종563개·빌드와실제CHZZK10~12초bounded acquire를검증했다. YouTube indexed/분리 관계·양사이트통합과전체4a는남았다.
