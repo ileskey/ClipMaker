@@ -47,15 +47,30 @@ public sealed partial class SelectedSourceAcquisitionService
                 video.ObservedRange, ObservationCompleteness.Partial);
             var fps = rate is null ? MediaInspectionFact<FrameRate>.Unknown(partial, MediaInspectionIssue.NotInspected) :
                 MediaInspectionFact<FrameRate>.Verified(rate, complete);
-            // Individual movie clocks are known. Provider grouping/content evidence is still required
-            // before placing the two files on a shared source axis or choosing a shared origin.
+            bool verifiedAxis = false;
+            if (request.Purpose.HasFlag(SourceInspectionPurpose.SourceTimeline) && relationship is not null && locators.PresentationReferences.Count == 2)
+            {
+                var proof = await relationship.InspectAsync(request, locators, native[0], native[1], used,
+                    file => Register(request.JobId, [file]), token).ConfigureAwait(false);
+                if (proof.Status != OperationStatus.Succeeded)
+                { Failed(request.JobId, proof.Error); return Translate(proof.Status, proof.Error); }
+                used = proof.Data!.BudgetUsed;
+                verifiedAxis = true;
+            }
+            var earliest = native.MinBy(n => n.EarliestPresentation)!;
+            var first = earliest.Streams.Single();
+            var originScope = new MediaObservationScope(id, new(earliest.Reference.Reference.File.Id, first.Stream.Index, first.Stream.Kind),
+                MediaInspectionKind.Summary, MediaTimeBasis.Native, first.ObservedRange, ObservationCompleteness.Complete);
+            var origin = verifiedAxis ? MediaInspectionFact<SignedMediaTime>.Verified(earliest.EarliestPresentation, originScope) :
+                MediaInspectionFact<SignedMediaTime>.Unknown(partial, MediaInspectionIssue.NotInspected);
+            var axis = verifiedAxis ? MediaInspectionFact<SourceAxisRelationship>.Verified(new(locators.Video.Format.Id, locators.Audio!.Format.Id,
+                SignedMediaTime.Zero), complete) : MediaInspectionFact<SourceAxisRelationship>.Unknown(partial, MediaInspectionIssue.NotInspected);
             var resultInspection = new SelectedSourceInspection(id, request,
                 native.Select(n => n.Reference.Reference.File), fps,
-                new(MediaInspectionFact<SignedMediaTime>.Unknown(partial, MediaInspectionIssue.NotInspected),
-                    MediaInspectionFact<SourceAxisRelationship>.Unknown(partial, MediaInspectionIssue.NotInspected),
+                new(origin, axis,
                     MediaInspectionFact<SignedMediaTime>.Unknown(partial, MediaInspectionIssue.NotInspected), StreamPresence.Present));
             token.ThrowIfCancellationRequested();
-            lock (stateLock) inspections.Add(id, new(resultInspection, locators, native[0]));
+            lock (stateLock) inspections.Add(id, new(resultInspection, locators, native[0], native[1], used));
             completed = true;
             return OperationResult<SelectedSourceInspection>.Succeeded(resultInspection);
         }

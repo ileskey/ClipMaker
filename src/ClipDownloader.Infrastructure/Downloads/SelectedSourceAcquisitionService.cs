@@ -10,11 +10,13 @@ using System.Numerics;
 namespace ClipDownloader.Infrastructure.Downloads;
 
 internal sealed class SourceInspectionContext(SelectedSourceInspection inspection, SelectedSourceLocators locators,
-    VerifiedHlsNativeReference native)
+    VerifiedHlsNativeReference native, VerifiedHlsNativeReference? audio = null, long? budgetUsed = null)
 {
     internal SelectedSourceInspection Inspection { get; } = inspection;
     internal SelectedSourceLocators Locators { get; } = locators;
     internal VerifiedHlsNativeReference Native { get; } = native;
+    internal VerifiedHlsNativeReference? Audio { get; } = audio;
+    internal long BudgetUsed { get; } = budgetUsed ?? native.Reference.Reference.BudgetUsed;
 }
 
 // Scoped source operations; hosts register the same instance for inspection/resource access.
@@ -35,12 +37,14 @@ public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceIn
     private readonly Func<SelectedSourceInspectionRequest,SelectedSourceLocators,CancellationToken,Task<HlsInitialReferenceInspectionResult>> inspect;
     private readonly BoundedSourceHttpReader? http;
     private readonly InitialReferenceProbe? probe;
+    private readonly PresentationRelationshipInspector? relationship;
 
     public SelectedSourceAcquisitionService(IToolExecutionDiagnostics diagnostics, IToolLocator locator,
         ToolPathSettings settings, IProcessRunner runner, string workingDirectory)
     {
         resolve=new YtDlpSourceLocatorService(new YtDlpMetadataQuery(diagnostics,locator,settings,runner,workingDirectory)).ResolveAsync;
         http=new(); probe=new(locator,settings,runner);
+        relationship = new(http, new(locator, settings, runner));
         inspect=(request,locators,token)=>new HlsInitialReferenceInspector(http,(reference,probeToken)=>
         {
             Register(request.JobId,[reference.File]);
@@ -50,8 +54,8 @@ public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceIn
     internal SelectedSourceAcquisitionService(
         Func<SelectedSourceSnapshot,CancellationToken,Task<OperationResult<SelectedSourceLocators>>> resolve,
         Func<SelectedSourceInspectionRequest,SelectedSourceLocators,CancellationToken,Task<HlsInitialReferenceInspectionResult>> inspect,
-        BoundedSourceHttpReader? http=null, InitialReferenceProbe? probe=null)
-    { ArgumentNullException.ThrowIfNull(resolve); ArgumentNullException.ThrowIfNull(inspect); this.resolve=resolve; this.inspect=inspect; this.http=http;this.probe=probe; }
+        BoundedSourceHttpReader? http=null, InitialReferenceProbe? probe=null, PresentationRelationshipInspector? relationship=null)
+    { ArgumentNullException.ThrowIfNull(resolve); ArgumentNullException.ThrowIfNull(inspect); this.resolve=resolve; this.inspect=inspect; this.http=http;this.probe=probe; this.relationship=relationship; }
 
     public SourceOwnedResources GetOwnedResources(Guid jobId)
     {

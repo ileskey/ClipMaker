@@ -7,10 +7,14 @@ using ClipMaker.Media.Core.ValueObjects;
 namespace ClipDownloader.Infrastructure.Downloads;
 
 internal sealed record H264CarrierPicture(long? Pts, H264PicturePayload Payload);
-internal sealed class H264CarrierObservations(SignedMediaTime timeBase, IEnumerable<H264CarrierPicture> pictures)
+internal sealed class H264CarrierObservations(SignedMediaTime timeBase, IEnumerable<H264CarrierPicture> pictures,
+    string? pixelFormat = null, int? width = null, int? height = null)
 {
     internal SignedMediaTime TimeBase { get; } = timeBase;
     internal IReadOnlyList<H264CarrierPicture> Pictures { get; } = Array.AsReadOnly(pictures.ToArray());
+    internal string? PixelFormat { get; } = pixelFormat;
+    internal int? Width { get; } = width;
+    internal int? Height { get; } = height;
 }
 
 internal sealed class H264CarrierObservationParser
@@ -50,7 +54,12 @@ internal sealed class H264CarrierObservationParser
                 if (canonical.Status != OperationStatus.Succeeded) throw new InvalidDataException();
                 pictures.Add(new(pts, canonical.Data!));
             }
-            return OperationResult<H264CarrierObservations>.Succeeded(new(clock!, pictures));
+            string? pixel = stream.TryGetProperty("pix_fmt", out var pix) ? pix.GetString() : null;
+            if (pixel is not null && (pixel.Length is < 1 or > 32 || pixel.Any(c => !char.IsAsciiLetterOrDigit(c) && c != '_'))) throw new InvalidDataException();
+            int? width = stream.TryGetProperty("width", out var w) ? checked((int)Integer(w)) : null;
+            int? height = stream.TryGetProperty("height", out var h) ? checked((int)Integer(h)) : null;
+            if (width is < 1 or > 8192 || height is < 1 or > 8192) throw new InvalidDataException();
+            return OperationResult<H264CarrierObservations>.Succeeded(new(clock!, pictures, pixel, width, height));
         }
         catch (Exception e) when (e is InvalidDataException or ArgumentException or InvalidOperationException or KeyNotFoundException or FormatException or OverflowException or JsonException)
         { return OperationResult<H264CarrierObservations>.Failed(new(OperationErrorCode.VerificationFailed, OperationErrorCategory.Execution,

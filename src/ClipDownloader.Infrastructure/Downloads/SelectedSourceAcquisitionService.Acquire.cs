@@ -23,11 +23,12 @@ public sealed partial class SelectedSourceAcquisitionService
             }
             if(request.Inspection.Timeline.Origin.Value is not { } origin || request.Inspection.Timeline.SharedAxis.State!=MediaInspectionState.Verified)
                 return AcquireFailure(OperationErrorCode.VerificationFailed,"SourceTimelineUnverified");
+            if (context.Audio is not null) return AcquireFailure(OperationErrorCode.UnsupportedFormat, "IndexedTargetStrategyUnavailable");
             if(http is null || probe is null) return AcquireFailure(OperationErrorCode.UnsupportedFormat,"AcquisitionCompositionMissing");
             var locators=await resolve(request.Selection,cancellationToken).ConfigureAwait(false);
             if(locators.Status!=OperationStatus.Succeeded) {Failed(request.JobId,locators.Error);return AcquireTranslate(locators.Status,locators.Error);}
             var budget=request.Inspection.Request.Budget;
-            long already=context.Native.Reference.Reference.BudgetUsed;
+            long already=context.BudgetUsed;
             if(already>=budget.MaximumBytes) return AcquireFailure(OperationErrorCode.UnsupportedFormat,"SourceByteBudget");
             var refreshRequest=new SelectedSourceInspectionRequest(request.JobId,request.Selection,request.Inspection.Request.Purpose,
                 request.WorkDirectory,new(budget.MaximumBytes-already,budget.MaximumPresentationSpan));
