@@ -209,6 +209,21 @@ public sealed class InitialReferenceProbeTests
         Assert.True(File.Exists(fixture.Reference.File.Path));
     }
 
+    [Fact]
+    public async Task FragmentAnchorIsReturnedFromTheSameBoundFile()
+    {
+        var tfhd = new byte[8]; BinaryPrimitives.WriteUInt32BigEndian(tfhd.AsSpan(4), 7);
+        var tfdt = new byte[12]; tfdt[0] = 1; BinaryPrimitives.WriteUInt64BigEndian(tfdt.AsSpan(4), 12000);
+        byte[] bytes = Media().Concat(Box("moof", Box("traf", Box("tfhd", tfhd), Box("tfdt", tfdt)))).ToArray();
+        using var fixture = new Fixture(bytes);
+        var result = await Probe(new Runner()).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
+        Assert.Equal(OperationStatus.Succeeded, result.Status);
+        var anchor = Assert.Single(result.Data!.FragmentAnchors);
+        Assert.Equal(result.Data.TrackLinks[0].Track.TrackId, anchor.TrackId);
+        Assert.Equal(12000ul, anchor.BaseDecodeTime);
+        Assert.Same(fixture.Reference, result.Data.Reference);
+    }
+
     [Theory]
     [InlineData(true)]
     [InlineData(false)]

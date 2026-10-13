@@ -8,16 +8,21 @@ internal sealed record Mp4EditObservation(ulong MovieDuration, long MediaTime, s
 internal sealed record Mp4TrackTiming(uint TrackId, uint MediaTimescale, bool HasEditList,
     IReadOnlyList<Mp4EditObservation> Edits);
 internal sealed record Mp4TimingObservation(uint MovieTimescale, IReadOnlyList<Mp4TrackTiming> Tracks);
+internal sealed record Mp4FragmentDecodeAnchor(long MoofOffset, uint TrackId, uint HeaderFlags, ulong? BaseDecodeTime);
+internal sealed record Mp4FileTimingObservation(Mp4TimingObservation Initialization,
+    IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors);
 
 // Container header observations only. Track IDs are not FFprobe stream indices.
 internal sealed class Mp4TimingReader
 {
     internal const int MaximumMoovBytes = 2 * 1024 * 1024;
+    internal const int MaximumMoofBytes = 2 * 1024 * 1024;
+    internal const int MaximumTotalMoofBytes = 8 * 1024 * 1024;
     private const int MaximumBoxes = 10_000;
     private sealed record Box(string Type, ReadOnlyMemory<byte> Body);
     private sealed class Unsupported : Exception { }
 
-    internal async Task<OperationResult<Mp4TimingObservation>> ReadAsync(Stream input, CancellationToken token)
+    internal async Task<OperationResult<Mp4FileTimingObservation>> ReadAsync(Stream input, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(input);
         if (!input.CanRead || !input.CanSeek) throw new ArgumentException("A readable seekable local stream is required.", nameof(input));
@@ -28,6 +33,8 @@ internal sealed class Mp4TimingReader
             long end = input.Length;
             byte[] header = new byte[16];
             byte[]? moov = null;
+            var anchors = new List<Mp4FragmentDecodeAnchor>();
+            int moofBytes = 0, moofCount = 0, fragmentBoxes = 0;
             int count = 0;
             while (input.Position < end)
             {
@@ -45,12 +52,23 @@ internal sealed class Mp4TimingReader
                 }
                 if (size == 0) size = (ulong)(end - start);
                 if (size < (ulong)headerBytes || size > (ulong)(end - start)) throw new InvalidDataException();
-                if (Encoding.ASCII.GetString(header, 4, 4) == "moov")
+                string type = Encoding.ASCII.GetString(header, 4, 4);
+                if (type == "moov")
                 {
                     if (moov is not null) throw new InvalidDataException();
                     if (size - (ulong)headerBytes > MaximumMoovBytes) throw new Unsupported();
                     moov = new byte[(int)size - headerBytes];
                     await input.ReadExactlyAsync(moov, token).ConfigureAwait(false);
+                }
+                else if (type == "moof")
+                {
+                    ulong bodyBytes = size - (ulong)headerBytes;
+                    if (++moofCount > 1024 || bodyBytes > MaximumMoofBytes ||
+                        bodyBytes > (ulong)(MaximumTotalMoofBytes - moofBytes)) throw new Unsupported();
+                    moofBytes += (int)bodyBytes;
+                    var body = new byte[(int)bodyBytes];
+                    await input.ReadExactlyAsync(body, token).ConfigureAwait(false);
+                    anchors.AddRange(FragmentAnchors(body, start, ref fragmentBoxes));
                 }
                 // Media payload is skipped, never allocated or decoded here.
                 input.Position = checked(start + (long)size);
@@ -59,12 +77,46 @@ internal sealed class Mp4TimingReader
             token.ThrowIfCancellationRequested();
             var result = ParseMoov(moov);
             token.ThrowIfCancellationRequested();
-            return result;
+            if (result.Status != OperationStatus.Succeeded) return OperationResult<Mp4FileTimingObservation>.Failed(result.Error!);
+            if (anchors.Any(anchor => !result.Data!.Tracks.Any(track => track.TrackId == anchor.TrackId)))
+                throw new InvalidDataException();
+            return OperationResult<Mp4FileTimingObservation>.Succeeded(new(result.Data!, anchors.AsReadOnly()));
         }
-        catch (OperationCanceledException) when (token.IsCancellationRequested) { return OperationResult<Mp4TimingObservation>.Cancelled(); }
-        catch (Unsupported) { return Failed(OperationErrorCode.UnsupportedFormat); }
+        catch (OperationCanceledException) when (token.IsCancellationRequested) { return OperationResult<Mp4FileTimingObservation>.Cancelled(); }
+        catch (Unsupported) { return FileFailed(OperationErrorCode.UnsupportedFormat); }
         catch (Exception error) when (error is IOException or InvalidDataException or OverflowException or UnauthorizedAccessException)
-        { return Failed(OperationErrorCode.InvalidMetadata); }
+        { return FileFailed(OperationErrorCode.InvalidMetadata); }
+    }
+
+    private static IEnumerable<Mp4FragmentDecodeAnchor> FragmentAnchors(ReadOnlyMemory<byte> body, long offset, ref int count)
+    {
+        var result = new List<Mp4FragmentDecodeAnchor>();
+        var ids = new HashSet<uint>();
+        foreach (var traf in Boxes(body, ref count).Where(box => box.Type == "traf"))
+        {
+            if (result.Count == 16) throw new Unsupported();
+            var children = Boxes(traf.Body, ref count);
+            var tfhd = Single(children, "tfhd").Body;
+            if (Version(tfhd) != 0) throw new Unsupported();
+            uint id = U32(tfhd, 4);
+            if (id == 0 || !ids.Add(id)) throw new InvalidDataException();
+            uint flags = U32(tfhd, 0) & 0x00ffffff;
+            var tfdt = children.Where(box => box.Type == "tfdt").ToArray();
+            if (tfdt.Length > 1) throw new InvalidDataException();
+            ulong? decodeTime = null;
+            if (tfdt.Length == 1)
+            {
+                var value = tfdt[0].Body;
+                byte version = Version(value);
+                if ((U32(value, 0) & 0x00ffffff) != 0) throw new Unsupported();
+                if (value.Length != (version == 0 ? 8 : 12)) throw new InvalidDataException();
+                decodeTime = version == 0 ? U32(value, 4) : BinaryPrimitives.ReadUInt64BigEndian(value.Span[4..]);
+            }
+            // Only the tfhd prefix and tfdt value are interpreted. Optional tfhd fields/trun are not validated here.
+            result.Add(new(offset, id, flags, decodeTime));
+        }
+        if (result.Count == 0) throw new InvalidDataException();
+        return result;
     }
 
     internal OperationResult<Mp4TimingObservation> ParseMoov(ReadOnlyMemory<byte> bytes)
@@ -164,4 +216,6 @@ internal sealed class Mp4TimingReader
     }
     private static OperationResult<Mp4TimingObservation> Failed(OperationErrorCode code) => OperationResult<Mp4TimingObservation>.Failed(
         new(code, OperationErrorCategory.Execution, "MP4 timing header를 제한 범위에서 확인하지 못했습니다."));
+    private static OperationResult<Mp4FileTimingObservation> FileFailed(OperationErrorCode code) => OperationResult<Mp4FileTimingObservation>.Failed(
+        new(code, OperationErrorCategory.Execution, "MP4 초기/fragment timing header를 제한 범위에서 확인하지 못했습니다."));
 }

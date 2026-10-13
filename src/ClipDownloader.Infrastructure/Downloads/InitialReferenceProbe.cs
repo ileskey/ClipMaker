@@ -10,7 +10,7 @@ namespace ClipDownloader.Infrastructure.Downloads;
 internal sealed record Mp4StreamTimingLink(int StreamIndex, Mp4TrackTiming Track);
 internal sealed record ProbedInitialReference(HlsCollectedReference Reference,
     string ProbeVersion, InitialReferenceObservations Observations, Mp4TimingObservation ContainerTiming,
-    IReadOnlyList<Mp4StreamTimingLink> TrackLinks);
+    IReadOnlyList<Mp4StreamTimingLink> TrackLinks, IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors);
 
 internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettings settings, IProcessRunner runner)
 {
@@ -58,20 +58,20 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
             token.ThrowIfCancellationRequested();
             if (parsed.Status != OperationStatus.Succeeded) return OperationResult<ProbedInitialReference>.Failed(parsed.Error!);
             var streams = parsed.Data!.Streams;
-            if (streams.Count != timing.Data!.Tracks.Count) return Failed(OperationErrorCode.VerificationFailed, "TrackCount");
+            if (streams.Count != timing.Data!.Initialization.Tracks.Count) return Failed(OperationErrorCode.VerificationFailed, "TrackCount");
             var ids = new HashSet<uint>();
             var links = new List<Mp4StreamTimingLink>();
             foreach (var stream in streams)
             {
                 if (stream.TrackId is not { } id || !ids.Add(id)) return Failed(OperationErrorCode.VerificationFailed, "TrackId");
-                var track = timing.Data.Tracks.SingleOrDefault(track => track.TrackId == id);
+                var track = timing.Data.Initialization.Tracks.SingleOrDefault(track => track.TrackId == id);
                 if (track is null || stream.TimeBase.Numerator != 1 || stream.TimeBase.Denominator != track.MediaTimescale)
                     return Failed(OperationErrorCode.VerificationFailed, "TrackClock");
                 links.Add(new(stream.Index, track));
             }
             token.ThrowIfCancellationRequested();
             return OperationResult<ProbedInitialReference>.Succeeded(new(reference, version, parsed.Data,
-                timing.Data, links.AsReadOnly()));
+                timing.Data.Initialization, links.AsReadOnly(), timing.Data.FragmentAnchors));
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { return OperationResult<ProbedInitialReference>.Cancelled(); }
         catch (DecoderFallbackException) { return Failed(OperationErrorCode.ProcessFailed); }

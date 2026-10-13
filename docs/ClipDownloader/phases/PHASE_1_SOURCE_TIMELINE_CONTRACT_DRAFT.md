@@ -223,3 +223,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 33. 4a-3c-3c-2 동일 bytes의 explicit track 연결
 
 2026-10-13 [4a-3c-3c-2](PHASE_1_STAGE_4A3C3C2_LINK_RESULT.md)는 collector reference의 lock/pre·posthash 수명에 container 읽기를 결합하고 explicit FFprobe id·동일 exact clock을 대조한다. index+1/list order 추정은 없으며 미확인/불일치에는 연결을 발행하지 않는다. 성공도 Demux/container 관찰이며 handler/codec/fragment/native 원점/coverage 증명이 아니다. 최종452개·빌드와 기존 초기 참조 복사본의 실제 ToolLocator/ProcessRunner/FFprobe 연결213frames를 확인했다. actual selected service/HTTP collector·native evidence는 남았다. sandbox ProbeExecution I/O를 clock 모순으로 처리하지 않고 안전한 실패 단계/분류를 보완했다.
+
+## 34. 4a-3c-3c-3a fragment decode 관찰
+
+2026-10-13 [4a-3c-3c-3a](PHASE_1_STAGE_4A3C3C3A_FRAGMENT_RESULT.md)는 동일 bytes의 bounded moof offset·tfhd TrackId/flags·optional unsigned32/64 tfdt를 보존한다. missing tfdt는 null이며 repeated/nonmonotonic anchors를 자동 보정하지 않는다. trun/default/codec/skip/priming/sample presentation은 아직 미확인이다. tfdt를 PTS/O나 native correction0으로 승격하지 않는다. synthetic467개·빌드와 보존된 실제 local fixture adapter의4anchors를 검증했다. 다음 codec/sample/native evidence·inspector/획득 연결이 남았다.
