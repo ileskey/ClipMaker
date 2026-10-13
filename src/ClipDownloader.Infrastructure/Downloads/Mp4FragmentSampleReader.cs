@@ -153,7 +153,9 @@ internal sealed class Mp4FragmentSampleReader
         var esds = Single(Boxes(entry.Body[28..], ref count), "esds").Body;
         if (Version(esds) != 0) throw new Unsupported();
         config = AacConfiguration(esds[4..]);
-        if (config.Length != 2) throw new Unsupported();
+        // Narrow LC form: two-byte GAS configuration with only zero byte padding.
+        // Preserve the full original configuration identity; nonzero extensions remain unsupported.
+        if (config.Length is < 2 or > 16 || config.Span[2..].IndexOfAnyExcept((byte)0) >= 0) throw new Unsupported();
         ushort bits = BinaryPrimitives.ReadUInt16BigEndian(config.Span);
         int objectType = bits >> 11, frequencyIndex = (bits >> 7) & 15, channels = (bits >> 3) & 15;
         int[] rates = [96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350];
@@ -162,7 +164,7 @@ internal sealed class Mp4FragmentSampleReader
         if (rate > ushort.MaxValue) throw new Unsupported();
         if (BinaryPrimitives.ReadUInt16BigEndian(entry.Body.Span[16..]) != channels || U32(entry.Body, 24) != (uint)rate << 16)
             throw new InvalidDataException();
-        return new(id, "aac", 2, Convert.ToHexString(SHA256.HashData(config.Span)), rate, channels);
+        return new(id, "aac", config.Length, Convert.ToHexString(SHA256.HashData(config.Span)), rate, channels);
     }
 
     private static ReadOnlyMemory<byte> AacConfiguration(ReadOnlyMemory<byte> bytes)

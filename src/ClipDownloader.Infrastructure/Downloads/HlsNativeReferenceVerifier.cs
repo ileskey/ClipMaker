@@ -23,11 +23,13 @@ internal sealed class HlsNativeReferenceVerifier
         if (reference.NativeSamples is null) return Fail(OperationErrorCode.VerificationFailed, "NativeSamplesMissing");
         if (reference.NativeSamples.Status != OperationStatus.Succeeded)
             return OperationResult<VerifiedHlsNativeReference>.Failed(reference.NativeSamples.Error!);
-        if (!reference.Observations.PacketsObserved || reference.ContainerTiming.Tracks.Any(track => track.HasEditList))
+        bool indexed = reference.Reference is IndexedCollectedReference;
+        if (!reference.Observations.PacketsObserved || !indexed && reference.ContainerTiming.Tracks.Any(track => track.HasEditList))
             return Fail(OperationErrorCode.UnsupportedFormat, "NativeEditsUnsupported");
         var evidence = reference.NativeSamples.Data!;
         if (reference.Observations.Streams.Count != evidence.Configurations.Count ||
-            reference.Observations.Streams.Count(s => s.Kind == MediaStreamKind.Video) != 1 ||
+            (!indexed && reference.Observations.Streams.Count(s => s.Kind == MediaStreamKind.Video) != 1) ||
+            (indexed && reference.Observations.Streams.Count != 1) ||
             reference.Observations.Streams.Count(s => s.Kind == MediaStreamKind.Audio) > 1)
             return Fail(OperationErrorCode.UnsupportedFormat, "NativeTrackLayout");
         var verified = new List<VerifiedNativeStream>();
@@ -36,6 +38,16 @@ internal sealed class HlsNativeReferenceVerifier
             var track = reference.ContainerTiming.Tracks.SingleOrDefault(track => track.TrackId == stream.TrackId);
             if (track is null || stream.TimeBase.Numerator != 1 || stream.TimeBase.Denominator != track.MediaTimescale)
                 return Fail(OperationErrorCode.VerificationFailed, "NativeTrackClock");
+            BigInteger translation = 0;
+            SignedMediaTime? movieEnd = null;
+            if (track.HasEditList)
+            {
+                if (!indexed || track.Edits.Count != 1 || track.Edits[0] is not { MediaTime: >= 0, MovieDuration: > 0, RateInteger: 1, RateFraction: 0 } edit)
+                    return Fail(OperationErrorCode.UnsupportedFormat, "NativeEditsUnsupported");
+                translation = -new BigInteger(edit.MediaTime);
+                SignedMediaTime.TryCreate(edit.MovieDuration, reference.ContainerTiming.MovieTimescale, out movieEnd, out _);
+                if (movieEnd is null) return Fail(OperationErrorCode.VerificationFailed, "MovieClock");
+            }
             var config = evidence.Configurations.SingleOrDefault(c => c.TrackId == stream.TrackId);
             if (config is null || config.Codec != stream.Codec.Name || config.ConfigBytes != stream.Codec.ExtradataSize)
                 return Fail(OperationErrorCode.VerificationFailed, "NativeCodecIdentity");
@@ -51,10 +63,10 @@ internal sealed class HlsNativeReferenceVerifier
             for (int i = 0; i < samples.Length; i++)
             {
                 var sample = samples[i]; var packet = packets[i];
-                if (sample.PresentationTicks < long.MinValue || sample.PresentationTicks > long.MaxValue ||
-                    sample.DecodeTicks < long.MinValue || sample.DecodeTicks > long.MaxValue)
+                if (sample.PresentationTicks + translation < long.MinValue || sample.PresentationTicks + translation > long.MaxValue ||
+                    sample.DecodeTicks + translation < long.MinValue || sample.DecodeTicks + translation > long.MaxValue)
                     return Fail(OperationErrorCode.UnsupportedFormat, "NativeClockOverflow");
-                if (packet.Pts != (long)sample.PresentationTicks || packet.Dts != (long)sample.DecodeTicks ||
+                if (packet.Pts != (long)(sample.PresentationTicks + translation) || packet.Dts != (long)(sample.DecodeTicks + translation) ||
                     packet.Duration != sample.Duration || packet.Size != sample.Size || packet.Position != sample.ByteOffset)
                     return Fail(OperationErrorCode.VerificationFailed, "NativePacketTiming");
                 if (packet.HasUninterpretedSideData || packet.Flags is null || packet.Flags.Contains('C') || packet.Flags.Contains('D'))
@@ -76,20 +88,22 @@ internal sealed class HlsNativeReferenceVerifier
             for (int i = 0; i < orderedSamples.Length; i++)
             {
                 var sample = orderedSamples[i]; var frame = orderedFrames[i];
-                if (frame.Pts != (long)sample.PresentationTicks || frame.Duration != sample.Duration)
+                if (frame.Pts != (long)(sample.PresentationTicks + translation) || frame.Duration != sample.Duration)
                     return Fail(OperationErrorCode.VerificationFailed, "NativeFrameTiming");
                 if (stream.Kind == MediaStreamKind.Audio && (frame.SampleCount != sample.Duration ||
                     frame.SampleRate is { } rate && rate != config.SampleRate || frame.Channels is { } channels && channels != config.Channels))
                     return Fail(OperationErrorCode.VerificationFailed, "NativeAudioSamples");
             }
-            if (stream.StartPts != (long)orderedSamples[0].PresentationTicks)
+            if (stream.StartPts != (long)(orderedSamples[0].PresentationTicks + translation))
                 return Fail(OperationErrorCode.VerificationFailed, "NativeStartTiming");
-            SignedMediaTime.TryCreate(orderedSamples[0].PresentationTicks * stream.TimeBase.Numerator,
+            SignedMediaTime.TryCreate((orderedSamples[0].PresentationTicks + translation) * stream.TimeBase.Numerator,
                 stream.TimeBase.Denominator, out var start, out _);
-            BigInteger last = orderedSamples.Max(s => s.PresentationTicks + s.Duration);
+            BigInteger last = orderedSamples.Max(s => s.PresentationTicks + s.Duration) + translation;
             SignedMediaTime.TryCreate(last * stream.TimeBase.Numerator, stream.TimeBase.Denominator, out var end, out _);
             PresentationRange.TryCreate(start!, end!, out var range, out _);
             if (range is null) return Fail(OperationErrorCode.VerificationFailed, "NativeEmptyRange");
+            if (movieEnd is not null && (range.Start.Numerator < 0 || range.End.CompareTo(movieEnd) > 0))
+                return Fail(OperationErrorCode.UnsupportedFormat, "MovieEditClippingUnsupported");
             verified.Add(new(stream, config, range));
         }
         return OperationResult<VerifiedHlsNativeReference>.Succeeded(new(reference, verified));

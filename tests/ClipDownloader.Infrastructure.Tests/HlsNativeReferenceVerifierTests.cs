@@ -8,6 +8,38 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class HlsNativeReferenceVerifierTests
 {
+    [Theory]
+    [InlineData("valid")]
+    [InlineData("double")]
+    [InlineData("empty")]
+    [InlineData("rate")]
+    [InlineData("clipped")]
+    public void IndexedMovieTranslationIsAppliedExactlyOnceAndUnsupportedEditsFail(string kind)
+    {
+        var original = Reference();
+        var local = new IndexedCollectedReference(original.Reference.File, 1116, 1116, new string('A', 64), F.Range(0, 2), F.Range(0, 2));
+        long shift = kind == "double" ? -200 : -100;
+        var stream = original.Observations.Streams[0] with { StartPts = 12000 + shift };
+        var observations = new InitialReferenceObservations([stream],
+            original.Observations.Frames.Select(f => f with { Pts = f.Pts + shift }),
+            original.Observations.Packets.Select(p => p with { Pts = p.Pts + shift, Dts = p.Dts + shift }), true);
+        var edit = new Mp4EditObservation(kind == "clipped" ? 1u : 18000u, kind == "empty" ? -1 : 100,
+            kind == "rate" ? (short)2 : (short)1, 0);
+        var track = new Mp4TrackTiming(7, 6000, true, [edit]);
+        var reference = original with { Reference = local, Observations = observations,
+            ContainerTiming = new(6000, [track]), TrackLinks = [new(0, track)] };
+        var result = new HlsNativeReferenceVerifier().Verify(reference);
+        if (kind == "valid")
+        {
+            Assert.Equal(OperationStatus.Succeeded, result.Status);
+            Assert.Equal(F.Time(11900, 6000), result.Data!.EarliestPresentation);
+        }
+        else
+        {
+            Assert.Null(result.Data);
+            Assert.Equal(kind == "double" ? OperationErrorCode.VerificationFailed : OperationErrorCode.UnsupportedFormat, result.Error!.Code);
+        }
+    }
     internal static ProbedInitialReference Reference(OwnedMediaFile? file=null)
     {
         var native = NativeMp4Fixture.Read();
