@@ -5,7 +5,7 @@ namespace ClipDownloader.Infrastructure.Downloads;
 
 // These are demux/decoder observations, never proof of native source origin or coverage.
 internal sealed record InitialStreamObservation(int Index, MediaStreamKind Kind,
-    SignedMediaTime TimeBase, long? StartPts, FrameRate? DeclaredRate, FrameRate? AverageRate);
+    SignedMediaTime TimeBase, long? StartPts, FrameRate? DeclaredRate, FrameRate? AverageRate, uint? TrackId);
 
 internal sealed record InitialFrameObservation(int StreamIndex, long? Pts, long? Duration, int? SampleCount);
 

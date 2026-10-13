@@ -96,6 +96,28 @@ public sealed class InitialReferenceObservationParserTests
         AssertFailure(Parse(frames: string.Join(',', Enumerable.Repeat(frame, InitialReferenceObservationParser.MaximumFrames + 1))));
     }
 
+    [Theory]
+    [InlineData("\"0xffffffff\"", 4294967295u)]
+    [InlineData("\"0x7\"", 7u)]
+    [InlineData("\"7\"", 7u)]
+    [InlineData("7", 7u)]
+    public void ExplicitTrackIdsArePreserved(string id, uint expected)
+    {
+        Assert.Equal(expected, Parse(Video.Replace("\"index\":0", "\"index\":0,\"id\":" + id)).Data!.Streams[0].TrackId);
+        Assert.Null(Parse().Data!.Streams[0].TrackId);
+    }
+
+    [Theory]
+    [InlineData("0")]
+    [InlineData("-1")]
+    [InlineData("4294967296")]
+    [InlineData("null")]
+    [InlineData("\"0x\"")]
+    [InlineData("\"0x100000000\"")]
+    [InlineData("\"0xno\"")]
+    public void MalformedExplicitTrackIdFails(string id) =>
+        AssertFailure(Parse(Video.Replace("\"index\":0", "\"index\":0,\"id\":" + id)));
+
     private static void AssertFailure(OperationResult<InitialReferenceObservations> result)
     {
         Assert.Equal(OperationStatus.Failed, result.Status);

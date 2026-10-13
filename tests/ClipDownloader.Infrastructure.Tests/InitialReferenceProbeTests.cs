@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Buffers.Binary;
 using System.Text;
 using ClipDownloader.Application.Models;
 using ClipDownloader.Infrastructure.Downloads;
@@ -11,20 +12,33 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class InitialReferenceProbeTests
 {
-    private const string Json = """{"streams":[{"index":0,"codec_type":"video","time_base":"1/6000"}],"frames":[]}""";
+    private const string Json = """{"streams":[{"index":0,"id":"0x7","codec_type":"video","time_base":"1/6000"}],"frames":[]}""";
+    private static byte[] Box(string type, params byte[][] bodies)
+    {
+        byte[] body = bodies.SelectMany(b => b).ToArray(); byte[] result = new byte[8 + body.Length];
+        BinaryPrimitives.WriteUInt32BigEndian(result, (uint)result.Length);
+        Encoding.ASCII.GetBytes(type).CopyTo(result, 4); body.CopyTo(result, 8); return result;
+    }
+    private static byte[] Header(string type, uint value)
+    {
+        var body = new byte[type switch { "mvhd" => 100, "tkhd" => 84, _ => 24 }];
+        BinaryPrimitives.WriteUInt32BigEndian(body.AsSpan(12), value); return Box(type, body);
+    }
+    private static byte[] Media() => Box("moov", Header("mvhd", 1000),
+        Box("trak", Header("tkhd", 7), Box("mdia", Header("mdhd", 6000))));
     private sealed class Fixture : IDisposable
     {
         private readonly string directory = Path.Combine(Path.GetFullPath(".artifacts"), "initial-probe-tests", Guid.NewGuid().ToString("N"));
         internal HlsCollectedReference Reference { get; }
-        internal Fixture()
+        internal Fixture(byte[]? content = null)
         {
             Directory.CreateDirectory(directory);
             string path = Path.Combine(directory, "ref.mp4");
-            byte[] bytes = [1, 2, 3]; File.WriteAllBytes(path, bytes);
+            byte[] bytes = content ?? Media(); File.WriteAllBytes(path, bytes);
             SignedMediaTime.TryCreate(0, 1, out var zero, out _);
             SignedMediaTime.TryCreate(2, 1, out var two, out _);
             PresentationRange.TryCreate(zero!, two!, out var range, out _);
-            Reference = new(Guid.NewGuid(), new(Guid.NewGuid(), path, ["selected"]), 3, 4,
+            Reference = new(Guid.NewGuid(), new(Guid.NewGuid(), path, ["selected"]), bytes.Length, bytes.Length + 1,
                 Convert.ToHexString(SHA256.HashData(bytes)), range!, range!);
         }
         public void Dispose() { File.Delete(Reference.File.Path); Directory.Delete(directory); }
@@ -57,6 +71,10 @@ public sealed class InitialReferenceProbeTests
         var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
         Assert.Equal(OperationStatus.Succeeded, result.Status);
         Assert.Same(fixture.Reference, result.Data!.Reference); Assert.Equal("8.1", result.Data.ProbeVersion);
+        Assert.Equal(1000u, result.Data.ContainerTiming.MovieTimescale);
+        var link = Assert.Single(result.Data.TrackLinks);
+        Assert.Equal(0, link.StreamIndex); Assert.Equal(7u, link.Track.TrackId);
+        Assert.True(((System.Collections.IList)result.Data.TrackLinks).IsReadOnly);
         Assert.Equal(2, runner.Calls.Count);
         Assert.Equal(TimeSpan.FromSeconds(15), runner.Calls[0].Timeout);
         var request = runner.Calls[1]; Assert.Equal(TimeSpan.FromSeconds(60), request.Timeout);
@@ -74,7 +92,8 @@ public sealed class InitialReferenceProbeTests
     public async Task ChangedBytesOrLengthStopsBeforeExecution(bool length)
     {
         using var fixture = new Fixture(); var runner = new Runner();
-        File.WriteAllBytes(fixture.Reference.File.Path, length ? [1] : [9, 2, 3]);
+        byte[] changed = File.ReadAllBytes(fixture.Reference.File.Path); changed[0] ^= 1;
+        File.WriteAllBytes(fixture.Reference.File.Path, length ? [1] : changed);
         var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
         Assert.Equal(OperationErrorCode.VerificationFailed, result.Error!.Code); Assert.Null(result.Data); Assert.Empty(runner.Calls);
     }
@@ -144,5 +163,71 @@ public sealed class InitialReferenceProbeTests
         Assert.Equal(OperationStatus.Cancelled, (await Probe(runner).ProbeAsync(fixture.Reference, new(true))).Status);
         Assert.Equal(2, runner.Calls.Count);
         Assert.True(File.Exists(fixture.Reference.File.Path));
+    }
+
+    [Theory]
+    [InlineData("missing")]
+    [InlineData("foreign")]
+    [InlineData("clock")]
+    [InlineData("extra")]
+    [InlineData("empty")]
+    public async Task UnmatchedContainerAndProbeNeverPublishLinkedObservation(string fault)
+    {
+        using var fixture = new Fixture();
+        string json = fault switch
+        {
+            "missing" => Json.Replace("\"id\":\"0x7\",", ""),
+            "foreign" => Json.Replace("0x7", "0x1"),
+            "clock" => Json.Replace("1/6000", "1/48000"),
+            "extra" => Json.Replace("}],\"frames\"", "},{\"index\":1,\"id\":\"0x7\",\"codec_type\":\"audio\",\"time_base\":\"1/6000\"}],\"frames\""),
+            _ => "{\"streams\":[],\"frames\":[]}"
+        };
+        var runner = new Runner { Respond = request => Result(request.Arguments.Contains("-version") ? "ffprobe version 8.1" : json) };
+        var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
+        Assert.Null(result.Data);
+        Assert.Equal(fault == "empty" ? OperationErrorCode.InvalidMetadata : OperationErrorCode.VerificationFailed, result.Error!.Code);
+    }
+
+    [Fact]
+    public async Task ContainerFailureStopsBeforeAnyToolAndPreservesFile()
+    {
+        using var fixture = new Fixture([1, 2, 3]); var runner = new Runner();
+        var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
+        Assert.Equal(OperationErrorCode.InvalidMetadata, result.Error!.Code); Assert.Null(result.Data);
+        Assert.Empty(runner.Calls); Assert.True(File.Exists(fixture.Reference.File.Path));
+    }
+
+    [Fact]
+    public async Task RunnerIoFailureIsDistinctFromFileIdentityFailure()
+    {
+        using var fixture = new Fixture();
+        var runner = new Runner { Respond = _ => throw new IOException("SECRET") };
+        var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
+        Assert.Equal(OperationErrorCode.ProcessFailed, result.Error!.Code);
+        Assert.Equal("ProbeExecution", result.Error.Field);
+        Assert.DoesNotContain("SECRET", result.Error.Message); Assert.Null(result.Data);
+        Assert.True(File.Exists(fixture.Reference.File.Path));
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task ExplicitIdsDetermineLinksIndependentlyOfListOrder(bool duplicate)
+    {
+        byte[] media = Box("moov", Header("mvhd", 1000),
+            Box("trak", Header("tkhd", 7), Box("mdia", Header("mdhd", 6000))),
+            Box("trak", Header("tkhd", 9), Box("mdia", Header("mdhd", 6000))));
+        using var fixture = new Fixture(media);
+        string json = """{"streams":[{"index":8,"id":"0x9","codec_type":"audio","time_base":"2/12000"},{"index":2,"id":"0x7","codec_type":"video","time_base":"1/6000"}],"frames":[]}""";
+        if (duplicate) json = json.Replace("0x9", "0x7");
+        var runner = new Runner { Respond = request => Result(request.Arguments.Contains("-version") ? "ffprobe version 8.1" : json) };
+        var result = await Probe(runner).ProbeAsync(fixture.Reference, TestContext.Current.CancellationToken);
+        if (duplicate) Assert.Equal(OperationErrorCode.VerificationFailed, result.Error!.Code);
+        else
+        {
+            Assert.Equal(OperationStatus.Succeeded, result.Status);
+            Assert.Equal(9u, result.Data!.TrackLinks.Single(link => link.StreamIndex == 8).Track.TrackId);
+            Assert.Equal(7u, result.Data.TrackLinks.Single(link => link.StreamIndex == 2).Track.TrackId);
+        }
     }
 }

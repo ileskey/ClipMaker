@@ -37,7 +37,7 @@ internal sealed class InitialReferenceObservationParser
                 var (n, d) = Rational(Required(item, "time_base").GetString());
                 if (n <= 0 || d <= 0 || !SignedMediaTime.TryCreate(n, d, out var timeBase, out _)) return Failed();
                 streams.Add(new(index, kind, timeBase!, OptionalInteger(item, "start_pts"),
-                    Rate(item, "r_frame_rate"), Rate(item, "avg_frame_rate")));
+                    Rate(item, "r_frame_rate"), Rate(item, "avg_frame_rate"), TrackId(item)));
             }
             var frames = new List<InitialFrameObservation>();
             foreach (var item in framesJson.EnumerateArray())
@@ -82,6 +82,21 @@ internal sealed class InitialReferenceObservationParser
 
     private static long? OptionalInteger(JsonElement item, string name) =>
         item.TryGetProperty(name, out var value) ? Integer(value) : null;
+
+    private static uint? TrackId(JsonElement item)
+    {
+        if (!item.TryGetProperty("id", out var value)) return null;
+        if (value.ValueKind == JsonValueKind.String && value.GetString() is { } text &&
+            text.StartsWith("0x", StringComparison.Ordinal) && text.Length is > 2 and <= 10)
+        {
+            if (uint.TryParse(text.AsSpan(2), NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture, out uint id) && id > 0)
+                return id;
+            throw new FormatException();
+        }
+        long number = Integer(value);
+        if (number <= 0 || number > uint.MaxValue) throw new FormatException();
+        return (uint)number;
+    }
 
     private static (long Numerator, long Denominator) Rational(string? text)
     {
