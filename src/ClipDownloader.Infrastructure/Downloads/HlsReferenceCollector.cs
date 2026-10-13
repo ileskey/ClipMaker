@@ -115,8 +115,9 @@ internal sealed class HlsReferenceCollector
             {
                 await output.FlushAsync(token).ConfigureAwait(false);
                 token.ThrowIfCancellationRequested();
-                completed = new(playlist.Id, file, written, used,
-                    Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant(), plan.RequestedPlaylistRange, actual);
+                string digest = Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant();
+                var captured = new OwnedMediaFile(file.Id, file.Path, file.SourceFormatIds, new(written, digest));
+                completed = new(playlist.Id, captured, written, used, digest, plan.RequestedPlaylistRange, actual);
                 status = OperationStatus.Succeeded;
             }
         }

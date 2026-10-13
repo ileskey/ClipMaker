@@ -64,6 +64,8 @@ public sealed class IndexedReferenceCollectorTests
                 Assert.Equal(new byte[] { 1, 2, 3, 4, 3, 4 }, await File.ReadAllBytesAsync(path, TestContext.Current.CancellationToken));
                 Assert.Equal(14, result.Data!.BudgetUsed);
                 Assert.Equal(6, result.Data.Bytes);
+                Assert.Equal(6, result.Data.File.Content!.Bytes);
+                Assert.Equal(result.Data.Sha256, result.Data.File.Content.Sha256);
                 Assert.Equal(Range(0, 4), result.Data.ActualIndexRange);
                 Assert.Equal(Convert.ToHexString(SHA256.HashData(await File.ReadAllBytesAsync(path, TestContext.Current.CancellationToken))).ToLowerInvariant(), result.Data.Sha256);
                 Assert.Equal(new (long?, long?)[] { (10, 11), (20, 21) }, handler.Ranges);

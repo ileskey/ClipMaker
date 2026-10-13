@@ -81,7 +81,9 @@ internal sealed class IndexedReferenceCollector(BoundedSourceHttpReader reader)
             {
                 await output.FlushAsync(token).ConfigureAwait(false);
                 token.ThrowIfCancellationRequested();
-                data = new(file, written, used, Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant(), requested, actual);
+                string digest = Convert.ToHexString(hash.GetHashAndReset()).ToLowerInvariant();
+                var captured = new OwnedMediaFile(file.Id, file.Path, file.SourceFormatIds, new(written, digest));
+                data = new(captured, written, used, digest, requested, actual);
                 status = OperationStatus.Succeeded;
             }
         }

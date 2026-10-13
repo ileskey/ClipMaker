@@ -51,6 +51,8 @@ public sealed class AuxiliaryHlsReferenceCollectorTests
                 Assert.Equal(OperationStatus.Succeeded, result.Status);
                 Assert.Equal(new byte[] { 1, 2, 3 }, File.ReadAllBytes(result.Data!.File.Path));
                 Assert.Equal(new[] { "270" }, result.Data.File.SourceFormatIds);
+                Assert.Equal(3, result.Data.File.Content!.Bytes);
+                Assert.Equal(result.Data.Sha256.ToLowerInvariant(), result.Data.File.Content.Sha256);
                 Assert.Equal(100 + Encoding.UTF8.GetByteCount(Playlist) + 3, result.Data.BudgetUsed);
                 Assert.Equal(Convert.ToHexString(SHA256.HashData(new byte[] { 1, 2, 3 })), result.Data.Sha256);
                 Assert.Equal(2, handler.Calls);

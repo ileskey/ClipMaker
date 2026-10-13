@@ -151,6 +151,8 @@ public sealed class HlsReferenceCollectorTests
         Assert.Equal(8, result.Data.Bytes);
         Assert.Equal(input.Playlist.SourceBytes + 8, result.Data.BudgetUsed);
         Assert.Equal(Convert.ToHexString(SHA256.HashData(expected)).ToLowerInvariant(), result.Data.Sha256);
+        Assert.Equal(result.Data.Bytes, result.Data.File.Content!.Bytes);
+        Assert.Equal(result.Data.Sha256, result.Data.File.Content.Sha256);
         Assert.Equal(id, result.Data.File.Id);
         Assert.Equal("hls-selected", Assert.Single(result.Data.File.SourceFormatIds));
         Assert.Equal(input.Playlist.Id, result.Data.PlaylistId);

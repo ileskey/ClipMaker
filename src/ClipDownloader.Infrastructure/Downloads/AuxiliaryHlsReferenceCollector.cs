@@ -66,8 +66,12 @@ internal sealed class AuxiliaryHlsReferenceCollector(BoundedSourceHttpReader rea
                 }
         }
         if (status == OperationStatus.Succeeded && token.IsCancellationRequested) status = OperationStatus.Cancelled;
-        if (status == OperationStatus.Succeeded) return new(status, new(file, bytes.Length, used + bytes.Length,
-            Convert.ToHexString(SHA256.HashData(bytes)), first), null, []);
+        if (status == OperationStatus.Succeeded)
+        {
+            string digest = Convert.ToHexString(SHA256.HashData(bytes));
+            var captured = new OwnedMediaFile(file.Id, file.Path, file.SourceFormatIds, new(bytes.Length, digest));
+            return new(status, new(captured, bytes.Length, used + bytes.Length, digest, first), null, []);
+        }
         var files = new List<OwnedMediaFile>();
         if (uncertainClose) files.Add(file);
         else if (owned)
