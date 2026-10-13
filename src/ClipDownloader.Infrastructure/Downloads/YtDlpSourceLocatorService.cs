@@ -16,12 +16,14 @@ internal sealed class SelectedMediaLocator(VideoFormat format, Uri uri, Uri? man
     internal IReadOnlyDictionary<string, string> Headers { get; } = headers;
 }
 
-internal sealed class SelectedSourceLocators(SelectedSourceSnapshot selection, VideoInfo info, SelectedMediaLocator video, SelectedMediaLocator? audio)
+internal sealed class SelectedSourceLocators(SelectedSourceSnapshot selection, VideoInfo info, SelectedMediaLocator video, SelectedMediaLocator? audio,
+    IEnumerable<SelectedMediaLocator>? presentationReferences = null)
 {
     internal SelectedSourceSnapshot Selection { get; } = selection;
     internal VideoInfo Info { get; } = info;
     internal SelectedMediaLocator Video { get; } = video;
     internal SelectedMediaLocator? Audio { get; } = audio;
+    internal IReadOnlyList<SelectedMediaLocator> PresentationReferences { get; } = Array.AsReadOnly((presentationReferences ?? []).ToArray());
 }
 
 internal sealed class YtDlpSourceLocatorService
@@ -82,7 +84,20 @@ internal sealed class YtDlpSourceLocatorService
                 if (resolved.Status != OperationStatus.Succeeded) return Fail(resolved.Error!.Code);
                 audioLocator = resolved.Data!;
             }
-            return OperationResult<SelectedSourceLocators>.Succeeded(new(selection, info, videoLocator.Data!, audioLocator));
+            var references = new List<SelectedMediaLocator>();
+            // The first declared bridge strategy is deliberately limited to the experimentally verified pair.
+            // Supplemental renditions are relation evidence, never replacement output choices.
+            if (selection.Source.Platform == VideoPlatform.YouTube && video.Id == "137" && audio?.Id == "140")
+            {
+                foreach (string id in new[] { "270", "234" })
+                {
+                    var auxiliary = info.Formats.SingleOrDefault(f => f.Id == id && f.Transport == FormatTransport.Hls);
+                    if (auxiliary is null) continue;
+                    var resolved = Locator(auxiliary, formats, headers);
+                    if (resolved.Status == OperationStatus.Succeeded) references.Add(resolved.Data!);
+                }
+            }
+            return OperationResult<SelectedSourceLocators>.Succeeded(new(selection, info, videoLocator.Data!, audioLocator, references));
         }
         catch (JsonException) { return Fail(OperationErrorCode.InvalidMetadata); }
         catch (ArgumentException) { return Fail(OperationErrorCode.InvalidMetadata); }

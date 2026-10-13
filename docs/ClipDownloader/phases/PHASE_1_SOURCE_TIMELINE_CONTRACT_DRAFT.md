@@ -259,3 +259,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 42. 4a-3d-2 indexed byte collection
 
 [4a-3d-2](PHASE_1_STAGE_4A3D2_COLLECTION_RESULT.md)는 same-prefix locator/index 계약 아래 whole direct references를 정확한 byte 범위로 소유 파일에 수집한다. 요청/실제 index 구간과 byte hash를 보존하며 movie/native O 또는 coverage를 추정하지 않는다. Downloader581개·빌드 경고/오류0. prefix 통합/public 연결·native/edit/shared axis와전체4a 검증은남았다.
+
+## 43. Indexed movie 및 provider declaration의 관찰 범위
+
+[4a-3d-3~8](PHASE_1_STAGE_4A3D8_REFERENCE_RESULT.md)은 개별indexed 소유참조/native clock과limited movie edit를확인하고provider master·packed-audio carrier 관찰경로를추가했다. 단일content edit는원본sample→demux에한번만적용한다. 보조audio metadata Unknown은조사후보로유지하며media presence로승격하지않는다. mastergroup 선언만으로selected137/140 공통축을확정하지않는다. public FPS만확인된snapshot에서Origin/SharedAxis/NativeEnd는Unknown이며targetAcquire는SourceTimelineUnverified다. provider/content/native 대조생산경로와target/전체4단계는남았다.

@@ -51,7 +51,7 @@ public sealed class YtDlpSourceLocatorServiceTests
         {
             Calls.Add(request);
             bool metadata = request.Arguments.Contains("--dump-single-json");
-            byte[] bytes = Encoding.UTF8.GetBytes(metadata ? json : "2026.08.19");
+            byte[] bytes = Encoding.UTF8.GetBytes(metadata ? json : Path.GetFileName(request.ExecutablePath) == "node.exe" ? "v22.0.0" : "2026.08.19");
             return Task.FromResult(new ProcessResult(metadata ? status : ProcessStatus.Exited, metadata && status != ProcessStatus.Exited ? 1 : 0,
                 new(bytes, bytes.Length, false, false, !metadata || complete, !metadata || complete),
                 new(Array.Empty<byte>(), 0, false, false, true, true), null, true, true, status != ProcessStatus.TerminationFailed, null));
@@ -63,6 +63,41 @@ public sealed class YtDlpSourceLocatorServiceTests
         var settings = new ToolPathSettings();
         return new(new(new ToolExecutionDiagnostics(locator, settings, runner, Path.GetFullPath(".")), locator,
             settings, runner, Path.GetFullPath(".")));
+    }
+
+    [Theory]
+    [InlineData("complete", 2)]
+    [InlineData("missing", 1)]
+    [InlineData("unsafe", 1)]
+    public async Task SupplementalPresentationLocatorsNeverReplaceSelectedPair(string fault, int referenceCount)
+    {
+        var json = JsonNode.Parse(Json(split: true))!;
+        json["id"] = "sFXPM_sfJNo";
+        json["webpage_url"] = "https://www.youtube.com/watch?v=sFXPM_sfJNo";
+        var formats = json["formats"]!.AsArray();
+        var video = formats[0]!;
+        var audio = formats[1]!;
+        video["format_id"] = "137"; video["protocol"] = "https";
+        audio["format_id"] = "140";
+        var videoReference = video.DeepClone(); videoReference["format_id"] = "270"; videoReference["protocol"] = "m3u8_native";
+        if (fault == "unsafe") videoReference["url"] = "http://media.example/unsafe";
+        var audioReference = audio.DeepClone(); audioReference["format_id"] = "234"; audioReference["protocol"] = "m3u8_native";
+        if (fault != "missing") formats.Add(videoReference);
+        formats.Add(audioReference);
+        string text = json.ToJsonString();
+        Assert.True(VideoSourceReference.TryCreate(VideoPlatform.YouTube, "sFXPM_sfJNo", out var source));
+        var info = new YtDlpMetadataParser().Parse(Encoding.UTF8.GetBytes(text), source).Data!;
+        var choice = FormatSelection.Create(info, QualityOption.Best, info.Formats.Single(f => f.Id == "137"),
+            info.Formats.Single(f => f.Id == "140"), FormatSelectionReason.RequestedBest).Data!;
+        var snapshot = SelectedSourceSnapshot.Create(Guid.NewGuid(), info, choice, ClipMode.Fast).Data!;
+        var result = await Service(new(text)).ResolveAsync(snapshot, TestContext.Current.CancellationToken);
+        Assert.Equal(OperationStatus.Succeeded, result.Status);
+        Assert.Same(snapshot, result.Data!.Selection);
+        Assert.Equal("137", result.Data.Video.Format.Id);
+        Assert.Equal("140", result.Data.Audio!.Format.Id);
+        Assert.Equal(referenceCount, result.Data.PresentationReferences.Count);
+        Assert.All(result.Data.PresentationReferences, r => Assert.Equal(FormatTransport.Hls, r.Format.Transport));
+        Assert.True(((System.Collections.IList)result.Data.PresentationReferences).IsReadOnly);
     }
 
     [Fact]
