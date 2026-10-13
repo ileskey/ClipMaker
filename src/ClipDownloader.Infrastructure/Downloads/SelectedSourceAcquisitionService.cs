@@ -81,6 +81,9 @@ public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceIn
             }
             var locators=await resolve(request.Selection,cancellationToken).ConfigureAwait(false);
             if(locators.Status!=OperationStatus.Succeeded) {Failed(request.JobId,locators.Error);return Translate(locators.Status,locators.Error);}
+            if (http is not null && probe is not null && locators.Data!.Video.Format.Transport == FormatTransport.Https &&
+                locators.Data.Audio is { Format.Transport: FormatTransport.Https })
+                return await InspectIndexedAsync(request, locators.Data, cancellationToken).ConfigureAwait(false);
             var initial=await inspect(request,locators.Data!,cancellationToken).ConfigureAwait(false);
             Register(request.JobId,initial.RemainingFiles);
             if(initial.Data is { } observed) Register(request.JobId,[observed.Reference.File]);
