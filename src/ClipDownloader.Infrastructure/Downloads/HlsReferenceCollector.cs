@@ -5,13 +5,9 @@ using ClipMaker.Media.Core.ValueObjects;
 namespace ClipDownloader.Infrastructure.Downloads;
 
 internal sealed class HlsCollectedReference(Guid playlistId, OwnedMediaFile file, long bytes, long budgetUsed,
-    string sha256, PresentationRange requested, PresentationRange actual)
+    string sha256, PresentationRange requested, PresentationRange actual) : CollectedSourceReference(file, bytes, budgetUsed, sha256)
 {
     internal Guid PlaylistId { get; } = playlistId;
-    internal OwnedMediaFile File { get; } = file;
-    internal long Bytes { get; } = bytes;
-    internal long BudgetUsed { get; } = budgetUsed;
-    internal string Sha256 { get; } = sha256;
     internal PresentationRange RequestedPlaylistRange { get; } = requested;
     internal PresentationRange ActualPlaylistRange { get; } = actual;
 }

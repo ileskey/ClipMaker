@@ -43,7 +43,8 @@ public sealed partial class SelectedSourceAcquisitionService
             var video=context.Native.Streams.Single(s=>s.Stream.Kind==MediaStreamKind.Video);
             var sourceStart=SignedMediaTime.FromTimecode(request.Range.Start)+origin;
             var sourceEnd=SignedMediaTime.FromTimecode(request.Range.End)+origin;
-            var firstSpan=context.Native.Reference.Reference.ActualPlaylistRange.End-context.Native.Reference.Reference.ActualPlaylistRange.Start;
+            var firstReference=(HlsCollectedReference)context.Native.Reference.Reference;
+            var firstSpan=firstReference.ActualPlaylistRange.End-firstReference.ActualPlaylistRange.Start;
             var fetchStart=sourceStart-video.ObservedRange.Start-firstSpan;
             if(fetchStart.CompareTo(SignedMediaTime.Zero)<0) fetchStart=SignedMediaTime.Zero;
             var fetchEnd=sourceEnd-video.ObservedRange.Start+firstSpan;

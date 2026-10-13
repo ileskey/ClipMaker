@@ -8,14 +8,14 @@ using ClipMaker.Media.Infrastructure.Tools;
 namespace ClipDownloader.Infrastructure.Downloads;
 
 internal sealed record Mp4StreamTimingLink(int StreamIndex, Mp4TrackTiming Track);
-internal sealed record ProbedInitialReference(HlsCollectedReference Reference,
+internal sealed record ProbedInitialReference(CollectedSourceReference Reference,
     string ProbeVersion, InitialReferenceObservations Observations, Mp4TimingObservation ContainerTiming,
     IReadOnlyList<Mp4StreamTimingLink> TrackLinks, IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors,
     OperationResult<Mp4NativeSampleEvidence>? NativeSamples = null);
 
 internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettings settings, IProcessRunner runner)
 {
-    internal async Task<OperationResult<ProbedInitialReference>> ProbeAsync(HlsCollectedReference reference, CancellationToken token)
+    internal async Task<OperationResult<ProbedInitialReference>> ProbeAsync(CollectedSourceReference reference, CancellationToken token)
     {
         ArgumentNullException.ThrowIfNull(reference);
         string accessStage = "FileOpen";
@@ -83,7 +83,7 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
         { return Failed(accessStage == "ProbeExecution" ? OperationErrorCode.ProcessFailed : OperationErrorCode.VerificationFailed, accessStage); }
     }
 
-    private static async Task<bool> Matches(FileStream file, HlsCollectedReference reference, CancellationToken token)
+    private static async Task<bool> Matches(FileStream file, CollectedSourceReference reference, CancellationToken token)
     {
         if (file.Length != reference.Bytes) return false;
         file.Position = 0;

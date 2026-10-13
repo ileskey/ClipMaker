@@ -86,7 +86,7 @@ public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceIn
             if(initial.Data is { } observed) Register(request.JobId,[observed.Reference.File]);
             if(initial.Status!=OperationStatus.Succeeded) {Failed(request.JobId,initial.Error);return Translate(initial.Status,initial.Error);}
             cancellationToken.ThrowIfCancellationRequested();
-            if(initial.Data!.Reference.ActualPlaylistRange.Start!=SignedMediaTime.Zero)
+            if(initial.Data!.Reference is not HlsCollectedReference hls || hls.ActualPlaylistRange.Start!=SignedMediaTime.Zero)
             {Failed(request.JobId,null);return Failure(OperationErrorCode.VerificationFailed,"InitialReferenceRequired");}
             var verified=new HlsNativeReferenceVerifier().Verify(initial.Data);
             if(verified.Status!=OperationStatus.Succeeded) {Failed(request.JobId,verified.Error);return Translate(verified.Status,verified.Error);}

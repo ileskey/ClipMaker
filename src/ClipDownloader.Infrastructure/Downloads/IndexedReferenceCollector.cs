@@ -4,8 +4,12 @@ using ClipMaker.Media.Core.ValueObjects;
 
 namespace ClipDownloader.Infrastructure.Downloads;
 
-internal sealed record IndexedCollectedReference(OwnedMediaFile File, long Bytes, long BudgetUsed,
-    string Sha256, PresentationRange RequestedIndexRange, PresentationRange ActualIndexRange);
+internal sealed class IndexedCollectedReference(OwnedMediaFile file, long bytes, long budgetUsed,
+    string sha256, PresentationRange requested, PresentationRange actual) : CollectedSourceReference(file, bytes, budgetUsed, sha256)
+{
+    internal PresentationRange RequestedIndexRange { get; } = requested;
+    internal PresentationRange ActualIndexRange { get; } = actual;
+}
 
 internal sealed record IndexedReferenceCollectionResult(OperationStatus Status, IndexedCollectedReference? Data,
     OperationError? Error, IReadOnlyList<OwnedMediaFile> RemainingFiles);

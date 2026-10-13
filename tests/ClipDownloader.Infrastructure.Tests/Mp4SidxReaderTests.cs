@@ -8,7 +8,7 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class Mp4SidxReaderTests
 {
-    private static byte[] Prefix(byte version=0,uint size=100,uint scale=6000,uint duration=6000,ulong earliest=12000,ulong firstOffset=8)
+    internal static byte[] Prefix(byte version=0,uint size=100,uint scale=6000,uint duration=6000,ulong earliest=12000,ulong firstOffset=8)
     {
         byte[] body=new byte[version==0?36:44];body[0]=version;
         BinaryPrimitives.WriteUInt32BigEndian(body.AsSpan(4),7);BinaryPrimitives.WriteUInt32BigEndian(body.AsSpan(8),scale);

@@ -35,7 +35,7 @@ public sealed class HlsAcquireServiceTests
                 if(inspected>1 && fault=="termination") return Task.FromResult(new HlsInitialReferenceInspectionResult(OperationStatus.Failed,null,
                     new(OperationErrorCode.ProcessTerminationFailed,OperationErrorCategory.Execution,"종료 미확인"),[fixture.File]));
                 var reference=HlsNativeReferenceVerifierTests.Reference(fixture.File);
-                if(inspected>1 && fault=="changed") reference=reference with{Reference=new(reference.Reference.PlaylistId,fixture.File,1116,1116,new string('B',64),F.Range(0,2),F.Range(0,2))};
+                if(inspected>1 && fault=="changed") reference=reference with{Reference=new HlsCollectedReference(((HlsCollectedReference)reference.Reference).PlaylistId,fixture.File,1116,1116,new string('B',64),F.Range(0,2),F.Range(0,2))};
                 var playlist=new HlsMediaPlaylistParser().Parse(Encoding.UTF8.GetBytes(Playlist),locators.Video.Uri).Data!;
                 return Task.FromResult(new HlsInitialReferenceInspectionResult(OperationStatus.Succeeded,reference,null,playlist:playlist));
             },http,new(new Locator(),new(),new Runner()));
