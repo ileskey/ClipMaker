@@ -784,3 +784,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 2026-10-14 4a-3c-7: HEAD336b869789b7b4a1db9180d49a6bd46834ca06e6·phase/1에서중단변경을보존해 [HLS target acquire](PHASE_1_STAGE_4A3C7_ACQUIRE_RESULT.md)를구현했다. metadata/first hash재확인·누적budget·whole target참조·native cfg/clock/필요support와source-local0 mapping을연결한다. SignedMediaTime 비교컴파일오류6곳을CompareTo로수정해최종563개·솔루션빌드경고/오류0을확인했다. 실제CHZZK10~12초요청의source 후보획득/매핑을검증했으며최종clip/decoder preparation을보증하지 않는다. indexed/분리축/양사이트통합과전체4a는남았다.
 
 2026-10-14 4a-3d-1: HEAD33a4ca7cb44ff8c8a00d02199da35fdfbbb1a7b0·phase/1에서 [bounded init/SIDX reader](PHASE_1_STAGE_4A3D1_SIDX_RESULT.md)를구현했다. unsigned index 시간과 checked 직접 byte 범위를 분리하고 hierarchy/누락/중복/범위 초과를 거절한다. 최종574개·빌드경고/오류0, 실제YouTube137/140 prefix각64KiB·38/23refs를확인했다. index0은movie/native O가아니며 indexed수집/bridge/분리축/전체4a는남았다.
+
+2026-10-14 4a-3d-2: [indexed 참조 수집](PHASE_1_STAGE_4A3D2_COLLECTION_RESULT.md)을 구현했다. exact HeaderRange/초기 resource length·전송 전 누적 budget·CreateNew/hash와 실패 소유 파일 인계를 확인했다. Downloader581개·솔루션 빌드 경고/오류0. synthetic 검증이며 새 원격 수집/public indexed 연결·movie/native bridge·분리축 및 전체4a는 남았다.

@@ -255,3 +255,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 41. 4a-3d-1 init/SIDX byte references
 
 [4a-3d-1](PHASE_1_STAGE_4A3D1_SIDX_RESULT.md)는independently confirmed resource length와bounded prefix에서init/direct byte references 및exact index time을읽는다. unsigned time/SAP는관찰이며user/movie/native O/keyframe/decoder 준비를추정하지 않는다. 최종574개·빌드와actual137/140 prefix각65536bytes를검증했다. actualindex/header수집/소유파일과native/shared-axis 연결·전체4a는남았다.
+
+## 42. 4a-3d-2 indexed byte collection
+
+[4a-3d-2](PHASE_1_STAGE_4A3D2_COLLECTION_RESULT.md)는 same-prefix locator/index 계약 아래 whole direct references를 정확한 byte 범위로 소유 파일에 수집한다. 요청/실제 index 구간과 byte hash를 보존하며 movie/native O 또는 coverage를 추정하지 않는다. Downloader581개·빌드 경고/오류0. prefix 통합/public 연결·native/edit/shared axis와전체4a 검증은남았다.
