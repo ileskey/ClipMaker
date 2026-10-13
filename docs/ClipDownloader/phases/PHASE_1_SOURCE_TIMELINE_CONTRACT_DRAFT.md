@@ -251,3 +251,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 40. 4a-3c-7 HLS target acquisition
 
 [4a-3c-7](PHASE_1_STAGE_4A3C7_ACQUIRE_RESULT.md)는confirmed O를사용한참조후보를수집하고실제native cfg/clock/필요sample support를대조한scoped B0 mapping을반환한다. first hash재확인과누적budget/소유registry를유지하며failure/cancel Data=null에서도files를인계한다. PCM/decoder history/CFR/최종output proof와다르다. 최종563개·빌드와실제CHZZK10~12초bounded acquire를검증했다. YouTube indexed/분리 관계·양사이트통합과전체4a는남았다.
+
+## 41. 4a-3d-1 init/SIDX byte references
+
+[4a-3d-1](PHASE_1_STAGE_4A3D1_SIDX_RESULT.md)는independently confirmed resource length와bounded prefix에서init/direct byte references 및exact index time을읽는다. unsigned time/SAP는관찰이며user/movie/native O/keyframe/decoder 준비를추정하지 않는다. 최종574개·빌드와actual137/140 prefix각65536bytes를검증했다. actualindex/header수집/소유파일과native/shared-axis 연결·전체4a는남았다.
