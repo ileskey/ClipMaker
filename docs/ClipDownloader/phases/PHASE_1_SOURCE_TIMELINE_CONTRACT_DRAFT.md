@@ -207,3 +207,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 29. 4a-3c-2 bounded 참조와 파일 수명
 
 2026-10-13 [4a-3c-2](PHASE_1_STAGE_4A3C2_COLLECTION_RESULT.md)는 같은 playlist/leaf plan의 complete init/segment를 누적 budget·소유 파일·취소/cleanup 조건으로 수집한다. bytes/SHA/playlist범위/provenance는 반환하지만 source/native/decoder/target 관계를 증명한 것은 아니다. cancellation/close 실패 교차를 수정하고 fake HTTP/실제 fixture 파일의385개 테스트·솔루션빌드를 검증했다. 다음 초기 source참조의 native 원점/FPS 관찰과 public inspector/잔존자원 연결이 필요하며 실제 CHZZK/전체 준비는 미완료다.
+
+## 30. 4a-3c-3a 초기 참조 Demux 관찰
+
+2026-10-13 [4a-3c-3a](PHASE_1_STAGE_4A3C3A_OBSERVATIONS_RESULT.md)는 bounded JSON의 exact stream/frame PTS와 선언/평균 FPS를 internal read-only 관찰로 보존한다. 누락은 대체하지 않으며 basis는 Demux다. start_pts/최초 frame/동일 FPS 자체가 source O/native 관계/CFR/coverage 증명이 아니다. synthetic JSON의 Downloader404개·솔루션빌드를 검증했다. 다음 local FFprobe 실행·수집파일 hash identity, codec/container 보정/native proof와 inspector 연결이 필요하다. 실제 source/전체 준비는 미완료다.

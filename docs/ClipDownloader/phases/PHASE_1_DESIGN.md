@@ -760,3 +760,5 @@ Phase 2는 Phase 1 구현·필수 검증 완료 후 실제 Application 계약을
 
 
 2026-10-13 4a-3c-2: 시작 HEAD 4953a7b44bec453387899d9cc02cf85bcdbd230f·phase/1·clean에서 [HLS 참조수집/소유 파일](PHASE_1_STAGE_4A3C2_COLLECTION_RESULT.md)을 구현했다. 동일 leaf/plan·playlist 포함 누적byte/span budget·complete init/segments를 CreateNew 파일로 연결하며 SHA/소유provenance를 반환한다. 실패/취소의 원래결과·잔존 경로를 보존하고 uncertain close에서는 삭제/성공발행을 하지 않는다. 취소/close 교차 테스트 실패를 응답수락 경계에서 수정해 최종Downloader385개·솔루션빌드 경고/오류0을 확인했다. fakebytes/fixture파일 검증이며 실제source/native/서비스 지원은 아직 아니다. 다음4a-3c-3 초기 참조 native/원점/FPS 관찰연결이 남았고 staging/commit은 하지 않았다.
+
+2026-10-13 4a-3c-3a: 시작 HEAD a609ee0b909d8a5861cc15c614f4f9800e4e961e·phase/1·clean에서 [초기 참조 관찰 파서](PHASE_1_STAGE_4A3C3A_OBSERVATIONS_RESULT.md)를 구현했다. exact signed PTS/time_base·별도 선언/평균 FPS·누락값을 Demux 관찰로 보존하며 bounded JSON/중복/foreign 연결을 거절한다. Downloader404개·솔루션빌드 경고/오류0을 확인했다. synthetic JSON 검증이며 실제 FFprobe/파일 결합/native 원점/FPS fact는 아직 아니다. 다음4a-3c-3b 실행·hash identity 연결과 native evidence/inspector가 남았다. staging/commit과 전체 완료는 하지 않았다.
