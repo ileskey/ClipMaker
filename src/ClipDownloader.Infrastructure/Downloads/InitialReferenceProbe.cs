@@ -10,7 +10,8 @@ namespace ClipDownloader.Infrastructure.Downloads;
 internal sealed record Mp4StreamTimingLink(int StreamIndex, Mp4TrackTiming Track);
 internal sealed record ProbedInitialReference(HlsCollectedReference Reference,
     string ProbeVersion, InitialReferenceObservations Observations, Mp4TimingObservation ContainerTiming,
-    IReadOnlyList<Mp4StreamTimingLink> TrackLinks, IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors);
+    IReadOnlyList<Mp4StreamTimingLink> TrackLinks, IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors,
+    OperationResult<Mp4NativeSampleEvidence>? NativeSamples = null);
 
 internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettings settings, IProcessRunner runner)
 {
@@ -46,11 +47,13 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
             if (version is null) return Failed(OperationErrorCode.ProcessFailed);
             var probeResult = await runner.RunAsync(new(location.SelectedPath!,
                 ["-v", "error", "-protocol_whitelist", "file", "-format_whitelist", "mov", "-show_streams", "-show_frames", "-show_packets",
-                    "-show_entries", "stream=index,id,codec_type,codec_name,profile,pix_fmt,sample_fmt,sample_rate,channels,extradata_size,time_base,start_pts,r_frame_rate,avg_frame_rate:frame=stream_index,media_type,pts,duration,nb_samples,sample_fmt,sample_rate,channels:packet=stream_index,pts,dts,duration,flags:packet_side_data=side_data_type,skip_samples,discard_padding,skip_reason,discard_reason",
+                    "-show_entries", "stream=index,id,codec_type,codec_name,profile,pix_fmt,sample_fmt,sample_rate,channels,extradata_size,time_base,start_pts,r_frame_rate,avg_frame_rate:frame=stream_index,media_type,pts,duration,nb_samples,sample_fmt,sample_rate,channels:packet=stream_index,pts,dts,duration,flags,size,pos:packet_side_data=side_data_type,skip_samples,discard_padding,skip_reason,discard_reason",
                     "-of", "json", "-i", reference.File.Path], directory,
                 ProcessOutputMode.Full, ProcessOutputMode.Tail, TimeSpan.FromSeconds(60)), null, token).ConfigureAwait(false);
             failure = Check(probeResult);
             if (failure is not null) return failure;
+            if (probeResult.StandardError.TotalBytes != 0)
+                return Failed(OperationErrorCode.VerificationFailed, "DecoderReportedError");
             token.ThrowIfCancellationRequested();
             accessStage = "FileRead";
             if (!await Matches(file, reference, token).ConfigureAwait(false)) return Failed(OperationErrorCode.VerificationFailed, "ByteIdentityAfter");
@@ -72,7 +75,7 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
             }
             token.ThrowIfCancellationRequested();
             return OperationResult<ProbedInitialReference>.Succeeded(new(reference, version, parsed.Data,
-                timing.Data.Initialization, links.AsReadOnly(), timing.Data.FragmentAnchors));
+                timing.Data.Initialization, links.AsReadOnly(), timing.Data.FragmentAnchors, timing.Data.NativeSamples));
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { return OperationResult<ProbedInitialReference>.Cancelled(); }
         catch (DecoderFallbackException) { return Failed(OperationErrorCode.ProcessFailed); }

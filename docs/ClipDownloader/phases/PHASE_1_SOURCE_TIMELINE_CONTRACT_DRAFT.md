@@ -239,3 +239,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 37. 4a-3c-4 HLS initial observation pipeline
 
 [4a-3c-4](PHASE_1_STAGE_4A3C4_INITIAL_PIPELINE_RESULT.md)는 재검증된 resolved locator의동일선택과budget을first whole reference/collector/probe에 연결한다. 성공은internal observation 후보이며native/원점/FPS fact가 아니다. 실패/취소에도소유파일을RemainingFiles로 인계하고uncertain termination을취소/삭제로숨기지 않는다. public adapter/workspace cleanup인계는아직없다. 최종synthetic520개·빌드를확인했고actual pipeline site/media 실행은미완료다.
+
+## 38. 4a-3c-5 bounded native sample gate
+
+[4a-3c-5](PHASE_1_STAGE_4A3C5_NATIVE_RESULT.md)는 최초 AVC/AAC-LC fMP4 전략의실제sample duration/CTS/defaults/bytes와packet/frame을대조한다. 성공은해당원본참조의timing 관계이며first source provenance와public O/FPS/axis 발행은caller 책임이다. decoder/history/PCM/CFR/target/전체끝을추정하지 않는다. edit/비zero skip/복합codec은첫 gate에서미지원이다. 최종546개·빌드와보존된CHZZK native sample/AAC edit실제대조를검증했다. public adapter/소유실패 인계와획득은남았다.

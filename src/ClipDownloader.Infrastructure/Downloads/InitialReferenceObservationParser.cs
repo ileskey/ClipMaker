@@ -124,7 +124,10 @@ internal sealed class InitialReferenceObservationParser
                             (byte?)OptionalUnsigned(side, "skip_reason", byte.MaxValue), (byte?)OptionalUnsigned(side, "discard_reason", byte.MaxValue));
                     }
                 }
-                packets.Add(new(index, OptionalInteger(item, "pts"), OptionalInteger(item, "dts"), duration, flags, skip, uninterpreted));
+                var packetPosition = OptionalInteger(item, "pos");
+                if (packetPosition < 0) return Failed();
+                packets.Add(new(index, OptionalInteger(item, "pts"), OptionalInteger(item, "dts"), duration, flags, skip, uninterpreted,
+                    NonnegativeInt(item, "size"), packetPosition));
             }
             return OperationResult<InitialReferenceObservations>.Succeeded(new(streams, frames, packets, packetsObserved));
         }

@@ -10,7 +10,8 @@ internal sealed record Mp4TrackTiming(uint TrackId, uint MediaTimescale, bool Ha
 internal sealed record Mp4TimingObservation(uint MovieTimescale, IReadOnlyList<Mp4TrackTiming> Tracks);
 internal sealed record Mp4FragmentDecodeAnchor(long MoofOffset, uint TrackId, uint HeaderFlags, ulong? BaseDecodeTime);
 internal sealed record Mp4FileTimingObservation(Mp4TimingObservation Initialization,
-    IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors);
+    IReadOnlyList<Mp4FragmentDecodeAnchor> FragmentAnchors, OperationResult<Mp4NativeSampleEvidence> NativeSamples);
+internal sealed record Mp4MoofBody(long Offset, ReadOnlyMemory<byte> Body);
 
 // Container header observations only. Track IDs are not FFprobe stream indices.
 internal sealed class Mp4TimingReader
@@ -19,8 +20,8 @@ internal sealed class Mp4TimingReader
     internal const int MaximumMoofBytes = 2 * 1024 * 1024;
     internal const int MaximumTotalMoofBytes = 8 * 1024 * 1024;
     private const int MaximumBoxes = 10_000;
-    private sealed record Box(string Type, ReadOnlyMemory<byte> Body);
-    private sealed class Unsupported : Exception { }
+    internal sealed record Box(string Type, ReadOnlyMemory<byte> Body);
+    internal sealed class Unsupported : Exception { }
 
     internal async Task<OperationResult<Mp4FileTimingObservation>> ReadAsync(Stream input, CancellationToken token)
     {
@@ -34,6 +35,8 @@ internal sealed class Mp4TimingReader
             byte[] header = new byte[16];
             byte[]? moov = null;
             var anchors = new List<Mp4FragmentDecodeAnchor>();
+            var fragments = new List<Mp4MoofBody>();
+            var payloads = new List<Mp4PayloadRange>();
             int moofBytes = 0, moofCount = 0, fragmentBoxes = 0;
             int count = 0;
             while (input.Position < end)
@@ -69,7 +72,9 @@ internal sealed class Mp4TimingReader
                     var body = new byte[(int)bodyBytes];
                     await input.ReadExactlyAsync(body, token).ConfigureAwait(false);
                     anchors.AddRange(FragmentAnchors(body, start, ref fragmentBoxes));
+                    fragments.Add(new(start, body));
                 }
+                else if (type == "mdat") payloads.Add(new(start + headerBytes, checked(start + (long)size)));
                 // Media payload is skipped, never allocated or decoded here.
                 input.Position = checked(start + (long)size);
             }
@@ -80,7 +85,9 @@ internal sealed class Mp4TimingReader
             if (result.Status != OperationStatus.Succeeded) return OperationResult<Mp4FileTimingObservation>.Failed(result.Error!);
             if (anchors.Any(anchor => !result.Data!.Tracks.Any(track => track.TrackId == anchor.TrackId)))
                 throw new InvalidDataException();
-            return OperationResult<Mp4FileTimingObservation>.Succeeded(new(result.Data!, anchors.AsReadOnly()));
+            var samples = new Mp4FragmentSampleReader().Read(moov, fragments, payloads);
+            token.ThrowIfCancellationRequested();
+            return OperationResult<Mp4FileTimingObservation>.Succeeded(new(result.Data!, anchors.AsReadOnly(), samples));
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { return OperationResult<Mp4FileTimingObservation>.Cancelled(); }
         catch (Unsupported) { return FileFailed(OperationErrorCode.UnsupportedFormat); }
@@ -153,7 +160,7 @@ internal sealed class Mp4TimingReader
         { return Failed(OperationErrorCode.InvalidMetadata); }
     }
 
-    private static List<Box> Boxes(ReadOnlyMemory<byte> memory, ref int count)
+    internal static List<Box> Boxes(ReadOnlyMemory<byte> memory, ref int count)
     {
         var boxes = new List<Box>(); int position = 0;
         while (position < memory.Length)
@@ -174,18 +181,18 @@ internal sealed class Mp4TimingReader
         return boxes;
     }
 
-    private static Box Single(List<Box> boxes, string type)
+    internal static Box Single(List<Box> boxes, string type)
     {
         var selected = boxes.Where(box => box.Type == type).ToArray();
         return selected.Length == 1 ? selected[0] : throw new InvalidDataException();
     }
-    private static byte Version(ReadOnlyMemory<byte> memory)
+    internal static byte Version(ReadOnlyMemory<byte> memory)
     {
         if (memory.Length < 4) throw new InvalidDataException();
         if (memory.Span[0] > 1) throw new Unsupported();
         return memory.Span[0];
     }
-    private static uint U32(ReadOnlyMemory<byte> memory, int offset)
+    internal static uint U32(ReadOnlyMemory<byte> memory, int offset)
     {
         if (memory.Length - offset < 4) throw new InvalidDataException();
         return BinaryPrimitives.ReadUInt32BigEndian(memory.Span[offset..]);

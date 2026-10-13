@@ -15,7 +15,7 @@ internal sealed record InitialFrameObservation(int StreamIndex, long? Pts, long?
     string? SampleFormat, int? SampleRate, int? Channels);
 internal sealed record InitialPacketSkipObservation(uint? SkipSamples, uint? DiscardPadding, byte? SkipReason, byte? DiscardReason);
 internal sealed record InitialPacketObservation(int StreamIndex, long? Pts, long? Dts, long? Duration,
-    string? Flags, InitialPacketSkipObservation? Skip, bool HasUninterpretedSideData);
+    string? Flags, InitialPacketSkipObservation? Skip, bool HasUninterpretedSideData, int? Size, long? Position);
 
 internal sealed class InitialReferenceObservations
 {

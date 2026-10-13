@@ -219,6 +219,16 @@ public sealed class InitialReferenceProbeTests
         Assert.DoesNotContain("SECRET", result.Error.Message); Assert.Null(result.Data);
         Assert.True(File.Exists(fixture.Reference.File.Path));
     }
+    [Fact]
+    public async Task ExitZeroWithDecoderErrorsDoesNotPublishCleanObservations()
+    {
+        using var fixture = new Fixture();
+        var runner = new Runner { Respond = request => request.Arguments.Contains("-version") ? Result("ffprobe version 8.1") :
+            Result(Json) with {StandardError = new(Encoding.UTF8.GetBytes("SECRET decoder error"),20,false,false,true,true)} };
+        var result=await Probe(runner).ProbeAsync(fixture.Reference,TestContext.Current.CancellationToken);
+        Assert.Equal("DecoderReportedError",result.Error!.Field); Assert.Null(result.Data);
+        Assert.DoesNotContain("SECRET",result.Error.Message);
+    }
 
     [Fact]
     public async Task FragmentAnchorIsReturnedFromTheSameBoundFile()
