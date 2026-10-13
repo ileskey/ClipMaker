@@ -211,3 +211,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 30. 4a-3c-3a 초기 참조 Demux 관찰
 
 2026-10-13 [4a-3c-3a](PHASE_1_STAGE_4A3C3A_OBSERVATIONS_RESULT.md)는 bounded JSON의 exact stream/frame PTS와 선언/평균 FPS를 internal read-only 관찰로 보존한다. 누락은 대체하지 않으며 basis는 Demux다. start_pts/최초 frame/동일 FPS 자체가 source O/native 관계/CFR/coverage 증명이 아니다. synthetic JSON의 Downloader404개·솔루션빌드를 검증했다. 다음 local FFprobe 실행·수집파일 hash identity, codec/container 보정/native proof와 inspector 연결이 필요하다. 실제 source/전체 준비는 미완료다.
+
+## 31. 4a-3c-3b local probe와 byte identity
+
+2026-10-13 [4a-3c-3b](PHASE_1_STAGE_4A3C3B_PROBE_RESULT.md)는 collector reference의 local bytes를 read share lock·실행 전후 길이/SHA로 연결하고 version/local FFprobe·종료/출력/취소 제한을 적용한다. success도 Demux 관찰이며 remote identity/native 원점/CFR/coverage 증명이 아니다. fake runner/실제 tiny파일의 Downloader416개·빌드와 기존 G2파일의 별도 실제 CLI 옵션을 검증했다. real adapter end-to-end·codec/container/native 증거·inspector·획득 연결은 남았다. 파일 cleanup은 collector/caller 수명에 속하며 probe는 소유 파일을 삭제하지 않는다.
