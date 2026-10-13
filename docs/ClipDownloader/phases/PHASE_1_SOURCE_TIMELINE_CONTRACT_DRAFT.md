@@ -263,3 +263,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 43. Indexed movie 및 provider declaration의 관찰 범위
 
 [4a-3d-3~8](PHASE_1_STAGE_4A3D8_REFERENCE_RESULT.md)은 개별indexed 소유참조/native clock과limited movie edit를확인하고provider master·packed-audio carrier 관찰경로를추가했다. 단일content edit는원본sample→demux에한번만적용한다. 보조audio metadata Unknown은조사후보로유지하며media presence로승격하지않는다. mastergroup 선언만으로selected137/140 공통축을확정하지않는다. public FPS만확인된snapshot에서Origin/SharedAxis/NativeEnd는Unknown이며targetAcquire는SourceTimelineUnverified다. provider/content/native 대조생산경로와target/전체4단계는남았다.
+
+## 44. Production 초기관계와target native 인계
+
+[4a-3d-11](PHASE_1_STAGE_4A3D11_RELATIONSHIP_RESULT.md)에서현재provider grouping→payload/native→decoded video→global movie edit의초기관계가확인된경우에만Origin/SharedAxis를발행한다. [target](PHASE_1_STAGE_4A3D12_TARGET_RESULT.md)은새선택/초기SHA재검사와동일header·codec·clock/index/native support를검사하고원본timestamp를보존한B0 mapping을범위scope로발행한다. 원격asset 전체version/end/CFR/PCM을뜻하지않는다. [byte identity](PHASE_1_STAGE_4A3D13_BYTE_IDENTITY_RESULT.md)는후속local file 변경검사의최소인계이며generic probe/처리검증이아직없다. SourceNativeEnd는Unknown이며decoder 준비·최종clip·전체4단계는미완료다.
