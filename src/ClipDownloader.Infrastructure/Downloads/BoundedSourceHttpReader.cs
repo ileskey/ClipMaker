@@ -56,6 +56,7 @@ internal sealed class BoundedSourceHttpReader : IDisposable
             if (source.Mode == SourceHttpMode.HeaderRange) request.Headers.Range = new(source.Start, source.End);
             foreach (var header in source.Headers) request.Headers.TryAddWithoutValidation(header.Key, header.Value);
             using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
             status = (int)response.StatusCode;
             var content = response.Content.Headers;
             if (content.Contains("Content-Length") && content.ContentLength is null)

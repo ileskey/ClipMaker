@@ -15,13 +15,14 @@ internal sealed class HlsSegment(long sequence, Uri uri, PresentationRange playl
     internal PresentationRange PlaylistRange { get; } = playlistRange;
 }
 
-internal sealed class HlsMediaPlaylist(Uri uri, Uri initialization, IReadOnlyList<HlsSegment> segments, SignedMediaTime duration)
+internal sealed class HlsMediaPlaylist(Uri uri, Uri initialization, IReadOnlyList<HlsSegment> segments, SignedMediaTime duration, int sourceBytes)
 {
     internal Guid Id { get; } = Guid.NewGuid();
     internal Uri Uri { get; } = uri;
     internal Uri Initialization { get; } = initialization;
     internal IReadOnlyList<HlsSegment> Segments { get; } = segments;
     internal SignedMediaTime Duration { get; } = duration;
+    internal int SourceBytes { get; } = sourceBytes;
 }
 
 internal sealed class HlsMediaPlaylistParser
@@ -108,7 +109,7 @@ internal sealed class HlsMediaPlaylistParser
             }
             if (!end || !versionSeen || map is null || target is null || segments.Count == 0 || pending is not null)
                 return Fail(OperationErrorCode.UnsupportedFormat);
-            return OperationResult<HlsMediaPlaylist>.Succeeded(new(playlistUri, map, Array.AsReadOnly(segments.ToArray()), position));
+            return OperationResult<HlsMediaPlaylist>.Succeeded(new(playlistUri, map, Array.AsReadOnly(segments.ToArray()), position, bytes.Length));
         }
         catch (DecoderFallbackException) { return Fail(OperationErrorCode.InvalidMetadata); }
         catch (ArgumentException) { return Fail(OperationErrorCode.InvalidMetadata); }
