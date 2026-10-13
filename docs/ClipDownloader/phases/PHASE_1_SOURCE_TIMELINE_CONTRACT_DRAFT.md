@@ -235,3 +235,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 36. 4a-3c-3c-3b-2 packet timing/skip 관찰
 
 [4a-3c-3c-3b-2](PHASE_1_STAGE_4A3C3C3B2_PACKET_RESULT.md)는 같은 파일의 packet/frame 결합 출력에서 signed PTS/DTS와 explicit skip/padding/reasons를 보존한다. missing clocks/side data를0으로 추정하지 않으며 unknown side는미해석으로 남긴다. 최종507개·빌드와local CHZZK/AAC edit oracle를 실제대조했다. 원시 음수 priming packet은O가 아니다. native/sample/codec gate·source inspector/획득 연결과전체 검증은남았다.
+
+## 37. 4a-3c-4 HLS initial observation pipeline
+
+[4a-3c-4](PHASE_1_STAGE_4A3C4_INITIAL_PIPELINE_RESULT.md)는 재검증된 resolved locator의동일선택과budget을first whole reference/collector/probe에 연결한다. 성공은internal observation 후보이며native/원점/FPS fact가 아니다. 실패/취소에도소유파일을RemainingFiles로 인계하고uncertain termination을취소/삭제로숨기지 않는다. public adapter/workspace cleanup인계는아직없다. 최종synthetic520개·빌드를확인했고actual pipeline site/media 실행은미완료다.
