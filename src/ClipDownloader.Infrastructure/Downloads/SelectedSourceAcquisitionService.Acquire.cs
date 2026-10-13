@@ -23,7 +23,13 @@ public sealed partial class SelectedSourceAcquisitionService
             }
             if(request.Inspection.Timeline.Origin.Value is not { } origin || request.Inspection.Timeline.SharedAxis.State!=MediaInspectionState.Verified)
                 return AcquireFailure(OperationErrorCode.VerificationFailed,"SourceTimelineUnverified");
-            if (context.Audio is not null) return AcquireFailure(OperationErrorCode.UnsupportedFormat, "IndexedTargetStrategyUnavailable");
+            if (context.Audio is not null)
+            {
+                var indexed = await AcquireIndexedAsync(request, context, origin, cancellationToken).ConfigureAwait(false);
+                completed = indexed.Status == OperationStatus.Succeeded;
+                if (!completed) Failed(request.JobId, indexed.Error);
+                return indexed;
+            }
             if(http is null || probe is null) return AcquireFailure(OperationErrorCode.UnsupportedFormat,"AcquisitionCompositionMissing");
             var locators=await resolve(request.Selection,cancellationToken).ConfigureAwait(false);
             if(locators.Status!=OperationStatus.Succeeded) {Failed(request.JobId,locators.Error);return AcquireTranslate(locators.Status,locators.Error);}
@@ -47,6 +53,7 @@ public sealed partial class SelectedSourceAcquisitionService
             var firstReference=(HlsCollectedReference)context.Native.Reference.Reference;
             var firstSpan=firstReference.ActualPlaylistRange.End-firstReference.ActualPlaylistRange.Start;
             var fetchStart=sourceStart-video.ObservedRange.Start-firstSpan;
+            if (request.Selection.Mode == ClipMode.Accurate) fetchStart = SignedMediaTime.Zero;
             if(fetchStart.CompareTo(SignedMediaTime.Zero)<0) fetchStart=SignedMediaTime.Zero;
             var fetchEnd=sourceEnd-video.ObservedRange.Start+firstSpan;
             if(fetchEnd.CompareTo(playlist.Duration)>0) fetchEnd=playlist.Duration;

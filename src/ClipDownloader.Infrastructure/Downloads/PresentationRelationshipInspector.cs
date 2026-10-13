@@ -46,6 +46,10 @@ internal sealed class PresentationRelationshipInspector(BoundedSourceHttpReader 
         if (moviePixels.Status != OperationStatus.Succeeded) return Translate(moviePixels.Status, moviePixels.Error);
         var carrierPixels = await videoProbe.DecodeAsync(files[0], token).ConfigureAwait(false);
         if (carrierPixels.Status != OperationStatus.Succeeded) return Translate(carrierPixels.Status, carrierPixels.Error);
+        if (locators.Video.Format.Width is { } width && moviePixels.Data!.Width != width ||
+            locators.Video.Format.Height is { } height && moviePixels.Data!.Height != height ||
+            declared.Data.Video.Format.Width is { } auxiliaryWidth && carrierPixels.Data!.Width != auxiliaryWidth ||
+            declared.Data.Video.Format.Height is { } auxiliaryHeight && carrierPixels.Data!.Height != auxiliaryHeight) return Fail();
         var pixels = new PresentationPictureVerifier().Verify(video, carrierVideo.Data!, moviePixels.Data!, carrierPixels.Data!);
         if (pixels.Status != OperationStatus.Succeeded) return Translate(pixels.Status, pixels.Error);
         token.ThrowIfCancellationRequested();
