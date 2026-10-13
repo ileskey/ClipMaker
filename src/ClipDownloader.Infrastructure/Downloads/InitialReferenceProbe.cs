@@ -46,7 +46,7 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
             if (version is null) return Failed(OperationErrorCode.ProcessFailed);
             var probeResult = await runner.RunAsync(new(location.SelectedPath!,
                 ["-v", "error", "-protocol_whitelist", "file", "-format_whitelist", "mov", "-show_streams", "-show_frames",
-                    "-show_entries", "stream=index,id,codec_type,time_base,start_pts,r_frame_rate,avg_frame_rate:frame=stream_index,media_type,pts,duration,nb_samples",
+                    "-show_entries", "stream=index,id,codec_type,codec_name,profile,pix_fmt,sample_fmt,sample_rate,channels,extradata_size,time_base,start_pts,r_frame_rate,avg_frame_rate:frame=stream_index,media_type,pts,duration,nb_samples,sample_fmt,sample_rate,channels",
                     "-of", "json", "-i", reference.File.Path], directory,
                 ProcessOutputMode.Full, ProcessOutputMode.Tail, TimeSpan.FromSeconds(60)), null, token).ConfigureAwait(false);
             failure = Check(probeResult);

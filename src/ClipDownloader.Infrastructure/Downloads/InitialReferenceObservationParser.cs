@@ -36,8 +36,13 @@ internal sealed class InitialReferenceObservationParser
                 var kind = Kind(Required(item, "codec_type").GetString());
                 var (n, d) = Rational(Required(item, "time_base").GetString());
                 if (n <= 0 || d <= 0 || !SignedMediaTime.TryCreate(n, d, out var timeBase, out _)) return Failed();
+                var codec = new InitialCodecObservation(Label(item, "codec_name"), Label(item, "profile"),
+                    Label(item, "pix_fmt"), Label(item, "sample_fmt"), PositiveInt(item, "sample_rate"),
+                    PositiveInt(item, "channels"), NonnegativeInt(item, "extradata_size"));
+                if (kind == MediaStreamKind.Video && (codec.SampleFormat is not null || codec.SampleRate is not null || codec.Channels is not null) ||
+                    kind == MediaStreamKind.Audio && codec.PixelFormat is not null) return Failed();
                 streams.Add(new(index, kind, timeBase!, OptionalInteger(item, "start_pts"),
-                    Rate(item, "r_frame_rate"), Rate(item, "avg_frame_rate"), TrackId(item)));
+                    Rate(item, "r_frame_rate"), Rate(item, "avg_frame_rate"), TrackId(item), codec));
             }
             var frames = new List<InitialFrameObservation>();
             foreach (var item in framesJson.EnumerateArray())
@@ -50,7 +55,12 @@ internal sealed class InitialReferenceObservationParser
                 long? samples = OptionalInteger(item, "nb_samples");
                 if (duration < 0 || samples <= 0 || samples > int.MaxValue ||
                     samples is not null && stream.Kind != MediaStreamKind.Audio) return Failed();
-                frames.Add(new(index, OptionalInteger(item, "pts"), duration, samples is null ? null : (int)samples));
+                string? sampleFormat = Label(item, "sample_fmt");
+                int? sampleRate = PositiveInt(item, "sample_rate");
+                int? channels = PositiveInt(item, "channels");
+                if (stream.Kind != MediaStreamKind.Audio && (sampleFormat is not null || sampleRate is not null || channels is not null)) return Failed();
+                frames.Add(new(index, OptionalInteger(item, "pts"), duration, samples is null ? null : (int)samples,
+                    sampleFormat, sampleRate, channels));
             }
             return OperationResult<InitialReferenceObservations>.Succeeded(new(streams, frames));
         }
@@ -82,6 +92,28 @@ internal sealed class InitialReferenceObservationParser
 
     private static long? OptionalInteger(JsonElement item, string name) =>
         item.TryGetProperty(name, out var value) ? Integer(value) : null;
+
+    private static int? NonnegativeInt(JsonElement item, string name)
+    {
+        var value = OptionalInteger(item, name);
+        if (value < 0 || value > int.MaxValue) throw new FormatException();
+        return value is null ? null : (int)value;
+    }
+    private static int? PositiveInt(JsonElement item, string name)
+    {
+        var value = NonnegativeInt(item, name);
+        if (value == 0) throw new FormatException();
+        return value;
+    }
+    private static string? Label(JsonElement item, string name)
+    {
+        if (!item.TryGetProperty(name, out var value)) return null;
+        string? text = value.GetString();
+        if (text is "unknown" or "N/A") return null;
+        if (text is null || text.Length is < 1 or > 128 ||
+            !text.All(character => char.IsAsciiLetterOrDigit(character) || " _().:+-".Contains(character))) throw new FormatException();
+        return text;
+    }
 
     private static uint? TrackId(JsonElement item)
     {

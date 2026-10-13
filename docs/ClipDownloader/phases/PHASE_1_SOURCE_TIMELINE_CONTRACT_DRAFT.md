@@ -227,3 +227,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 34. 4a-3c-3c-3a fragment decode 관찰
 
 2026-10-13 [4a-3c-3c-3a](PHASE_1_STAGE_4A3C3C3A_FRAGMENT_RESULT.md)는 동일 bytes의 bounded moof offset·tfhd TrackId/flags·optional unsigned32/64 tfdt를 보존한다. missing tfdt는 null이며 repeated/nonmonotonic anchors를 자동 보정하지 않는다. trun/default/codec/skip/priming/sample presentation은 아직 미확인이다. tfdt를 PTS/O나 native correction0으로 승격하지 않는다. synthetic467개·빌드와 보존된 실제 local fixture adapter의4anchors를 검증했다. 다음 codec/sample/native evidence·inspector/획득 연결이 남았다.
+
+## 35. 4a-3c-3c-3b-1 codec/decoded audio 관찰
+
+2026-10-13 [4a-3c-3c-3b-1](PHASE_1_STAGE_4A3C3C3B1_CODEC_RESULT.md)는 같은 파일의 FFprobe codec labels·sample parameters·extradata_size와 decoded frame audio parameters를 별도로 보존한다. 누락을 codec default/time_base/다른 관찰로 채우지 않는다. extradata 크기와 profile 관찰은 codec 설정 bytes·native/priming/지원 proof가 아니다. synthetic487개·빌드와 보존된 실제fixture의 codec/213frames를 확인했다. packet skip/padding·container sample presentation/native gate·inspector/획득은 남았다.
