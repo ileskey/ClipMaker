@@ -215,3 +215,7 @@ Git 상태·현재 Core/Application 코드·제품 요구사항·Phase 운영 �
 ## 31. 4a-3c-3b local probe와 byte identity
 
 2026-10-13 [4a-3c-3b](PHASE_1_STAGE_4A3C3B_PROBE_RESULT.md)는 collector reference의 local bytes를 read share lock·실행 전후 길이/SHA로 연결하고 version/local FFprobe·종료/출력/취소 제한을 적용한다. success도 Demux 관찰이며 remote identity/native 원점/CFR/coverage 증명이 아니다. fake runner/실제 tiny파일의 Downloader416개·빌드와 기존 G2파일의 별도 실제 CLI 옵션을 검증했다. real adapter end-to-end·codec/container/native 증거·inspector·획득 연결은 남았다. 파일 cleanup은 collector/caller 수명에 속하며 probe는 소유 파일을 삭제하지 않는다.
+
+## 32. 4a-3c-3c-1 MP4 timing header 경계
+
+2026-10-13 [4a-3c-3c-1](PHASE_1_STAGE_4A3C3C1_CONTAINER_RESULT.md)는 movie/track timescale·explicit track ID·edit 존재/entry·signed rate를 bounded standalone stream reader로 보존한다. track ID를 stream index+1로 대체하지 않는다. edit 없음/empty edit/header 읽기 성공 자체가 native 변환0·AAC priming·source O/지원/coverage 증명이 아니다. 아직 collector/probe hash 수명에 결합하지 않았고 codec/fragment를 검사하지 않는다. malformed box 예외 경계를 수정한 synthetic432개·솔루션빌드를 확인했다. 다음 byte identity/track 연결과 native 증거 gate가 남았다.
