@@ -119,3 +119,13 @@ Accurate binder는 source video를 처음부터 decode하여 exact common clock/
 CHZZK 첫 encode의 16/17ms는 실제 source native 시간부터 존재하며 60fps 선언만으로 CFR이라고 추정하지 않았다. 첫 B-frame 후보에서 output PTS600개는 같지만 decoded frame duration300개가 달랐다. B-frame0 후보에서600개 PTS/duration 모두 exact 대응했고 native 표시 끝이 일치했다. AAC의 완전한 첫 priming packet에 나타난 discard flag는 native edit/skip1024가 함께 일치할 때만 해석한다. audible packet discard는 계속 거절한다.
 
 실제 native consistency: CHZZK video[13/9600,96013/9600), audio[0,10), AAC skip1024/tail256. YouTube video/audio[0,10), skip1024/tail344. source-start decode/encode4개와 binder5개, output discard2개, 준비 거절3개를 추가했으며 Media Infrastructure143개/Downloader771개 실패·skip0이다. 이 단위의 결과는 captured encode이며 최종 source/output 검증은 아래 연결 기록에서 구별한다.
+
+## Accurate 최종 source/output 검증
+
+`AccurateClipVerificationService`는 동일 qualified plan/processing/render identity와 input/decoded/render/staging 전후 hash를 확인한다. output native consistency에 더해 정확한 source `[IN,OUT)` frame 집합의 상대 PTS/duration, decoded frame 수·해상도, sample-grid 유효 시작/끝과 AAC skip/tail을 대조한다. video는 S_IN, audio는 requested ceil Qa를 사용하여 실제 source 표시 범위를 반환한다. lossless render 값 검증과 lossy 출력의 temporal 검증을 구별한다. probe/decode 종료 불확실은 조회·후속 차단하고 실패·취소 결과는 Data=null이다.
+
+bounded10~20초 양 사이트 실제 Accurate 통합이 성공했다. CHZZK600 frames, source video[12,22), audio[115187/9600,211187/9600), staging1173183bytes/SHA256 `3916abad8217623b35079f2502c185444cac487b56107cb0fd9aaa6714612dde`. YouTube300 frames, source video/audio[10,20), staging4897957bytes/SHA256 `c599d0e9beda14a895ac0003f0607aa21b0fa010385f325452742707867801ce`. CHZZK 원점 O=19187/9600이므로 source 좌표12~22와 사용자10~20의 차이를 숨기지 않는다. 요청 OUT과 마지막 video frame의 실제 표시 끝은 별도로 전달한다.
+
+실제 verified 폴더는 `0df2a23acbfc4ba9af43f918fcffc122` / `ed3a486756ce4c598822492665b47115`이며 ignored `VerifyAccurateHls.ps1` / `VerifyAccurateIndexed.ps1`과 safe `accurate-output-summary.json`을 보존한다. YouTube render PCM441000 samples/3528000bytes/SHA256 `e972fcbfffef5c82e016d96cf67aff3fe36dc97dd28099b8a2b40a72fa82eea5`도 독립 occupancy oracle와 byte 동일하다. 새 final user 파일 확정·삭제·덮어쓰기는 수행하지 않았다.
+
+추가6개 테스트로 source membership 모순, 선택 해상도 변경, PCM byte 변경, 종료 불확실과 취소를 검사했다. shift fixture의 stream start_pts가 edit와 모순돼 예상보다 앞선 native gate에서 거절된 테스트를 수정한 뒤 모두 통과했다. Core143/Media Infrastructure143/Downloader771개, 총1057개 실패·skip0이며 솔루션 build 경고·오류0이다. `--no-build` 테스트와 실제 harness는 같은 DLL을 변경하는 빌드와 분리했다.
