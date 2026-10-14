@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 CHZZK Accurate 대체자료(2026-10-15): [15537558·45~55초 검증](PHASE_1_CHZZK_AUDIBLE_ACCURATE_VERIFICATION.md)의실제CLI·기존gate·독립full decode·정리가성공했다. 600서로다른decoded picture hash와무음아닌음성signal을확인했으나사용자재생/음성동기는아직Pending이다. 앞선무음자료의한계를이대체자료로확인할예정이며Phase1전체완료를아직확정하지않는다.
+
 최신 소리 있는 후보 시도(2026-10-15): 사용자제공15654475의20~30초Accurate 실제CLI는metadata sourceURL 예외로exit1·final없음이다. [기록](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md#새-후보15654475-실제-시도)을따르며CHZZK Accurate 자동생성/사람재생통과로세지않는다. Phase1전체완료는Pending이다.
 
 최신 재생 자료 보완(2026-10-15): 사용자가보존CHZZK Accurate의방송초반이무음이라음성동기확인에부족하다고보고했다. 자동생성/native/decode기록을사람검증으로승격하지않는다. 사용자는소리·움직임이있는다른영상의앞쪽구간으로현재지원범위를검증하기로선택했으며새URL/구간을기다린다. [후속 기록](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md#후속-사용자-입력과-검증-자료-변경)에14791589의46분Accurate1396/64 segment 거절도기록했다. 전체Phase완료는Pending이다.
