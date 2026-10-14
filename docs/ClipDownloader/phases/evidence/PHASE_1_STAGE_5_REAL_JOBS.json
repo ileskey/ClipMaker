@@ -1,7 +1,8 @@
 {
   "Date": "2026-10-14",
   "Scope": "Application stage 5 bounded 10-20 second jobs; stage 6 CLI not implemented",
-  "WorkRoot": "C:\\Users\\shiro\\AppData\\Local\\Packages\\sandbox.{f649ed25-e3c9-4ef2-ad57-d4303f5fc7b6}\\AC\\ClipMaker\\ClipDownloader\\jobs",
+  "WorkRoot": "C:\\Users\\shiro\\AppData\\Local\\ClipMaker\\ClipDownloader\\jobs",
+  "WorkspaceRecheckEnvironment": "Same unsandboxed app-data resolution as actual jobs",
   "Rows": [
     {
       "Summary": {

@@ -1,6 +1,6 @@
 # Phase 1 5단계 구현·통합 검증 기록
 
-2026-10-14, `phase/1`, 시작HEAD `241e44a`. 사용자 지시로5단계를 진행한다. 논리 단위 자동 commit을 유지하고 단계 완료 시 통합 보고한다. **현재 누적 작업 기록이며5단계 완료 보고가 아니다.** 6단계 CLI 연결·Phase2/WPF 다운로드 UI/ClipEditor는 진행하지 않는다.
+2026-10-14, `phase/1`, 시작HEAD `241e44a`. 사용자 지시에 따라 **검증된4단계 전략을 연결한5단계(workspace·준비·Application 실행·정리·최종 확정)를 완료했다.** 아래 기록의 진행 중 설명은 해당 시점의 이력이며 마지막 완료 범위·6단계 인계를 현재 기준으로 읽는다. 논리 단위 자동 commit과 단계별 통합 보고를 유지한다. 6단계 CLI 연결·Phase 1 전체·Phase2/WPF 다운로드 UI/ClipEditor는 완료로 선언하지 않는다.
 
 ## 5a 출력 workspace/session
 
@@ -43,6 +43,21 @@ ClipMediaService는 기존 공유 probe/native binder·K/qualifier·source-start
 | CHZZK Accurate | 1173183 / `3916abad8217623b35079f2502c185444cac487b56107cb0fd9aaa6714612dde` | 3 / 3 | 0 / 0 |
 | YouTube137/140 Accurate | 4897957 / `c599d0e9beda14a895ac0003f0607aa21b0fa010385f325452742707867801ce` | 10 / 3 | 0 / 0 |
 
-最초 CHZZK Fast harness는4단계 source 좌표 Video/Audio를 기록했고 이후 세 작업은 현재 API의 사용자 좌표 Presentation을 기록했다. 기존 기록을 임의 원점으로 바꾸지 않는다. CHZZK Accurate의 사용자 영상 범위는[96013/9600,192013/9600), 음성[10,20), gap 삽입2/중복 제거1·AAC skip1024/tail256이다. YouTube Accurate는 영상/음성[10,20), skip1024/tail344다. 요청 길이와 video 실제 표시 끝을 같다고 설명하지 않는다. 모든 SourceEndVerified는 false를 유지한다.
+최초 CHZZK Fast harness는4단계 source 좌표 Video/Audio를 기록했고 이후 세 작업은 현재 API의 사용자 좌표 Presentation을 기록했다. 기존 기록을 임의 원점으로 바꾸지 않는다. CHZZK Accurate의 사용자 영상 범위는[96013/9600,192013/9600), 음성[10,20), gap 삽입2/중복 제거1·AAC skip1024/tail256이다. YouTube Accurate는 영상/음성[10,20), skip1024/tail344다. 요청 길이와 video 실제 표시 끝을 같다고 설명하지 않는다. 모든 SourceEndVerified는 false를 유지한다.
 
 ignored RunStage5Job.ps1은 UI 확인이 끝난 호출에 해당하는 Execute를 직접 실행했다. 최초 harness의 PowerShell null→빈 string 변환으로 workspace root 전달이 실패한 실행은 성공으로 세지 않았다. .NET 기본 app-data 경로를 명시해 재실행한 위 네 작업이 성공했다. 데이터/metadata/CLI 확인 계약을 우회하지 않았으며 CLI clip/Y/N/--yes 동작의 검증으로 승격하지 않는다. 설치·whole-video fallback·모드/화질 변경·기존 사용자 파일 덮어쓰기·삭제는 없었다.
+
+폴더 독립 재검사의 첫 실행은 sandbox에서 redirect된 LocalApplicationData 경로를 조회해 경로 없음 오류가 났다. 이 실행의 폴더 확인을 유효 증거로 사용하지 않고, 실제 native 작업과 동일한 실행 환경에서 다시 검사했다. 실제 root `C:\Users\shiro\AppData\Local\ClipMaker\ClipDownloader\jobs`가 존재함을 요구하고, 네 job ID별 폴더0·최종 hash 일치를 확인한 뒤 safe 증거의 WorkRoot와 결과를 정정했다. 원래 최종 파일과 이력은 보존했다.
+
+## 5단계 완료 범위와 6단계 인계
+
+- 준비의 source/시간/경로/선택/필수 capability 검사와 immutable 확인 자료, confirmed/unknown FPS 구별을 완료했다. 준비에서 쓰기·source 획득은 없다.
+- 실행 재검사·선택 고정·source/media 요청 identity·검증 staging 연결·한 번 최종 확정·자원 인계/정리와 취소 경합을 완료했다. 기존 사용자 파일과 확정한 final은 cleanup하지 않는다.
+- 같은 process 종료 미확인은 Failed 및 보존/후속 차단, 파일 닫힘 미확인은 원래 결과 및 보존, 단순 cleanup 실패는 warning/잔존 경로다. 중단 token으로 cleanup을 생략하지 않는다.
+- 양 사이트/양 모드 Application 작업에서 final MP4 확정과 소유 임시 파일/폴더 삭제를 실제 검증했다. 4단계 codec/edit/clock·source-start budget·delay/empty support의 지원 제한과 NativeEnd Unknown·lossy 값 비동일성·player 미검증은 유지한다.
+
+최종 검증은 `dotnet build ClipMaker.slnx --no-restore` 경고·오류0, 각 기존 test csproj의 `dotnet test --no-restore --no-build`로 Core143/Media Infrastructure143/Downloader807개, **총1093개 실패·skip0**다. 단위 검증 뒤 변경된 cancellation metadata까지 솔루션을 다시 build해 같은 assembly 버전으로 회귀 검증했다. native harness가 로드한 DLL을 빌드로 덮어쓰지 않도록 실행 순서를 구별했다.
+
+다음6단계는 기존 CLI/Core Prototype 호스트의 실제 상태부터 확인하고 diagnose/info/clip 옵션·Application 조합·도구 경로·Y/N/EOF/--yes·Ctrl+C·0/1/2/130·요청/actual 범위·warning/잔존 경로 표시·로그·수명을 연결한다. 5단계는 콘솔 입력/숫자 종료 코드/DI 호스트 정책을 갖지 않는다. 6단계에 자동 진입하거나 WPF 다운로드 UI·ClipEditor를 수정하지 않았다. Source acquisition과 media facade는 해당 명령에서 같은 인스턴스를 사용해 registry 조회를 연결하고, 명시 cleanup 후 owner의 수명을 종료해야 한다.
+
+Git은 `phase/1`을 유지하고 승인한 논리 단위로 자동 commit했다. 문서 기준 `0759dc5`와 현재 실제 선행 Phase 0 `1ca2547`의 동일 source tree/다른 ancestry는4단계 기록을 유지하며 hash를 교체하거나 이력을 재작성하지 않았다. Phase 1 Base/Completion/Tag/Passed는 임의 갱신하지 않는다.
