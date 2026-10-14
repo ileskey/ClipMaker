@@ -126,7 +126,7 @@ public sealed class LocalMp4FragmentSampleReader
     private static uint Next(ReadOnlyMemory<byte> bytes, ref int position)
     { uint value = U32(bytes, position); position += 4; return value; }
 
-    private static Mp4TrackConfiguration Configuration(uint id, Box entry, ref int count)
+    internal static Mp4TrackConfiguration Configuration(uint id, Box entry, ref int count, bool allowDisabledSbrExtension = false)
     {
         ReadOnlyMemory<byte> config;
         if (entry.Type == "avc1")
@@ -144,7 +144,8 @@ public sealed class LocalMp4FragmentSampleReader
         config = AacConfiguration(esds[4..]);
         // Narrow LC form: two-byte GAS configuration with only zero byte padding.
         // Preserve the full original configuration identity; nonzero extensions remain unsupported.
-        if (config.Length is < 2 or > 16 || config.Span[2..].IndexOfAnyExcept((byte)0) >= 0) throw new Unsupported();
+        bool disabledSbr = allowDisabledSbrExtension && config.Length == 5 && config.Span[2..].SequenceEqual(new byte[] { 0x56, 0xe5, 0 });
+        if (config.Length is < 2 or > 16 || config.Span[2..].IndexOfAnyExcept((byte)0) >= 0 && !disabledSbr) throw new Unsupported();
         ushort bits = BinaryPrimitives.ReadUInt16BigEndian(config.Span);
         int objectType = bits >> 11, frequencyIndex = (bits >> 7) & 15, channels = (bits >> 3) & 15;
         int[] rates = [96000,88200,64000,48000,44100,32000,24000,22050,16000,12000,11025,8000,7350];

@@ -17,7 +17,7 @@ public sealed class LocalMp4TimingReader
     internal sealed record Box(string Type, ReadOnlyMemory<byte> Body);
     internal sealed class Unsupported : Exception { }
 
-    public async Task<MediaOperationResult<Mp4FileTimingEvidence>> ReadAsync(Stream input, CancellationToken token)
+    public async Task<MediaOperationResult<Mp4FileTimingEvidence>> ReadAsync(Stream input, CancellationToken token, bool inspectProgressiveSamples = false)
     {
         ArgumentNullException.ThrowIfNull(input);
         if (!input.CanRead || !input.CanSeek) throw new ArgumentException("A readable seekable local stream is required.", nameof(input));
@@ -79,7 +79,8 @@ public sealed class LocalMp4TimingReader
             if (result.Status != MediaOperationStatus.Succeeded) return MediaOperationResult<Mp4FileTimingEvidence>.Failed(result.Failure!);
             if (anchors.Any(anchor => !result.Data!.Tracks.Any(track => track.TrackId == anchor.TrackId)))
                 throw new InvalidDataException();
-            var samples = new LocalMp4FragmentSampleReader().Read(moov, fragments, payloads);
+            var samples = inspectProgressiveSamples && fragments.Count == 0 ? new LocalMp4ProgressiveSampleReader().Read(moov, payloads) :
+                new LocalMp4FragmentSampleReader().Read(moov, fragments, payloads);
             token.ThrowIfCancellationRequested();
             return MediaOperationResult<Mp4FileTimingEvidence>.Succeeded(new(result.Data!, anchors.AsReadOnly(), samples));
         }
@@ -127,7 +128,8 @@ public sealed class LocalMp4TimingReader
         {
             int count = 0;
             var children = Boxes(bytes, ref count);
-            uint scale = Timescale(Single(children, "mvhd").Body, 100, 112);
+            var movieHeader = Single(children, "mvhd").Body;
+            uint scale = Timescale(movieHeader, 100, 112);
             var tracks = new List<Mp4TrackTiming>();
             foreach (var track in children.Where(box => box.Type == "trak"))
             {
@@ -139,15 +141,17 @@ public sealed class LocalMp4TimingReader
                 uint id = U32(header, offset);
                 if (id == 0 || tracks.Any(t => t.TrackId == id)) throw new InvalidDataException();
                 var media = Boxes(Single(trackBoxes, "mdia").Body, ref count);
-                uint mediaScale = Timescale(Single(media, "mdhd").Body, 24, 36);
+                var mediaHeader = Single(media, "mdhd").Body;
+                uint mediaScale = Timescale(mediaHeader, 24, 36);
                 var editContainers = trackBoxes.Where(b => b.Type == "edts").ToArray();
                 if (editContainers.Length > 1) throw new InvalidDataException();
                 bool hasEdits = editContainers.Length == 1;
                 var edits = hasEdits ? Edits(Single(Boxes(editContainers[0].Body, ref count), "elst").Body) : [];
-                tracks.Add(new(id, mediaScale, hasEdits, Array.AsReadOnly(edits)));
+                tracks.Add(new(id, mediaScale, hasEdits, Array.AsReadOnly(edits), Duration(header, offset + 8),
+                    Duration(mediaHeader, Version(mediaHeader) == 0 ? 16 : 24)));
             }
             if (tracks.Count == 0) throw new InvalidDataException();
-            return MediaOperationResult<Mp4TimingObservation>.Succeeded(new(scale, tracks.AsReadOnly()));
+            return MediaOperationResult<Mp4TimingObservation>.Succeeded(new(scale, tracks.AsReadOnly(), Duration(movieHeader, Version(movieHeader) == 0 ? 16 : 24)));
         }
         catch (Unsupported) { return Failed(MediaFailureKind.UnsupportedInput); }
         catch (Exception error) when (error is InvalidDataException or OverflowException or ArgumentOutOfRangeException)
@@ -198,6 +202,8 @@ public sealed class LocalMp4TimingReader
         uint value = U32(memory, version == 0 ? 12 : 20);
         return value > 0 ? value : throw new InvalidDataException();
     }
+    private static ulong Duration(ReadOnlyMemory<byte> memory, int offset) => Version(memory) == 0 ? U32(memory, offset) :
+        BinaryPrimitives.ReadUInt64BigEndian(memory.Span[offset..]);
     private static Mp4EditObservation[] Edits(ReadOnlyMemory<byte> memory)
     {
         byte version = Version(memory); uint count = U32(memory, 4);

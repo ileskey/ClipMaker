@@ -30,7 +30,8 @@ public sealed class FfprobeMediaProbe(IToolLocator locator, ToolPathSettings set
             if (request.InspectContainer)
             {
                 stage = "ContainerRead";
-                var timing = await new LocalMp4TimingReader().ReadAsync(input, cancellationToken).ConfigureAwait(false);
+                var timing = await new LocalMp4TimingReader().ReadAsync(input, cancellationToken,
+                    request.Purpose == MediaProbePurpose.Output).ConfigureAwait(false);
                 if (timing.Status == MediaOperationStatus.Cancelled) return MediaOperationResult<MediaProbeResult>.Cancelled();
                 if (timing.Status != MediaOperationStatus.Succeeded) return MediaOperationResult<MediaProbeResult>.Failed(timing.Failure!);
                 container = timing.Data!;

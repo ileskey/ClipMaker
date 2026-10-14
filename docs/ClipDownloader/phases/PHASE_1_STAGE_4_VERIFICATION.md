@@ -81,3 +81,11 @@ Accurate는 같은 audio/acquisition scope의 Verified decoder preparation, 초�
 12개 backend 테스트로 captured 입력 변경, staging 충돌, 취소/늦은 취소, 종료 불확실 우선·재사용 차단, process/stderr 실패, Drain stdout, exact-double 한계를 검사했다. Media Infrastructure114개·Downloader744개 실패·skip0. 솔루션 build 경고·오류0.
 
 새 원격 획득 없이 기존 YouTube137/140 소유 파일을 실제 backend로 copy/mux했다. staging3,469,926bytes, SHA-256 `52314b66092c858dd4521d8e372a5546d2bc4da5e381eea87a16d0fd7d98ddd8`, raw probe/decode1025 frames/packets가 통과했다. video clock1/11289600, audio1/44100, H.264/AAC LC 설정을 확인했다. ignored `processing-real/CopyLocal.ps1`과 소유 폴더 summary를 유지한다. **progressive sample/edit/end 및 source 대응 검증 전이므로 최종 출력 통과로 선언하지 않는다.** 다음은 독립적인 MP4 output 해석/verification과 양 사이트 현재 경로 통합이다.
+
+## Progressive MP4 output 관찰
+
+source와 output probe 목적을 분리하고, output의 progressive stsz/stts/ctts/stsc/stco/co64/stss 및 실제 mdat 범위를 해석했다. sample 수·크기·물리 위치·signed composition·sync를 보존하고 중복/누락/범위 모순을 거절한다. source 전략의 제한을 넓히지 않는다. output AAC 설정에서는 명시적인 disabled SBR extension만 추가 해석한다.
+
+`Mp4OutputObservationVerifier`는 native sample/packet/frame, mvhd/tkhd/mdhd, 제한된 empty+content edit, AAC skip/decoded tail을 대조한다. mdhd의 coded presentation span과 DTS duration 합을 구별한다. [FFmpeg8.1 movenc.c](https://raw.githubusercontent.com/FFmpeg/FFmpeg/n8.1/libavformat/movenc.c)의 계산과 실제 header/sample/decode를 함께 확인했다. 이 결과는 source 대응·최종 clip 성공을 뜻하지 않는다.
+
+위 기존 YouTube staging의 output consistency가 성공했다. video valid 범위[0,211/15), audio[0,154522/11025), 첫 AAC skip408/tail padding0을 독립적으로 확인했다. video mdhd158807040과 stts 합158430720의 차이를 오류로 오인하지 않는다. Media Infrastructure128개 실패·skip0. 다음 source payload·시간·decoded 영상 대응과 Accurate 준비/처리는 미완료다.

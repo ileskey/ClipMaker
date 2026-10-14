@@ -3,6 +3,7 @@ using ClipMaker.Media.Core.ValueObjects;
 namespace ClipMaker.Media.Core.Models;
 
 public enum MediaProbeDetail { Summary, FramesAndPackets }
+public enum MediaProbePurpose { Source, Output }
 
 public sealed class MediaProbeRequest
 {
@@ -15,18 +16,21 @@ public sealed class MediaProbeRequest
     // The bounded owned file is observed in full, retaining preparation and reorder evidence.
     public PresentationRange? Range { get; }
     public bool InspectContainer { get; }
+    public MediaProbePurpose Purpose { get; }
 
     public MediaProbeRequest(Guid snapshotId, Guid fileId, string path, MediaFileContentIdentity content,
-        MediaProbeDetail detail, PresentationRange? range = null, bool inspectContainer = false)
+        MediaProbeDetail detail, PresentationRange? range = null, bool inspectContainer = false, MediaProbePurpose purpose = MediaProbePurpose.Source)
     {
         if (snapshotId == Guid.Empty || fileId == Guid.Empty) throw new ArgumentException("Local snapshot/file identities are required.");
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
         if (!System.IO.Path.IsPathFullyQualified(path)) throw new ArgumentException("An absolute local file path is required.", nameof(path));
         ArgumentNullException.ThrowIfNull(content);
         if (!Enum.IsDefined(detail)) throw new ArgumentOutOfRangeException(nameof(detail));
+        if (!Enum.IsDefined(purpose)) throw new ArgumentOutOfRangeException(nameof(purpose));
         if (detail == MediaProbeDetail.FramesAndPackets && range is null) throw new ArgumentException("Detailed inspection requires a bounded requested range.", nameof(range));
         SnapshotId = snapshotId; FileId = fileId; Path = System.IO.Path.GetFullPath(path);
         Content = content; Detail = detail; Range = range; InspectContainer = inspectContainer;
+        Purpose = purpose;
     }
 }
 

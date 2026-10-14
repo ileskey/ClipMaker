@@ -31,7 +31,7 @@ public sealed class AcquiredMediaInspection
             var request = file.Probe.Request;
             if (owned is null || owned.Content is null || request.Content != owned.Content || request.SnapshotId != acquisition.AcquisitionId ||
                 !string.Equals(request.Path, owned.Path, StringComparison.OrdinalIgnoreCase) || !request.InspectContainer ||
-                request.Detail != MediaProbeDetail.FramesAndPackets || file.Probe.Container is null)
+                request.Detail != MediaProbeDetail.FramesAndPackets || request.Purpose != MediaProbePurpose.Source || file.Probe.Container is null)
                 return Fail("AcquiredProbeIdentity");
             if (file.Native.Streams.Count != file.Probe.Observations.Streams.Count ||
                 file.Native.Streams.Any(s => !file.Probe.Observations.Streams.Contains(s.Stream)) ||
