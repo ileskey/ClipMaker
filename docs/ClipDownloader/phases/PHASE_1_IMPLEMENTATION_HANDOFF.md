@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 최종 검증 인계(2026-10-15): CHZZK15537558·45~55초Accurate의사용자재생·음성동기통과를기록했다. 양사이트/양mode의사용자확인과최종build경고/오류0·Core143/Media193/Downloader859·총1195개통과를 [최종 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)에통합했다. 아래해당player Pending은이전이력이다. 제한전략의필수검증은Passed이며Completion hash/tag확정은별개로남긴다. 원래Base/실제ancestor차이와미지원사항을보존하며Phase2로진입하지않는다.
+
 최신 CHZZK Accurate 자료 생성(2026-10-15): 사용자제공15537558·45초부터를45~55초Accurate로실제실행해exit0·final확정을완료했다. [검증 기록](PHASE_1_CHZZK_AUDIBLE_ACCURATE_VERIFICATION.md)에video[432013/9600,528013/9600)·audio[45,55)·zero1/overlap2·AAC skip1024/tail256·독립full decode·600서로다른picture hash·무음아닌음성signal·정리를기록했다. 소리있는검증자료를확보했으나사용자재생·동기확인과Phase1전체완료는Pending이다. 제품변경/build/test재실행은없다.
 
 최신 CHZZK Accurate 후보 시도(2026-10-15): 사용자가15654475·20초부터를제공해20~30초Accurate 실제CLI를실행했으나Metadata ProcessFailed·exit1·final없음이었다. 동일yt-dlp 인자로sourceURL KeyError를재현하고API200/ABR_HLS를확인했다. [후속 기록](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md#새-후보15654475-실제-시도)을따른다. 구간다운로드·렌더·재생은미수행이며CHZZK Accurate 사용자확인은Pending이다. 현재범위검증에는조회성공하는HLS원본의앞쪽소리있는구간이필요하다.

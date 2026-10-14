@@ -1,5 +1,7 @@
 # ClipDownloader Phase 1 상세 설계
 
+최신실제상태(2026-10-15): [최종 검증 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)를우선한다. 채택한제한전략의1~6단계구현·자동/실제통합과양사이트/양mode사용자재생확인을완료했다. 최종build경고/오류0·총1195개통과다. 아래미확정/미구현/Pending은작성시점의이력이며현재지원경계·후속미지원입력과Git Completion/tag확정대기를구분한다. Phase2로자동진입하지않는다.
+
 작성일: 2026-10-09 (Asia/Seoul).
 
 최종 갱신일: 2026-10-11 (Asia/Seoul).

@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 최종 사용자 확인(2026-10-15): CHZZK15537558 Accurate45~55초의재생·음성동기통과보고로양사이트/양mode의사람검증자료가확보됐다. 최초무음final대신새실제검증자료를사용했고기존네final전체확인으로표현하지않는다. 최종build경고/오류0·Core143/Media193/Downloader859·총1195개통과와 [최종 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)를우선한다. 아래직접재생미완료/Pending은당시이력이며현재필수검증은Passed다. Git Completion/tag는아직확정하지않았고Phase2는진행하지않는다.
+
 최신 CHZZK Accurate 대체자료(2026-10-15): [15537558·45~55초 검증](PHASE_1_CHZZK_AUDIBLE_ACCURATE_VERIFICATION.md)의실제CLI·기존gate·독립full decode·정리가성공했다. 600서로다른decoded picture hash와무음아닌음성signal을확인했으나사용자재생/음성동기는아직Pending이다. 앞선무음자료의한계를이대체자료로확인할예정이며Phase1전체완료를아직확정하지않는다.
 
 최신 소리 있는 후보 시도(2026-10-15): 사용자제공15654475의20~30초Accurate 실제CLI는metadata sourceURL 예외로exit1·final없음이다. [기록](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md#새-후보15654475-실제-시도)을따르며CHZZK Accurate 자동생성/사람재생통과로세지않는다. Phase1전체완료는Pending이다.

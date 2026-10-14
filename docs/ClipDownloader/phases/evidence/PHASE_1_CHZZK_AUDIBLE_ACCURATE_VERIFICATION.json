@@ -29,6 +29,12 @@
   "StagingCount": 0,
   "ProductCodeChanged": false,
   "BuildAndTestsRerun": false,
-  "DirectPlayerVerified": false,
+  "AgentContinuousPlaybackVerified": false,
+  "UserPlaybackReport": {
+    "Date": "2026-10-15",
+    "Quote": "동기 확인했어 정상이야",
+    "Scope": "15537558 / hls-8384 / 60fps / Accurate / [45,55)",
+    "PlaybackAndAudioSyncPassed": true
+  },
   "Phase1Completed": false
 }
