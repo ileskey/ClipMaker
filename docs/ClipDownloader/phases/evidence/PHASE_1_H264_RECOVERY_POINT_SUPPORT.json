@@ -1,0 +1,94 @@
+{
+  "Date": "2026-10-15",
+  "SourceId": "qnjEE-wkw8k",
+  "VideoFormat": "137",
+  "AudioFormat": "140",
+  "Mode": "Accurate",
+  "Start": 10,
+  "End": 40,
+  "SourceVideoSha256": "1AADCEDFF13B04A3E20B21D4F01D4BE02298327D9AA047D9EB264273BB0D3535",
+  "SourceVideoSamples": 1272,
+  "NativeStatusWithProof": "Succeeded",
+  "RecoveryProofs": [
+    {
+      "Position": 1043402,
+      "Size": 12145,
+      "Sha256": "BA244DD0C570EE1C5C94DF22F84795E64DD4CCA23724BF1488FE0FDE9A0062FA",
+      "RecoveryFrameCount": 0,
+      "ExactMatch": true,
+      "BrokenLink": false,
+      "ChangingSliceGroupIdc": 0,
+      "AllSlicesIntra": true
+    },
+    {
+      "Position": 1057696,
+      "Size": 18750,
+      "Sha256": "F014ADD256E8DD08669CA6C8ABAECD90FA9A8FB68FFAAE7EE3BA78691D129CF1",
+      "RecoveryFrameCount": 0,
+      "ExactMatch": true,
+      "BrokenLink": false,
+      "ChangingSliceGroupIdc": 0,
+      "AllSlicesIntra": true
+    },
+    {
+      "Position": 1144317,
+      "Size": 443,
+      "Sha256": "6A99184FCC2FF05E7378A7F9B6B9BCA28537457D8625171979675019F383E8D5",
+      "RecoveryFrameCount": 0,
+      "ExactMatch": true,
+      "BrokenLink": false,
+      "ChangingSliceGroupIdc": 0,
+      "AllSlicesIntra": true
+    }
+  ],
+  "RawNativeFlagsPreserved": true,
+  "RawPacketFlagsPreserved": true,
+  "FastClosedIdrConditionUnchanged": true,
+  "SupportedSeiNalHex": "060601C480",
+  "IntermediateFailures": [
+    {
+      "JobId": "4b401250-3b13-4b63-a494-d4908ce5755e",
+      "Field": "SourceIndex",
+      "CauseConfirmed": false
+    },
+    {
+      "JobId": "74672669-afe9-4fc3-9e05-47784b984c8f",
+      "Field": "NativeSyncState",
+      "Cause": "Acquisition initial probe did not attach recovery byte evidence"
+    }
+  ],
+  "CliVerification": {
+    "JobId": "21abf385-4ecc-444b-aa2d-314a04e0ab69",
+    "ExitCode": 0,
+    "Bytes": 2636718,
+    "Sha256": "54cc74d562fbb5c34c97afb326427ab2857abf27f03780cef71e9e3e8a108261",
+    "VideoRange": "[10,40)",
+    "AudioRange": "[10,40)",
+    "OutputAudioSkip": 1024,
+    "OutputAudioTail": 8,
+    "SourceEndVerified": false,
+    "FullAudioVideoDecodeExitCode": 0,
+    "FramehashExitCode": 0,
+    "VideoFrameCount": 900,
+    "DistinctDecodedPictureHashes": 896,
+    "SampleImagesVisuallyInspected": [
+      0,
+      15,
+      29
+    ],
+    "JobDirectoryCount": 0,
+    "StagingCount": 0
+  },
+  "Validation": {
+    "CorePassed": 143,
+    "MediaPassed": 186,
+    "DownloaderPassed": 856,
+    "TotalPassed": 1185,
+    "Failed": 0,
+    "Skipped": 0,
+    "BuildWarnings": 0,
+    "BuildErrors": 0
+  },
+  "DirectPlayerVerified": false,
+  "Reference": "https://github.com/FFmpeg/FFmpeg/blob/n8.1/libavcodec/h264_parser.c#L339"
+}

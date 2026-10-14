@@ -9,6 +9,20 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class InitialReferenceObservationParserTests
 {
+    [Fact]
+    public void SharedRecoveryByteEvidenceSurvivesAcquisitionObservationRoundTripWithoutChangingFlags()
+    {
+        SignedMediaTime.TryCreate(1, 6000, out var clock, out _);
+        var proof = new MediaH264RecoveryPointObservation(42, 16, new string('a', 64), 0, true, false, 0, true);
+        var packet = new MediaPacketObservation(0, 200, 100, 100, "K__", null, false, 16, 42, proof);
+        var shared = new MediaProbeObservations([new(0, MediaStreamKind.Video, clock!, 0, null, null, 1,
+            new("h264", null, "yuv420p", null, null, null, 1))], [new(0, 200, 100, null, null, null, null)], [packet], true, true);
+        var initial = new InitialReferenceObservationParser().FromShared(shared);
+        Assert.Same(proof, initial.Packets[0].RecoveryPoint);
+        Assert.Equal(packet, initial.ToShared().Packets[0]);
+        Assert.Equal(MediaTimeBasis.Demux, initial.TimeBasis);
+    }
+
     private const string Video = """{"index":0,"codec_type":"video","time_base":"1/6000","start_pts":12000,"r_frame_rate":"30000/1001","avg_frame_rate":"30/1"}""";
     private static OperationResult<InitialReferenceObservations> Parse(string streams = Video, string frames = "") =>
         new InitialReferenceObservationParser().Parse(Encoding.UTF8.GetBytes("{\"streams\":[" + streams + "],\"frames\":[" + frames + "]}"));

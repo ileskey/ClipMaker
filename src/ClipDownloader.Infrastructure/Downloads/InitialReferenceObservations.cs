@@ -15,7 +15,8 @@ internal sealed record InitialFrameObservation(int StreamIndex, long? Pts, long?
     string? SampleFormat, int? SampleRate, int? Channels);
 internal sealed record InitialPacketSkipObservation(uint? SkipSamples, uint? DiscardPadding, byte? SkipReason, byte? DiscardReason);
 internal sealed record InitialPacketObservation(int StreamIndex, long? Pts, long? Dts, long? Duration,
-    string? Flags, InitialPacketSkipObservation? Skip, bool HasUninterpretedSideData, int? Size, long? Position);
+    string? Flags, InitialPacketSkipObservation? Skip, bool HasUninterpretedSideData, int? Size, long? Position,
+    MediaH264RecoveryPointObservation? RecoveryPoint = null);
 
 internal sealed class InitialReferenceObservations
 {
@@ -41,5 +42,5 @@ internal sealed class InitialReferenceObservations
         Frames.Select(f => new MediaFrameObservation(f.StreamIndex, f.Pts, f.Duration, f.SampleCount, f.SampleFormat, f.SampleRate, f.Channels)),
         Packets.Select(p => new MediaPacketObservation(p.StreamIndex, p.Pts, p.Dts, p.Duration, p.Flags,
             p.Skip is null ? null : new(p.Skip.SkipSamples, p.Skip.DiscardPadding, p.Skip.SkipReason, p.Skip.DiscardReason),
-            p.HasUninterpretedSideData, p.Size, p.Position)), true, PacketsObserved);
+            p.HasUninterpretedSideData, p.Size, p.Position, p.RecoveryPoint)), true, PacketsObserved);
 }

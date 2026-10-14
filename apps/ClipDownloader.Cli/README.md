@@ -24,6 +24,8 @@ dotnet run --project apps/ClipDownloader.Cli --no-build -- clip --url "https://c
 
 단일 edit의 표시 끝과 마지막 native/packet/frame duration이 정확히 같고 decoded count와의 차이를 검증한 terminal AAC는 지원한다. Accurate는 전체 decoded PCM을 보존하고 증명된 끝 여분만 유효 sample placement에서 제외한다. 같은 영상의10~40초를 Fast/Accurate 모두 실제 확인했다. side-data discard padding 등 다른 끝 보정을 임의 허용하지 않는다. [끝 PCM 지원·검증](../../docs/ClipDownloader/phases/PHASE_1_ACCURATE_TERMINAL_PCM_SUPPORT.md)을 따른다.
 
+native non-sync와 FFprobe K가 다른 H.264 packet은 확인한 zero-count recovery SEI·non-IDR intra payload를 같은 파일/packet 바이트로 증명할 때만 지원한다. 움직이는 `qnjEE-wkw8k`의10~40초 Accurate를 실제 검증했다. 이 recovery 표식을 Fast의 폐쇄형 IDR 시작으로 사용하지 않는다. [지원 범위·실제 검증](../../docs/ClipDownloader/phases/PHASE_1_H264_RECOVERY_POINT_SUPPORT.md)을 따른다.
+
 정상 정보·준비 요약·최종 결과는 stdout, 질문·단계·주의사항·오류·잔존 경로는 stderr다. 리디렉션된 stderr는 단계 전환만 기록한다. 실제 영상/음성 표시 범위는 사용자 원점의 정확한 유리수 초와 반열린 구간으로 표시하며 요청 범위와 다를 수 있다.
 
 Ctrl+C는 취소와 자원 정리를 요청한다. 반복 입력으로 정리를 생략하지 않는다. Finalizing 진입 이후의 늦은 취소는 최종 확정 결과를 따른다. 종료 코드는 성공 `0`, 실행 오류 `1`, 입력 오류 `2`, 취소 `130`이다. 파일 정리 경고와 잔존 경로는 원래 결과를 덮지 않는다.

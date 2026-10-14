@@ -1,4 +1,5 @@
 using ClipMaker.Media.Core.Models;
+using ClipMaker.Media.Infrastructure.Probing;
 using System.Security.Cryptography;
 using System.Text;
 using ClipDownloader.Application.Models;
@@ -75,7 +76,16 @@ internal sealed class InitialReferenceProbe(IToolLocator locator, ToolPathSettin
                 links.Add(new(stream.Index, track));
             }
             token.ThrowIfCancellationRequested();
-            return OperationResult<ProbedInitialReference>.Succeeded(new(reference, version, parsed.Data,
+            var observations = parsed.Data!;
+            if (timing.Data.NativeSamples.Status == OperationStatus.Succeeded)
+            {
+                var container = new Mp4FileTimingEvidence(timing.Data.Initialization, timing.Data.FragmentAnchors,
+                    MediaOperationResult<Mp4NativeSampleEvidence>.Succeeded(timing.Data.NativeSamples.Data!));
+                var enriched = await new H264RecoveryPointReader().EnrichAsync(file, observations.ToShared(), container, token).ConfigureAwait(false);
+                observations = new InitialReferenceObservationParser().FromShared(enriched);
+                if (!await Matches(file, reference, token).ConfigureAwait(false)) return Failed(OperationErrorCode.VerificationFailed, "ByteIdentityAfter");
+            }
+            return OperationResult<ProbedInitialReference>.Succeeded(new(reference, version, observations,
                 timing.Data.Initialization, links.AsReadOnly(), timing.Data.FragmentAnchors, timing.Data.NativeSamples));
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { return OperationResult<ProbedInitialReference>.Cancelled(); }

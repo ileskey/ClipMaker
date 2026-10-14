@@ -16,8 +16,10 @@ internal sealed class InitialReferenceObservationParser
         if (json.Length > MaximumBytes) return Failed();
         var result = new FfprobeObservationParser().Parse(json);
         if (result.Status != MediaOperationStatus.Succeeded) return Failed();
-        var raw = result.Data!;
-        return OperationResult<InitialReferenceObservations>.Succeeded(new(
+        return OperationResult<InitialReferenceObservations>.Succeeded(FromShared(result.Data!));
+    }
+
+    internal InitialReferenceObservations FromShared(MediaProbeObservations raw) => new(
             raw.Streams.Select(s => new InitialStreamObservation(s.Index, s.Kind, s.TimeBase, s.StartPts, s.DeclaredRate,
                 s.AverageRate, s.TrackId, new(s.Codec.Name, s.Codec.Profile, s.Codec.PixelFormat, s.Codec.SampleFormat,
                     s.Codec.SampleRate, s.Codec.Channels, s.Codec.ExtradataSize))),
@@ -25,8 +27,7 @@ internal sealed class InitialReferenceObservationParser
                 f.SampleFormat, f.SampleRate, f.Channels)),
             raw.Packets.Select(p => new InitialPacketObservation(p.StreamIndex, p.Pts, p.Dts, p.Duration, p.Flags,
                 p.Skip is null ? null : new(p.Skip.SkipSamples, p.Skip.DiscardPadding, p.Skip.SkipReason, p.Skip.DiscardReason),
-                p.HasUninterpretedSideData, p.Size, p.Position)), raw.PacketsObserved));
-    }
+                p.HasUninterpretedSideData, p.Size, p.Position, p.RecoveryPoint)), raw.PacketsObserved);
 
     private static OperationResult<InitialReferenceObservations> Failed() => OperationResult<InitialReferenceObservations>.Failed(
         new(OperationErrorCode.InvalidMetadata, OperationErrorCategory.Execution, "초기 참조 관찰 응답이 불완전하거나 지원 범위를 벗어났습니다."));
