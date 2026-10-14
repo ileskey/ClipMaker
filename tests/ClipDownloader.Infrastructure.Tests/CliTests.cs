@@ -184,4 +184,38 @@ public sealed class CliTests
         Assert.NotNull(services.GetRequiredService<CliApplication>());
         Assert.DoesNotContain(typeof(CliApplication).Assembly.GetReferencedAssemblies(), a => a.Name == "ClipDownloader");
     }
+    [Fact]
+    public async Task LateCancellationDoesNotReplaceCommittedSuccess()
+    {
+        using var h = new Harness(); using var stop = new CancellationTokenSource();
+        h.Jobs.Result = (p, _) => { stop.Cancel(); return new(p.JobId, OperationStatus.Succeeded, p.FinalPath, null, [], []); };
+        Assert.Equal(0, await h.App(new()).RunAsync(h.Command(true), stop.Token));
+    }
+    [Fact]
+    public void ExplicitResolutionModeAndToolPathsAreParsed()
+    {
+        var parsed = CommandLineParser.Parse(["clip", "--url", "https://chzzk.naver.com/video/123", "--start", "00:00:01:00", "--end", "00:00:02:00", "--output", "clip.mp4", "--quality", "720p", "--mode", "accurate", "--yes", "--yt-dlp-path", "my.exe", "--ffprobe-path", "probe.exe"]);
+        Assert.Null(parsed.Error); Assert.Equal(720, parsed.Command!.Quality.Height); Assert.Equal(ClipMode.Accurate, parsed.Command.Mode);
+        Assert.True(parsed.Command.Yes); Assert.Equal("my.exe", parsed.Command.ToolPaths["yt-dlp.exe"]); Assert.Equal("probe.exe", parsed.Command.ToolPaths["ffprobe.exe"]);
+    }
+    [Fact]
+    public void LoggingInitializationFailureAndSinkFailureAreDetectedAndDisposed()
+    {
+        string directory = Path.Combine(Path.GetTempPath(), "clip-cli-log-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        string blocker = Path.Combine(directory, "file"); File.WriteAllText(blocker, "user file");
+        try
+        {
+            using (var failed = new LoggingSetup(blocker)) { Assert.Null(failed.Logger); Assert.True(failed.HasProblem); }
+            using (var logging = new LoggingSetup(directory))
+            {
+                Assert.NotNull(logging.Logger); Assert.False(logging.HasProblem);
+                logging.Logger.Information("Command {Command} completed with exit code {ExitCode}", "fixture", 0);
+                Serilog.Debugging.SelfLog.WriteLine("controlled sink failure"); Assert.True(logging.HasProblem);
+            }
+            Assert.Equal("user file", File.ReadAllText(blocker));
+            Assert.Contains("completed with exit code 0", File.ReadAllText(Directory.GetFiles(directory, "clipdownloader-cli-*.log").Single()));
+        }
+        finally { foreach (string file in Directory.GetFiles(directory)) File.Delete(file); Directory.Delete(directory); }
+    }
 }

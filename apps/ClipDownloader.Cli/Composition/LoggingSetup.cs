@@ -9,12 +9,12 @@ internal sealed class LoggingSetup : IDisposable
     private int problem;
     public bool HasProblem => Volatile.Read(ref problem) != 0;
     public Serilog.Core.Logger? Logger { get; private set; }
-    public LoggingSetup()
+    public LoggingSetup(string? directory = null)
     {
         SelfLog.Enable(_ => Interlocked.Exchange(ref problem, 1));
         try
         {
-            string directory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ClipMaker", "ClipDownloader", "Logs");
+            directory ??= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ClipMaker", "ClipDownloader", "Logs");
             Directory.CreateDirectory(directory);
             Logger = new LoggerConfiguration().MinimumLevel.Information().WriteTo.File(Path.Combine(directory, "clipdownloader-cli-.log"),
                 rollingInterval: RollingInterval.Day, fileSizeLimitBytes: 10 * 1024 * 1024, rollOnFileSizeLimit: true,
