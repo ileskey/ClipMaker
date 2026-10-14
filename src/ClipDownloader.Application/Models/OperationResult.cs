@@ -38,5 +38,6 @@ public sealed class OperationResult<T> where T : class
         ArgumentNullException.ThrowIfNull(error);
         return new(OperationStatus.Failed, null, error, warnings, remainingTemporaryPaths);
     }
-    public static OperationResult<T> Cancelled() => new(OperationStatus.Cancelled, null, null);
+    public static OperationResult<T> Cancelled(IEnumerable<string>? warnings = null, IEnumerable<string>? remainingTemporaryPaths = null) =>
+        new(OperationStatus.Cancelled, null, null, warnings, remainingTemporaryPaths);
 }

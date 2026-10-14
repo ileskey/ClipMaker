@@ -1,9 +1,10 @@
 using System.Globalization;
+using ClipDownloader.Application.Contracts;
 using ClipDownloader.Application.Models;
 
 namespace ClipDownloader.Infrastructure.Sources;
 
-public sealed class SupportedVideoSourceParser
+public sealed class SupportedVideoSourceParser : IVideoSourceParser
 {
     public OperationResult<VideoSourceReference> Parse(Uri input)
     {

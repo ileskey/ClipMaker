@@ -21,7 +21,12 @@ public sealed class OutputWorkspace(IOutputPathValidator validator, string? work
             Directory.CreateDirectory(root);
             if (Directory.Exists(directory) || File.Exists(directory)) throw new IOException();
             Directory.CreateDirectory(directory); created = true;
-            if (cancellationToken.IsCancellationRequested) { Directory.Delete(directory); return Task.FromResult(OperationResult<IOutputSession>.Cancelled()); }
+            if (cancellationToken.IsCancellationRequested)
+            {
+                try { Directory.Delete(directory); return Task.FromResult(OperationResult<IOutputSession>.Cancelled()); }
+                catch (Exception cleanup) when (cleanup is IOException or UnauthorizedAccessException)
+                { return Task.FromResult(OperationResult<IOutputSession>.Cancelled(["취소한 작업 폴더를 정리하지 못했습니다."], [directory])); }
+            }
             Guid stagingId = Guid.NewGuid();
             string staging = Path.Combine(Path.GetDirectoryName(validation.Data!)!, ".clipmaker-" + stagingId.ToString("N") + ".tmp.mp4");
             return Task.FromResult(OperationResult<IOutputSession>.Succeeded(new OutputSession(jobId, stagingId, directory, staging, validation.Data!)));
