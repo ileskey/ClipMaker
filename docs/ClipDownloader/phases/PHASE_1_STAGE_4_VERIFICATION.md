@@ -143,4 +143,6 @@ bounded10~20초 양 사이트 실제 Accurate 통합이 성공했다. CHZZK600 f
 
 4단계는 verified owned staging을 생산한다. app-data workspace 정책, 확인 후 실행/재검사 조정, resource registry의 통합 정리, 종료 미확인 시 파일 유지, output 폴더 staging 및 once-only 최종 확정/취소 경합은 **5단계**의 책임이다. CLI clip/Y/N/EOF/--yes·종료 코드·표시/로그/수명 통합은6단계다. 현재 CLI clip 전체 완료·사용자 지정 최종 MP4 확정·Phase 1 Completed/Passed를 선언하지 않는다. 5단계에는 자동 진입하지 않았고 Phase2/WPF 다운로드 UI/ClipEditor 변경·패키지/도구 설치·push/tag는 없었다.
 
-완료 검증 명령: `dotnet build ClipMaker.slnx --no-restore`, 각 기존 test csproj의 `dotnet test --no-restore --no-build`. build 경고/오류0, Core143/Media Infrastructure143/Downloader771개 모두 실패·skip0. 기준 commit이 HEAD의 ancestor임을 확인했다. 논리 단위 자동 commit과 누적 문서를 유지하며 기존 사용자 변경·실험 파일을 삭제/초기화하지 않았다.
+완료 검증 명령: `dotnet build ClipMaker.slnx --no-restore`, 각 기존 test csproj의 `dotnet test --no-restore --no-build`. build 경고/오류0, Core143/Media Infrastructure143/Downloader771개 모두 실패·skip0. 논리 단위 자동 commit과 누적 문서를 유지하며 기존 사용자 변경·실험 파일을 삭제/초기화하지 않았다.
+
+최종 Git 점검 보완: 기록상 Phase Base `0759dc52475538df848f765ce30c005cf755107f`는 현재 HEAD의 ancestor가 아니다. 실제 Phase 0 선행 commit은 `1ca2547`이며 두 commit의 parent는 `fc96883b18c1d6856c92ad6b029d45e095e41e69`, tree는 **동일한** `1d3d7d39a6991dbeeecb86b48d48dbaec7f716db`다. `git diff --quiet 0759dc5 1ca2547` exit0으로 소스 차이 없음을 확인했다. commit 제목은 각각 `feat: complete ...` / `feat: Complete ...`로 다르다. 두 commit의 이력이 달라진 원인을 추정 확정하지 않고, 이번 작업에서 rebase/reset/기준 hash 교체를 하지 않았다. 문서의 기준 snapshot과 실제 ancestry를 구별한다. 마지막 commit 직후 ancestor 검사의 exit1을 발견하여 이전의 ancestor 확인 문구를 바로 정정했다.
