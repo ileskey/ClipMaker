@@ -1,6 +1,6 @@
 # Phase 1 4단계 통합 검증 기록
 
-2026-10-14, `phase/1`, Phase Base `0759dc52475538df848f765ce30c005cf755107f` 유지. 이 문서는 누적 작업 기록이며 **4단계 완료 보고가 아니다**. 개별 커밋 보고를 생략하고 4단계 완료 후 통합 보고하는 사용자 지시를 따른다.
+2026-10-14, `phase/1`, Phase Base `0759dc52475538df848f765ce30c005cf755107f` 유지. **검증된 제한 전략 범위에서 4단계(4a 획득→4b 검사→4c 처리)를 완료했다.** 아래 누적 기록의 미완료 설명은 해당 작업 시점의 상태이며 마지막 완료 범위·제한·인계를 현재 기준으로 읽는다. Phase 1 전체와5/6은 미완료다. 개별 커밋 보고를 생략하고 4단계를 통합 보고하는 사용자 지시를 따른다.
 
 ## 획득 및 공유 probe
 
@@ -129,3 +129,18 @@ bounded10~20초 양 사이트 실제 Accurate 통합이 성공했다. CHZZK600 f
 실제 verified 폴더는 `0df2a23acbfc4ba9af43f918fcffc122` / `ed3a486756ce4c598822492665b47115`이며 ignored `VerifyAccurateHls.ps1` / `VerifyAccurateIndexed.ps1`과 safe `accurate-output-summary.json`을 보존한다. YouTube render PCM441000 samples/3528000bytes/SHA256 `e972fcbfffef5c82e016d96cf67aff3fe36dc97dd28099b8a2b40a72fa82eea5`도 독립 occupancy oracle와 byte 동일하다. 새 final user 파일 확정·삭제·덮어쓰기는 수행하지 않았다.
 
 추가6개 테스트로 source membership 모순, 선택 해상도 변경, PCM byte 변경, 종료 불확실과 취소를 검사했다. shift fixture의 stream start_pts가 edit와 모순돼 예상보다 앞선 native gate에서 거절된 테스트를 수정한 뒤 모두 통과했다. Core143/Media Infrastructure143/Downloader771개, 총1057개 실패·skip0이며 솔루션 build 경고·오류0이다. `--no-build` 테스트와 실제 harness는 같은 DLL을 변경하는 빌드와 분리했다.
+
+## 4단계 완료 범위와 5단계 인계
+
+| 영역 | 완료한 범위 |
+|---|---|
+| 4a 획득 | 단일 연속 완료 VOD/fMP4 HLS, YouTube137/140 direct init/SIDX 및 제한된 provider/native bridge; bounded bytes·whole references·소유권·선택/시간축 검사 |
+| 4b 검사 | captured input identity와 immutable raw/container/native 연결; declared FPS와 cadence 구별; 필요한 mapping/coverage/skip/layout 모순 거절 |
+| 4c 처리 | scoped qualifier/K, Fast copy/mux 및 exact packet/picture 대응; 실제 source-start AAC 준비·lossless PCM 재구성·Accurate encode·native/decode/actual end 검사 |
+| 실제 통합 | CHZZK/YouTube 각 Fast/Accurate10~20초 요청의 verified MP4 staging, PCM 독립 oracle 및 실패·취소·충돌·종료 인계 회귀 |
+
+지원 선언은 위 전략과 확인된 입력 범위에 한정한다. encrypted/discontinuous/live/master leaf, 미지원 codec/config/edit, exact clock/숫자 표현 불가와 미확인 source relation/coverage/preparation은 명시 거절한다. Accurate source-start prefix가 획득 budget 안에 들어와야 하며 임의 preroll·전체 원격 영상 fallback은 없다. 요청 OUT 이후 audio support가 미확인이거나, 첫 available audio가 requested ceil 이후인 미검증 AAC delay edit는 거절한다. 부분 support의 lossless 값 모델 검증을 범용 codec/edit 지원으로 승격하지 않는다. zero video membership을 허용하는 별도 Fast 전략은 아직 지원하지 않는다. NativeEnd Unknown·remote 전체 content/version 미확인, lossy AAC 값 동일성 비보증, 사람의 player 재생 미검증을 유지한다.
+
+4단계는 verified owned staging을 생산한다. app-data workspace 정책, 확인 후 실행/재검사 조정, resource registry의 통합 정리, 종료 미확인 시 파일 유지, output 폴더 staging 및 once-only 최종 확정/취소 경합은 **5단계**의 책임이다. CLI clip/Y/N/EOF/--yes·종료 코드·표시/로그/수명 통합은6단계다. 현재 CLI clip 전체 완료·사용자 지정 최종 MP4 확정·Phase 1 Completed/Passed를 선언하지 않는다. 5단계에는 자동 진입하지 않았고 Phase2/WPF 다운로드 UI/ClipEditor 변경·패키지/도구 설치·push/tag는 없었다.
+
+완료 검증 명령: `dotnet build ClipMaker.slnx --no-restore`, 각 기존 test csproj의 `dotnet test --no-restore --no-build`. build 경고/오류0, Core143/Media Infrastructure143/Downloader771개 모두 실패·skip0. 기준 commit이 HEAD의 ancestor임을 확인했다. 논리 단위 자동 commit과 누적 문서를 유지하며 기존 사용자 변경·실험 파일을 삭제/초기화하지 않았다.
