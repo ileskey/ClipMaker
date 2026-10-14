@@ -82,8 +82,7 @@ public sealed class Mp4NativeObservationVerifier
                 bool discardedPrefix = audio && leadingSkip > 0 && sample.PresentationTicks + sample.Duration + translation <= 0;
                 if (packet.HasUninterpretedSideData || packet.Flags is null || packet.Flags.Contains('C') || packet.Flags.Contains('D') && !discardedPrefix)
                     return Fail(MediaFailureKind.InvalidMedia, "NativePacketState");
-                bool nativeSync = (sample.Flags & 0x01010000) == 0;
-                if (nativeSync != packet.Flags.Contains('K'))
+                if (!MatchesPacketSync(stream.Kind, sample.Flags, packet))
                     return Fail(MediaFailureKind.InvalidMedia, "NativeSyncState");
                 if (packet.Skip is { } skip)
                 {
@@ -141,4 +140,14 @@ public sealed class Mp4NativeObservationVerifier
     private static MediaOperationResult<Mp4NativeObservation> Fail(MediaFailureKind code, string field) =>
         MediaOperationResult<Mp4NativeObservation>.Failed(new(code,
             "로컬 MP4의 native sample 관계를 지원 범위에서 확인하지 못했습니다.", field));
+
+    internal static bool MatchesPacketSync(MediaStreamKind kind, uint flags, MediaPacketObservation packet)
+    {
+        bool nativeSync = (flags & 0x01010000) == 0, key = packet.Flags?.Contains('K') == true;
+        if (nativeSync == key) return true;
+        return kind == MediaStreamKind.Video && !nativeSync && key && (flags & 0x10000) != 0 &&
+            packet.RecoveryPoint is { RecoveryFrameCount: 0, ExactMatch: true, BrokenLink: false,
+                ChangingSliceGroupIdc: 0, AllSlicesIntra: true } proof && proof.Position == packet.Position &&
+            proof.Size == packet.Size && proof.Sha256.Length == 64 && proof.Sha256.All(char.IsAsciiHexDigit);
+    }
 }

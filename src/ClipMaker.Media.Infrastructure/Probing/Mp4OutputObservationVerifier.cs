@@ -71,7 +71,7 @@ public sealed class Mp4OutputObservationVerifier
                     packet.Flags is null || packet.Flags.Contains('C') ||
                     packet.Flags.Contains('D') && !(stream.Kind == MediaStreamKind.Audio && config.Codec == "aac" &&
                         pts + 1024 <= delayTicks) ||
-                    packet.Flags.Contains('K') != ((sample.Flags & 0x01010000) == 0)) return Fail("OutputPacketContradicted");
+                    !Mp4NativeObservationVerifier.MatchesPacketSync(stream.Kind, sample.Flags, packet)) return Fail("OutputPacketContradicted");
                 mapped.Add(new(sample, (long)pts, (long)dts));
             }
             if (!PresentationRange.TryCreate(delay, validEnd, out var valid, out _)) return Fail("OutputEmptySupport");

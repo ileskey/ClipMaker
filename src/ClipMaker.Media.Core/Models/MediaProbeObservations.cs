@@ -11,8 +11,12 @@ public sealed record MediaStreamObservation(int Index, MediaStreamKind Kind, Sig
 public sealed record MediaFrameObservation(int StreamIndex, long? Pts, long? Duration, int? SampleCount,
     string? SampleFormat, int? SampleRate, int? Channels);
 public sealed record MediaPacketSkipObservation(uint? SkipSamples, uint? DiscardPadding, byte? SkipReason, byte? DiscardReason);
+// Bounded encoded-byte evidence; a recovery point is not a closed IDR access point.
+public sealed record MediaH264RecoveryPointObservation(long Position, int Size, string Sha256,
+    int RecoveryFrameCount, bool ExactMatch, bool BrokenLink, int ChangingSliceGroupIdc, bool AllSlicesIntra);
 public sealed record MediaPacketObservation(int StreamIndex, long? Pts, long? Dts, long? Duration,
-    string? Flags, MediaPacketSkipObservation? Skip, bool HasUninterpretedSideData, int? Size, long? Position);
+    string? Flags, MediaPacketSkipObservation? Skip, bool HasUninterpretedSideData, int? Size, long? Position,
+    MediaH264RecoveryPointObservation? RecoveryPoint = null);
 
 public sealed class MediaProbeObservations
 {

@@ -80,7 +80,13 @@ public sealed class FfprobeMediaProbe(IToolLocator locator, ToolPathSettings set
                         return Failed(MediaFailureKind.InvalidMedia, "ContainerTrackClock");
                 }
             }
-            return MediaOperationResult<MediaProbeResult>.Succeeded(new(request, match.Groups[1].Value, parsed.Data!, container));
+            var observations = parsed.Data!;
+            if (container is not null)
+            {
+                observations = await new H264RecoveryPointReader().EnrichAsync(input, observations, container, cancellationToken).ConfigureAwait(false);
+                if (!await Matches(input, request.Content, cancellationToken).ConfigureAwait(false)) return Failed(MediaFailureKind.InvalidMedia, "ByteIdentityAfter");
+            }
+            return MediaOperationResult<MediaProbeResult>.Succeeded(new(request, match.Groups[1].Value, observations, container));
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { return MediaOperationResult<MediaProbeResult>.Cancelled(); }
         catch (DecoderFallbackException) { return Failed(MediaFailureKind.ProcessFailed, "ProbeVersion"); }
