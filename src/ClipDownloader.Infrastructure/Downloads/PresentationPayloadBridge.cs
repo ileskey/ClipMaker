@@ -5,7 +5,7 @@ using ClipMaker.Media.Core.ValueObjects;
 
 namespace ClipDownloader.Infrastructure.Downloads;
 
-internal sealed record PresentationPayloadEvidence(int PayloadCount, int TimestampAnchors, int MissingTimestamps);
+internal sealed record PresentationPayloadEvidence(int PayloadCount, int TimestampAnchors, int MissingTimestamps, int FirstSourceSample = 0);
 
 // Content and declared-clock correspondence only. Decoded picture equality remains a separate gate.
 internal sealed class PresentationPayloadBridge
@@ -40,20 +40,33 @@ internal sealed class PresentationPayloadBridge
     internal Task<OperationResult<PresentationPayloadEvidence>> VerifyAudioAsync(VerifiedHlsNativeReference source,
         PackedAacReference carrier, CancellationToken token) => VerifyAsync(source, MediaStreamKind.Audio, async (file, samples) =>
     {
-        if (source.Reference.ContainerTiming.Tracks.Single().HasEditList || carrier.Frames.Count > samples.Length) throw new InvalidDataException();
+        if (carrier.Frames.Count > samples.Length) throw new InvalidDataException();
+        var track = source.Reference.ContainerTiming.Tracks.Single();
+        // Native verification already proved the edit/packet skip/effective frame relation.
+        // Packed AAC timestamps describe coded media, not the post-edit audible movie start.
+        if (track.HasEditList && (track.Edits.Count != 1 || track.Edits[0].RateInteger != 1 || track.Edits[0].RateFraction != 0 ||
+            track.Edits[0].MediaTime != source.Streams.Single().LeadingSkippedSamples || samples[0].PresentationTicks != 0))
+            throw new InvalidDataException();
         var config = source.Streams.Single().Configuration;
         if (config.SampleRate is not { } rate || carrier.Frames.Any(f => f.SampleRate != rate || f.Channels != config.Channels || f.Samples != 1024))
             throw new InvalidDataException();
-        if (samples[0].PresentationTicks < 0 || samples[0].PresentationTicks * 90000 / rate != carrier.TransportTicks)
+        long mediaTime = track.HasEditList ? track.Edits[0].MediaTime : 0;
+        // The provider may omit packets that start before the audible movie start,
+        // including the partially trimmed first audible packet. Prove the earliest
+        // whole audible packet by native time, then every payload in the contiguous reference.
+        int first = Array.FindIndex(samples, s => s.PresentationTicks - mediaTime >= 0);
+        if (first < 0 || carrier.Frames.Count > samples.Length - first ||
+            (samples[first].PresentationTicks - mediaTime) * 90000 / rate != carrier.TransportTicks)
             throw new InvalidDataException();
         for (int i = 0; i < carrier.Frames.Count; i++)
         {
-            if (samples[i].Duration != 1024 || samples[i].PresentationTicks != samples[0].PresentationTicks + i * 1024)
+            var sample = samples[first + i];
+            if (sample.Duration != 1024 || sample.PresentationTicks != samples[first].PresentationTicks + i * 1024)
                 throw new InvalidDataException();
-            var bytes = await Payload(file, samples[i], token).ConfigureAwait(false);
+            var bytes = await Payload(file, sample, token).ConfigureAwait(false);
             if (Convert.ToHexString(SHA256.HashData(bytes)) != carrier.Frames[i].PayloadSha256) throw new InvalidDataException();
         }
-        return new(carrier.Frames.Count, 1, 0);
+        return new(carrier.Frames.Count, 1, 0, first);
     }, token);
 
     private static async Task<OperationResult<PresentationPayloadEvidence>> VerifyAsync(VerifiedHlsNativeReference source,

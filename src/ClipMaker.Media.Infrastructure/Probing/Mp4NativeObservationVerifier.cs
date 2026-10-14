@@ -51,6 +51,12 @@ public sealed class Mp4NativeObservationVerifier
             var frames = observations.Frames.Where(f => f.StreamIndex == stream.Index).ToArray();
             if (samples.Length == 0 || samples.Length != packets.Length)
                 return Fail(MediaFailureKind.InvalidMedia, "NativeSampleCompleteness");
+            bool audio = stream.Kind == MediaStreamKind.Audio;
+            BigInteger skipped = audio ? BigInteger.Max(0, -(samples[0].PresentationTicks + translation)) : 0;
+            if (skipped > uint.MaxValue || skipped > 0 && (!track.HasEditList || samples[0].PresentationTicks != 0 ||
+                samples[0].DecodeTicks != 0 || samples.Any(s => s.Duration != 1024 || s.PresentationTicks != s.DecodeTicks)))
+                return Fail(MediaFailureKind.UnsupportedInput, "NativeSkipUnsupported");
+            long leadingSkip = (long)skipped;
             for (int i = 0; i < samples.Length; i++)
             {
                 var sample = samples[i]; var packet = packets[i];
@@ -60,7 +66,8 @@ public sealed class Mp4NativeObservationVerifier
                 if (packet.Pts != (long)(sample.PresentationTicks + translation) || packet.Dts != (long)(sample.DecodeTicks + translation) ||
                     packet.Duration != sample.Duration || packet.Size != sample.Size || packet.Position != sample.ByteOffset)
                     return Fail(MediaFailureKind.InvalidMedia, "NativePacketTiming");
-                if (packet.HasUninterpretedSideData || packet.Flags is null || packet.Flags.Contains('C') || packet.Flags.Contains('D'))
+                bool discardedPrefix = audio && leadingSkip > 0 && sample.PresentationTicks + sample.Duration + translation <= 0;
+                if (packet.HasUninterpretedSideData || packet.Flags is null || packet.Flags.Contains('C') || packet.Flags.Contains('D') && !discardedPrefix)
                     return Fail(MediaFailureKind.InvalidMedia, "NativePacketState");
                 bool nativeSync = (sample.Flags & 0x01010000) == 0;
                 if (nativeSync != packet.Flags.Contains('K'))
@@ -69,37 +76,51 @@ public sealed class Mp4NativeObservationVerifier
                 {
                     if (skip.SkipSamples is null || skip.DiscardPadding is null || skip.SkipReason is null || skip.DiscardReason is null)
                         return Fail(MediaFailureKind.InvalidMedia, "NativeSkipMissing");
-                    if (skip.SkipSamples != 0 || skip.DiscardPadding != 0 || skip.SkipReason != 0 || skip.DiscardReason != 0)
+                    if (skip.DiscardPadding != 0 || skip.SkipReason != 0 || skip.DiscardReason != 0 || !audio && skip.SkipSamples != 0)
                         return Fail(MediaFailureKind.UnsupportedInput, "NativeSkipUnsupported");
+                    if (skip.SkipSamples != (i == 0 ? leadingSkip : 0))
+                        return Fail(MediaFailureKind.InvalidMedia, "NativeSkipContradicted");
                 }
+                else if (i == 0 && leadingSkip != 0) return Fail(MediaFailureKind.InvalidMedia, "NativeSkipMissing");
             }
-            // Skip/padding can consume a complete packet or trim a decoded frame.
-            // Identify the unsupported transformation before treating its frame count as corruption.
-            if (samples.Length != frames.Length)
+            // A source AAC edit may consume entire leading packets and part of the next.
+            // Keep coded packet identity above; independently predict every effective decoded frame.
+            var expected = new List<(BigInteger Pts, long Duration)>();
+            long remainingSkip = leadingSkip;
+            for (int i = 0; i < samples.Length; i++)
+            {
+                var sample = samples[i];
+                if (remainingSkip > 0 && i > 0 && sample.PresentationTicks != samples[i - 1].PresentationTicks + samples[i - 1].Duration)
+                    return Fail(MediaFailureKind.UnsupportedInput, "NativeSkipDiscontinuous");
+                long trim = Math.Min(remainingSkip, sample.Duration);
+                remainingSkip -= trim;
+                if (trim < sample.Duration) expected.Add((sample.PresentationTicks + translation + trim, sample.Duration - trim));
+            }
+            if (remainingSkip != 0 || expected.Count == 0 || expected.Count != frames.Length)
                 return Fail(MediaFailureKind.InvalidMedia, "NativeSampleCompleteness");
-            var orderedSamples = samples.OrderBy(s => s.PresentationTicks).ToArray();
+            var orderedExpected = expected.OrderBy(s => s.Pts).ToArray();
             if (frames.Any(f => f.Pts is null)) return Fail(MediaFailureKind.InvalidMedia, "NativeFramePtsMissing");
             var orderedFrames = frames.OrderBy(f => f.Pts).ToArray();
-            for (int i = 0; i < orderedSamples.Length; i++)
+            for (int i = 0; i < orderedExpected.Length; i++)
             {
-                var sample = orderedSamples[i]; var frame = orderedFrames[i];
-                if (frame.Pts != (long)(sample.PresentationTicks + translation) || frame.Duration != sample.Duration)
+                var effective = orderedExpected[i]; var frame = orderedFrames[i];
+                if (frame.Pts != effective.Pts || frame.Duration != effective.Duration)
                     return Fail(MediaFailureKind.InvalidMedia, "NativeFrameTiming");
-                if (stream.Kind == MediaStreamKind.Audio && (frame.SampleCount != sample.Duration ||
+                if (audio && (frame.SampleCount != effective.Duration ||
                     frame.SampleRate is { } rate && rate != config.SampleRate || frame.Channels is { } channels && channels != config.Channels))
                     return Fail(MediaFailureKind.InvalidMedia, "NativeAudioSamples");
             }
-            if (stream.StartPts != (long)(orderedSamples[0].PresentationTicks + translation))
+            if (stream.StartPts != orderedExpected[0].Pts)
                 return Fail(MediaFailureKind.InvalidMedia, "NativeStartTiming");
-            SignedMediaTime.TryCreate((orderedSamples[0].PresentationTicks + translation) * stream.TimeBase.Numerator,
+            SignedMediaTime.TryCreate(orderedExpected[0].Pts * stream.TimeBase.Numerator,
                 stream.TimeBase.Denominator, out var start, out _);
-            BigInteger last = orderedSamples.Max(s => s.PresentationTicks + s.Duration) + translation;
+            BigInteger last = orderedExpected.Max(s => s.Pts + s.Duration);
             SignedMediaTime.TryCreate(last * stream.TimeBase.Numerator, stream.TimeBase.Denominator, out var end, out _);
             PresentationRange.TryCreate(start!, end!, out var range, out _);
             if (range is null) return Fail(MediaFailureKind.InvalidMedia, "NativeEmptyRange");
             if (movieEnd is not null && (range.Start.Numerator < 0 || range.End.CompareTo(movieEnd) > 0))
                 return Fail(MediaFailureKind.UnsupportedInput, "MovieEditClippingUnsupported");
-            verified.Add(new(stream, config, range));
+            verified.Add(new(stream, config, range, leadingSkip));
         }
         return MediaOperationResult<Mp4NativeObservation>.Succeeded(new(verified));
     }
