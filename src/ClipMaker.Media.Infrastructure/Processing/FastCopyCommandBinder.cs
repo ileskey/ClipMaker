@@ -18,6 +18,7 @@ internal sealed class FastCopyCommandBinder
     {
         var plan = request.Plan;
         if (plan.Mode != MediaProcessingMode.Fast) return Fail("AccurateStrategyUnavailable");
+        if (request.AudioRender is not null) return Fail("UnexpectedFastAudioRender");
         var video = plan.Streams.Where(s => s.Stream.Kind == MediaStreamKind.Video).ToArray();
         var audio = plan.Streams.Where(s => s.Stream.Kind == MediaStreamKind.Audio).ToArray();
         if (video.Length != 1 || video[0].Codec != "h264" || audio.Length > 1 || audio.Any(a => a.Codec != "aac" ||

@@ -107,3 +107,15 @@ source-order decoded PCM offset과 native lattice 위치를 구별하는 `AudioP
 독립 occupancy array oracle로 mono/stereo·비정렬 원점·부분 support·내부 gap/overlap의 값을 대조했다. 재구성4개와 소유 render4개 테스트를 통과했다. 현재 작업 중인 실제 source-start decode 경로에서 CHZZK10~20초 PCM480000 samples/3840000bytes를 생성했다. 독립 sample별 first-wins oracle와 byte 동일하며 SHA256 `93e14977216995d596762f7e59dbf507bd403be4fb7723cee9adc53c8e6ea7f3`, 삽입0 sample2개/중복 제거1개다. ignored `CheckPcmOracle.ps1`과 `550217234873477aa6de6ee93804efb4/pcm-oracle-summary.json`을 보존한다.
 
 이 값 검증은 lossless preencode 재구성이며 lossy AAC 출력 PCM byte 동일성 보증이 아니다. 실제 준비 producer/encode/output 연결은 다음 논리 단위에서 검증·기록한다. **Accurate 및 전체4단계 완료가 아니다.**
+
+## 실제 source-start 준비와 Accurate encode
+
+`SourceAudioPreparationService`는 Accurate의 같은 선택/source-start prefix를 실행 전후 재검사하고, captured AAC LC 입력의 처음부터 실제 f32le decode를 수행한다. seek/preroll 길이 추정 없이 실행한 source-order 값, 관찰 frame의 총 sample 수, PCM 길이/SHA-256을 결합한 준비 fact를 만든다. 초기 bytes의 존재만으로 Verified를 만들지 않는다. 실제 decoder process가 실패하거나 종료/출력/identity를 확인하지 못하면 null Data와 소유 자원을 인계한다. 처리 backend의 CreateNew/hash/취소/종료 registry를 decode와 encode에 공통 적용했다.
+
+양 사이트 source-start 준비와 qualifier가 성공했다. CHZZK1055744 samples/8445952bytes/SHA256 `2c416caa47f77cae3d1db4ba2224947231d604d9967496a528b20252542bb9ab`, YouTube1320960 samples/10567680bytes/SHA256 `7f4aea5d0c7d0ae78ca8203cb7a0fdcfddd6329a38915276c49c59ed6cc2a2c6`다. 임의 전역 준비 길이나 remote 전체 동일성을 보증하지 않는다.
+
+Accurate binder는 source video를 처음부터 decode하여 exact common clock/PTS trim/translation을 적용하고, 검증된 render PCM을 AAC encode한다. libx264 medium/CRF18/yuv420p/B-frame0, AAC192k를 사용한다. source/decoded/render 입력을 처리 전후 read lock/hash로 고정한다. 숫자 표현·frame membership 모순·미준비 PCM·Fast에 잘못 전달된 render를 거절한다. audio 첫 support가 requested ceil보다 늦으면 `AccurateDelayedAudioEditUnsupported`다. Qa 변경·support 밖 silence·자동 Fast 전환으로 숨기지 않으며 향후 별도 edit 전략이 필요하다.
+
+CHZZK 첫 encode의 16/17ms는 실제 source native 시간부터 존재하며 60fps 선언만으로 CFR이라고 추정하지 않았다. 첫 B-frame 후보에서 output PTS600개는 같지만 decoded frame duration300개가 달랐다. B-frame0 후보에서600개 PTS/duration 모두 exact 대응했고 native 표시 끝이 일치했다. AAC의 완전한 첫 priming packet에 나타난 discard flag는 native edit/skip1024가 함께 일치할 때만 해석한다. audible packet discard는 계속 거절한다.
+
+실제 native consistency: CHZZK video[13/9600,96013/9600), audio[0,10), AAC skip1024/tail256. YouTube video/audio[0,10), skip1024/tail344. source-start decode/encode4개와 binder5개, output discard2개, 준비 거절3개를 추가했으며 Media Infrastructure143개/Downloader771개 실패·skip0이다. 이 단위의 결과는 captured encode이며 최종 source/output 검증은 아래 연결 기록에서 구별한다.

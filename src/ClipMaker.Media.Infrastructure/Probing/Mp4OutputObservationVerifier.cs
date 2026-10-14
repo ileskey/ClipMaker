@@ -68,7 +68,9 @@ public sealed class Mp4OutputObservationVerifier
                     return Fail("OutputClockUnsupported", true);
                 if (packet.Pts != (long)pts || packet.Dts != (long)dts || packet.Duration != sample.Duration ||
                     packet.Position != sample.ByteOffset || packet.Size != sample.Size || packet.HasUninterpretedSideData ||
-                    packet.Flags is null || packet.Flags.Contains('C') || packet.Flags.Contains('D') ||
+                    packet.Flags is null || packet.Flags.Contains('C') ||
+                    packet.Flags.Contains('D') && !(stream.Kind == MediaStreamKind.Audio && i == 0 &&
+                        packet.Skip?.SkipSamples == 1024 && new BigInteger(mediaTime) - sample.PresentationTicks == 1024) ||
                     packet.Flags.Contains('K') != ((sample.Flags & 0x01010000) == 0)) return Fail("OutputPacketContradicted");
                 mapped.Add(new(sample, (long)pts, (long)dts));
             }

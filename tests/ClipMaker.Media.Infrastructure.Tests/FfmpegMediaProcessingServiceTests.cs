@@ -65,6 +65,48 @@ public sealed class FfmpegMediaProcessingServiceTests
     private sealed class Progress(CancellationTokenSource stop) : IProgress<MediaProcessingProgress>
     { public void Report(MediaProcessingProgress value) { if (value.Percent == 100) stop.Cancel(); } }
 
+    private sealed class DecodeRunner(string fault) : IProcessRunner
+    {
+        internal List<ProcessRequest> Calls = [];
+        public Task<ProcessResult> RunAsync(ProcessRequest request, Action<ProcessOutputChunk>? outputReceived, CancellationToken token)
+        {
+            Calls.Add(request);
+            if (request.Arguments.Contains("-version")) return Task.FromResult(Result("ffmpeg version 8.1 full"));
+            File.WriteAllBytes(request.Arguments[^1], new byte[fault == "count" ? 15 : 16]);
+            return Task.FromResult(fault == "termination" ? Result() with { DescendantExitConfirmed = false } : Result());
+        }
+    }
+
+    [Theory]
+    [InlineData("success")]
+    [InlineData("count")]
+    [InlineData("termination")]
+    [InlineData("conflict")]
+    public async Task SourceOrderDecodeCapturesExpectedPcmOrRetainsFailedOwnedResources(string fault)
+    {
+        using var f = new Fixture();
+        var request = new MediaAudioDecodeRequest(Guid.NewGuid(), Guid.NewGuid(), f.Request.Plan.Inputs[0], 1, 48000, 1, 4,
+            Path.Combine(f.DirectoryPath, "decoded.f32le"));
+        if (fault == "conflict") File.WriteAllText(request.PcmPath, "user");
+        var runner = new DecodeRunner(fault); var service = new FfmpegMediaProcessingService(new Locator(false), new(), runner);
+        var result = await service.DecodeAudioAsync(request, TestContext.Current.CancellationToken);
+        var resources = service.GetOwnedResources(request.OperationId);
+        if (fault == "success") { Assert.Equal(MediaOperationStatus.Succeeded, result.Status); Assert.Equal(16, result.Data!.Pcm.Content!.Bytes); }
+        else
+        {
+            Assert.Null(result.Data);
+            Assert.Equal(fault == "count" ? "DecodedPcmSampleCount" : fault == "termination" ? "ProcessingTermination" : "OutputConflict", result.Failure!.Field);
+        }
+        if (fault == "conflict") { Assert.Empty(resources.Files); Assert.Equal("user", File.ReadAllText(request.PcmPath)); }
+        else
+        {
+            Assert.True(resources.NeedsCleanup); Assert.Single(resources.Files);
+            Assert.Equal(fault == "termination", resources.HasUnconfirmedProcess);
+            Assert.DoesNotContain("-ss", runner.Calls[1].Arguments);
+            Assert.DoesNotContain("-af", runner.Calls[1].Arguments);
+        }
+    }
+
     [Theory]
     [InlineData("success")]
     [InlineData("drain")]
@@ -134,5 +176,44 @@ public sealed class FfmpegMediaProcessingServiceTests
         var result = new FastCopyCommandBinder().Bind(new(Guid.NewGuid(), Guid.NewGuid(), plan, f.Request.StagingPath));
         Assert.Equal(supported ? MediaOperationStatus.Succeeded : MediaOperationStatus.Failed, result.Status);
         if (!supported) Assert.Equal("NativeClockExpressionUnsupported", result.Failure!.Field);
+    }
+
+    [Theory]
+    [InlineData("success", null)]
+    [InlineData("outside", "AccurateVideoExpectation")]
+    [InlineData("numeric", "AccurateNativeExpressionUnsupported")]
+    [InlineData("audio", "AccurateAudioRenderUnverified")]
+    public void AccurateBinderRequiresExactMembershipExpressionsAndExecutedAudioRender(string fault, string? field)
+    {
+        using var f = new Fixture(); var video = f.Request.Plan.Streams[0];
+        var streams = new List<StreamProcessingPlan> { fault == "numeric" ? new(video.Stream, video.InputRange, video.Translation,
+            video.Codec, video.InputTimeBase, 0, 9007199254740992L) : video };
+        if (fault == "audio") streams.Add(new(new(video.Stream.FileId, 1, MediaStreamKind.Audio), Range(), Time(-1), "aac", Time(1, 48000), 0, 96000, 48000, 2));
+        var frame = fault == "outside" ? new MediaVideoFrameExpectation(60, 1, Time(1, 30), Time(1), Time(1, 30)) : f.Request.Plan.RequiredVideoFrames[0];
+        var plan = new MediaProcessingPlan(MediaProcessingMode.Accurate, f.Request.Plan.Inputs, streams, [frame], 48000);
+        var result = new AccurateEncodingCommandBinder().Bind(new(Guid.NewGuid(), Guid.NewGuid(), plan, f.Request.StagingPath));
+        if (field is not null) { Assert.Null(result.Data); Assert.Equal(field, result.Failure!.Field); }
+        else { Assert.Equal(MediaOperationStatus.Succeeded, result.Status); Assert.DoesNotContain("-ss", result.Data!.Arguments); }
+    }
+
+    [Fact]
+    public void DelayedAudioSupportIsExplicitlyUnsupportedWithoutResettingRequestedOrigin()
+    {
+        using var f = new Fixture(); var input = f.Request.Plan.Inputs[0];
+        var audioRef = new MediaStreamReference(input.Id, 1, MediaStreamKind.Audio);
+        var boundary = new AudioBoundaryPlan(new(SignedMediaTime.Zero, 48000), 100, 1000, 200, 800, Time(100, 48000));
+        var decoded = new MediaInputFile(Guid.NewGuid(), Path.Combine(f.DirectoryPath, "decoded.f32le"), new(4000, new string('a', 64)));
+        var preparation = MediaInspectionFact<AudioDecoderPreparation>.Verified(new(input.Id, input.Content, decoded, 48000, 1, 1000),
+            new(Guid.NewGuid(), audioRef, MediaInspectionKind.Samples, MediaTimeBasis.Native, Range(), ObservationCompleteness.Complete));
+        var audio = new StreamProcessingPlan(audioRef, Range(), Time(-1), "aac", Time(1, 48000), 0, 96000, 48000, 1);
+        var plan = new MediaProcessingPlan(MediaProcessingMode.Accurate, [input], [f.Request.Plan.Streams[0], audio],
+            f.Request.Plan.RequiredVideoFrames, 48000, boundary, preparation);
+        var rendered = new MediaAudioRenderInput(boundary, decoded, new(Guid.NewGuid(), Path.Combine(f.DirectoryPath, "render.f32le"),
+            new(2400, new string('b', 64))), new(600, 0, 0), 1);
+        var result = new AccurateEncodingCommandBinder().Bind(new(Guid.NewGuid(), Guid.NewGuid(), plan, f.Request.StagingPath, rendered));
+        Assert.Null(result.Data); Assert.Equal("AccurateDelayedAudioEditUnsupported", result.Failure!.Field);
+        Assert.Equal(Time(100, 48000), boundary.RenderOrigin);
+        Assert.Equal("UnexpectedFastAudioRender", new FastCopyCommandBinder().Bind(
+            new(Guid.NewGuid(), Guid.NewGuid(), f.Request.Plan, f.Request.StagingPath, rendered)).Failure!.Field);
     }
 }

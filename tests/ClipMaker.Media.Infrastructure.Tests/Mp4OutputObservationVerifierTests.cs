@@ -19,8 +19,8 @@ public sealed class Mp4OutputObservationVerifierTests
             new(0, 100, 100, null, null, null, null), new(1, 0, 1024, fault == "padding" ? 1023 : 1024, "fltp", 48000, 2) };
         var packets = new MediaPacketObservation[] { new(0, 0, -1000, 100, "K_", null, false, 4, 100),
             new(0, 100, -900, 100, "__", null, false, 4, 104),
-            new(1, -1024, -1024, 1024, "K_", new(fault == "skip" ? 1023u : 1024u, 0, 0, 0), false, 4, 108),
-            new(1, 0, 0, 256, "K_", null, false, 4, 112) };
+            new(1, -1024, -1024, 1024, fault == "discard-priming" ? "KD_" : "K_", new(fault == "skip" ? 1023u : 1024u, 0, 0, 0), false, 4, 108),
+            new(1, 0, 0, 256, fault == "discard-audible" ? "KD_" : "K_", null, false, 4, 112) };
         var native = new Mp4NativeSampleEvidence([new(1, "h264", 1, new string('a', 64), null, null), new(2, "aac", 2, new string('b', 64), 48000, 2)],
             [new(1, 0, 1000, 100, 4, 0, 100), new(1, 100, 1100, 100, 4, 0x01010000, 104),
              new(2, 0, 0, 1024, 4, 0, 108), new(2, 1024, 1024, 256, 4, 0, 112)]);
@@ -36,6 +36,8 @@ public sealed class Mp4OutputObservationVerifierTests
 
     [Theory]
     [InlineData("success", null)]
+    [InlineData("discard-priming", null)]
+    [InlineData("discard-audible", "OutputPacketContradicted")]
     [InlineData("media-duration", "OutputMediaHeaderDuration")]
     [InlineData("edit-duration", "OutputTrackHeaderDuration")]
     [InlineData("frame-pts", "OutputVideoTiming")]

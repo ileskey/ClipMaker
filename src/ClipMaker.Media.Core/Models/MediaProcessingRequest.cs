@@ -6,12 +6,14 @@ public sealed class MediaProcessingRequest
     public Guid OutputFileId { get; }
     public MediaProcessingPlan Plan { get; }
     public string StagingPath { get; }
-    public MediaProcessingRequest(Guid operationId, Guid outputFileId, MediaProcessingPlan plan, string stagingPath)
+    public MediaAudioRenderInput? AudioRender { get; }
+    public MediaProcessingRequest(Guid operationId, Guid outputFileId, MediaProcessingPlan plan, string stagingPath, MediaAudioRenderInput? audioRender = null)
     {
         if (operationId == Guid.Empty || outputFileId == Guid.Empty) throw new ArgumentException("Operation/output identities are required.");
         ArgumentNullException.ThrowIfNull(plan); ArgumentException.ThrowIfNullOrWhiteSpace(stagingPath);
         if (!Path.IsPathFullyQualified(stagingPath)) throw new ArgumentException("An absolute staging path is required.", nameof(stagingPath));
         OperationId = operationId; OutputFileId = outputFileId; Plan = plan; StagingPath = Path.GetFullPath(stagingPath);
+        AudioRender = audioRender;
     }
 }
 
