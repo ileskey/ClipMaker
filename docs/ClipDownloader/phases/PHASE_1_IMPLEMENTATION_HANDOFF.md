@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 CHZZK 메타데이터 진단(2026-10-15): [DASH 추출 실패 진단](PHASE_1_CHZZK_MPD_METADATA_DIAGNOSIS.md)에서14327648은 metadata 조회부터 yt-dlp2026.08.19의 MPD Initialization sourceURL 직접 접근으로 실패함을 재현했다. 실제 ABR_HLS/MPD의 초기화 항목은range만 있고sourceURL이 없다. 제품과 동일 인자·traceback·API/MPD 구조를 대조했으며 영상 다운로드나 도구 교체는 하지 않았다. 업데이트 해결·기존 indexed 전략 대응·이 영상 생성 지원은 미확정이다. 기존 CHZZK HLS 지원과 구별하고 사용자 양 모드 재생 확인·Phase1 전체 완료는Pending으로 유지한다.
+
 최신 YouTube Fast 사용자 확인(2026-10-15): 사용자가 `qnjEE-wkw8k`137/140·30fps·10~40초 Fast의 `out5.mp4` 생성 완료 로그와 재생 성공·음성 동기 통과를 보고했다. [확인 기록](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md#사용자-재생동기-확인)을 따른다. 같은 영상 Accurate도 앞서 사용자 통과 보고를 받았다. 아래 해당 Fast/Accurate player Pending은 보고 전 이력이다. CHZZK 양 모드의 사용자 재생·동기 확인은 남아 있으며 Phase1 전체 Passed/Completion/Tag는 Pending이다.
 
 최신 Fast 분수 seek 지원(2026-10-15): [진단·지원·실제 검증](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md)에서 같은 움직이는 YouTube10~40초의 CopySeekClockUnsupported가 검증된 IDR `68/15`초를 마이크로초로 정확히 표현할 수 없어 발생함을 확인했다. 명령 시작 좌표만 Floor하고 exact native 계획·translation·Fast IDR·출력 gate는 유지했다. 실제 CLI exit0·video[68/15,1201/30)·audio[68/15,441088/11025)·독립decode·정리를 확인했다. 이 Fast의 직접 player와 Phase1 전체 완료는 Pending이다.

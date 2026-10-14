@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 CHZZK 입력 진단(2026-10-15): 새14327648은 [yt-dlp MPD metadata 추출 실패](PHASE_1_CHZZK_MPD_METADATA_DIAGNOSIS.md)로 구간 획득 전에 차단된다. sourceURL 없는 Initialization과 직접 속성 접근 예외를 확인했으며 이 영상 지원이나 CHZZK player 통과로 기록하지 않는다. 문서 진단만 추가했고 기존 HLS 성공 증거와1192개 회귀 결과는 보존한다.
+
 최신 사용자 재생 확인(2026-10-15): 움직이는 YouTube `qnjEE-wkw8k`137/140·30fps·10~40초의 Accurate 통과 보고에 이어, Fast 생성 완료·재생 성공·음성 동기 통과를 [기록](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md#사용자-재생동기-확인)했다. 해당 두 사례의 사용자 확인과 아래 기존 네 final 전체의 검증을 구별한다. CHZZK 양 모드의 사용자 재생·동기 확인과 Phase1 전체 완료 판정은 남아 있다. 최신 자동 회귀는1192개 통과다.
 
 최신 Fast 후속(2026-10-15): [분수 seek 지원·실제 검증](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md)에서 움직이는 `qnjEE-wkw8k`137/140·10~40초 Fast의 명령 표현 거절을 보완했다. 실제 CLI·기존 output gate·독립 전체 decode·정리를 통과했으며, 직접 player 확인은 남아 있다.
