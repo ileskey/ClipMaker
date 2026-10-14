@@ -2,6 +2,8 @@
 
 2026-10-14. 시작 HEAD `d95d7b7`, branch `phase/1`에서 사용자 `wFOjWCLPDDM` / best137+140 / 25fps / Fast / IN10초·OUT40초의 indexed 수집 실패를 진단했다. 시작 시 미추적 사용자 파일 `22.mp4`를 발견해 조작하지 않았다. `out.mp4`도 조작하지 않고 고유 ignored 실험 경로만 썼다.
 
+후속 [Accurate terminal PCM 지원](PHASE_1_ACCURATE_TERMINAL_PCM_SUPPORT.md)에서같은10~40초의Accurate실제생성·독립PCM 값대응을검증했다. 아래Accurate 미완료설명은이Fast 지원시점의이력이다.
+
 ## 확인한 두 차단 조건
 
 현재 선택의 실제 SIDX를 각64KiB prefix로 읽었다. video는7초 단위7개 참조이며 `[0,1189/25)`=47.56초다. audio는약10초 단위5개이며 `[0,3568/75)`≈47.573333초다. 초기 참조 margin과 whole-reference 선택을 적용하면 video 요청 window `[3,47)`와 audio `[38/735,40)`이 양 스트림의 모든 참조와 겹친다. 원점0은 기존 실제 native 초기 관찰과 이번 통합 준비/실행의 재검증에서 확인했다. 기존40초 획득 상한으로는 video부터 실패한다.

@@ -25,7 +25,9 @@ public sealed class SourceAudioPreparationService(FfmpegMediaProcessingService p
             !string.Equals(Path.GetDirectoryName(Path.GetFullPath(pcmPath)), inspection.Acquisition.Request.WorkDirectory, StringComparison.OrdinalIgnoreCase))
             return Fail("SourceAudioPreparationIdentity");
         var frames = stream.Probe.Observations.Frames.Where(f => f.StreamIndex == stream.Native.Stream.Index).ToArray();
-        if (frames.Length == 0 || frames.Any(f => f.Pts is null || f.SampleCount is null or <= 0 or > 1024 || f.Duration != f.SampleCount ||
+        long tail = stream.Native.TrailingDecodedPaddingSamples;
+        if (tail is < 0 or >= 1024 || frames.Length == 0 || frames.Any(f => f.Pts is null || f.SampleCount is null or <= 0 or > 1024 ||
+            f.Duration is null or <= 0 || f.Duration != f.SampleCount - (ReferenceEquals(f, frames[^1]) ? tail : 0) ||
             f.SampleCount != 1024 && (stream.Native.LeadingSkippedSamples == 0 || !ReferenceEquals(f, frames[0])) || f.SampleRate is { } frameRate && frameRate != rate ||
             f.Channels != stream.Native.Stream.Codec.Channels || f.SampleFormat != "fltp")) return Fail("SourceDecodedFrameLayout");
         var samples = frames.Aggregate(BigInteger.Zero, (sum, frame) => sum + frame.SampleCount!.Value);

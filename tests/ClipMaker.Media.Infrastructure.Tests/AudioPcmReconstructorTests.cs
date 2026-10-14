@@ -8,6 +8,28 @@ namespace ClipMaker.Media.Infrastructure.Tests;
 public sealed class AudioPcmReconstructorTests
 {
     [Theory]
+    [InlineData(1)]
+    [InlineData(2)]
+    public async Task ProvenTrailingDecodedValuesRemainCapturedButAreNeverPlacedOnValidLattice(int channels)
+    {
+        var lattice = new AudioSampleLattice(SignedMediaTime.Zero, 48000);
+        var boundary = new AudioBoundaryPlan(lattice, 0, 4, 0, 4, SignedMediaTime.Zero);
+        AudioPcmFramePlacement[] frames = [new(0, 0, 2), new(2, 2, 2)];
+        var plan = new AudioPcmReconstructionPlan(boundary, channels, 6, frames, 2);
+        byte[] valid = Enumerable.Range(0, 4 * channels * 4).Select(i => (byte)i).ToArray();
+        byte[] captured = valid.Concat(Enumerable.Repeat((byte)0xee, 2 * channels * 4)).ToArray();
+        using var input = new MemoryStream(captured, false); using var output = new MemoryStream();
+        var counts = await new AudioPcmReconstructor().ReconstructAsync(plan, input, output, TestContext.Current.CancellationToken);
+        Assert.Equal(valid, output.ToArray()); Assert.Equal(4, counts.WrittenSamples);
+        Assert.Equal(0, counts.InsertedZeroSamples); Assert.Equal(0, counts.DiscardedOverlapSamples);
+        Assert.Equal(captured, input.ToArray()); Assert.Equal(valid.Length, input.Position);
+        Assert.Throws<ArgumentException>(() => new AudioPcmReconstructionPlan(boundary, channels, 6, frames));
+        Assert.Throws<ArgumentException>(() => new AudioPcmReconstructionPlan(boundary, channels, 6, frames, 1));
+        Assert.Throws<ArgumentException>(() => new AudioPcmReconstructionPlan(boundary, channels, 6, frames, -1));
+        Assert.Throws<ArgumentException>(() => new AudioPcmReconstructionPlan(boundary, channels, 6, frames, 6));
+    }
+
+    [Theory]
     [InlineData(1, 0, 11)]
     [InlineData(2, 2, 10)]
     [InlineData(2, -3, 15)]

@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 Accurate terminal PCM 지원(2026-10-14): [끝 AAC 준비·실제 검증](PHASE_1_ACCURATE_TERMINAL_PCM_SUPPORT.md)을 우선한다. `wFOjWCLPDDM`137/140·10~40초는증명된끝640 decoded padding을유효placement에서제외하고전체captured PCM을보존해Accurate실제CLI exit0·A/V[10,40)·최종decode·정리를검증했다. 독립full decode·selected slice와준비/render PCM이byte동일하다. Core143/Media168/Downloader855·총1166개통과·build경고/오류0. 아래terminal Accurate 미완료기록은이전이력이다. 직접player·Phase1전체완료는Pending이다.
+
 최신 YouTube30초Fast 지원(2026-10-14): [10~40초 지원·검증](PHASE_1_YOUTUBE_THIRTY_SECOND_SUPPORT.md)을 우선한다. `wFOjWCLPDDM`137/140은whole 참조47.56/약47.57초가 필요하고terminal AAC384 duration/1024 decoded count가 추가차단이었다. exact edit끝/native/packet/frame 조건에서640 decoded padding을 분리관찰해Fast실제CLI exit0·final·정리를 확인했다. 현재Phase1 CLI예산은64MiB/60초이며40초기록은이전이력이다. Core143/Media166/Downloader851·총1160개통과·build경고/오류0. terminal Accurate PCM준비·모든구간 지원·직접player·Phase1전체완료는확정하지 않는다.
 
 최신 영상 decode 시간 정책 보완(2026-10-14): [시간 정책 수정·검증](PHASE_1_PICTURE_DECODE_TIMEOUT_FIX.md)에서 FFmpeg framehash에 잘못 공유한 FFprobe60초 제한을 제거했다. 기존 FFmpeg 고정 제한 없음/취소 지원 정책으로 맞추고 버전15초·FFprobe60초는 유지한다. 실패 항목도 버전/FFprobe/FFmpeg로 구별한다. build 경고/오류0·Downloader850개 통과·같은 CHZZK Fast 실제 CLI exit0·final hash 동일·정리를 확인했다. 사용자 원래 timeout은 직접 재현하지 못했고 정확한 실패 호출도 미확정이다. 직접 player와 전체 Phase 완료는 Pending이다.

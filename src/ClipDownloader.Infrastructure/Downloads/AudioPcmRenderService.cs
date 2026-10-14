@@ -28,17 +28,20 @@ public sealed class AudioPcmRenderService
             return Fail("PcmRenderPreparation");
         var audio = plan.Inspection.Streams.Single(s => s.Native.Stream.Kind == MediaStreamKind.Audio);
         var placement = new List<AudioPcmFramePlacement>(); long decodedFirst = 0;
-        foreach (var frame in audio.Probe.Observations.Frames.Where(f => f.StreamIndex == audio.Native.Stream.Index))
+        var frames = audio.Probe.Observations.Frames.Where(f => f.StreamIndex == audio.Native.Stream.Index).ToArray();
+        foreach (var frame in frames)
         {
             NativeTimestamp.TryCreate(frame.Pts!.Value, audio.Native.Stream.TimeBase, out var timestamp, out _);
             var relative = timestamp!.PresentationTime - audio.Native.ObservedRange.Start;
             SignedMediaTime.TryCreate(1, preparation.SampleRate, out var sampleClock, out _);
             if (!relative.TryToNativeTicks(sampleClock!, NativeTimestampRounding.Exact, out long first, out _) || frame.SampleCount is not { } count)
                 return Fail("PcmNativeLatticePlacement");
-            placement.Add(new(decodedFirst, first, count)); decodedFirst = checked(decodedFirst + count);
+            long tail = ReferenceEquals(frame, frames[^1]) ? audio.Native.TrailingDecodedPaddingSamples : 0;
+            if (tail < 0 || tail >= count || tail > 0 && frame.Duration != count - tail) return Fail("PcmNativeTailPlacement");
+            placement.Add(new(decodedFirst, first, checked(count - (int)tail))); decodedFirst = checked(decodedFirst + count);
         }
         AudioPcmReconstructionPlan reconstruction;
-        try { reconstruction = new(boundary, preparation.Channels, preparation.Samples, placement); }
+        try { reconstruction = new(boundary, preparation.Channels, preparation.Samples, placement, audio.Native.TrailingDecodedPaddingSamples); }
         catch (ArgumentException) { return Fail("PcmNativeSupport"); }
         OperationResult<MediaAudioRenderInput>? outcome = null;
         bool creatingOutput = false;

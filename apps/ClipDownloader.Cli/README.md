@@ -20,7 +20,9 @@ dotnet run --project apps/ClipDownloader.Cli --no-build -- clip --url "https://c
 
 60초는 **출력 클립 길이 상한이 아니라 획득할 원본 참조 범위의 상한**이다. HLS Fast는 요청 앞뒤에 초기 참조 길이만큼 여유를 확보하고 겹치는 세그먼트를 통째로 획득한다. 30초 요청도 세그먼트 길이·경계와 바이트 비용에 따라 상한을 넘을 수 있다. `HlsFetchedSpanBudget`/`IndexedFetchedSpanBudget` 오류는 필요한 실제 획득 범위와 상한을 표시한다. 이 검사를 통과해도 바이트·원본·출력 검사는 별도로 통과해야 한다.
 
-단일 rate1 edit와 정확한 leading skip·decoded frame·provider 대응을 검증할 수 있는 indexed AAC 시작 보정은 지원한다. 여러 packet이 소모되는1600 sample 사례를 Fast/Accurate에서 실제 확인했다. 증거가 없거나 일치하지 않는 보정과 끝 padding 등 범위 밖 입력은 계속 거절한다. [지원 범위·실제 결과](../../docs/ClipDownloader/phases/PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)를 참조한다.
+단일 rate1 edit와 정확한 leading skip·decoded frame·provider 대응을 검증할 수 있는 indexed AAC 시작 보정은 지원한다. 여러 packet이 소모되는1600 sample 사례를 Fast/Accurate에서 실제 확인했다. 증거가 없거나 일치하지 않는 보정과 side-data discard padding 등 범위 밖 입력은 계속 거절한다. [지원 범위·실제 결과](../../docs/ClipDownloader/phases/PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)를 참조한다.
+
+단일 edit의 표시 끝과 마지막 native/packet/frame duration이 정확히 같고 decoded count와의 차이를 검증한 terminal AAC는 지원한다. Accurate는 전체 decoded PCM을 보존하고 증명된 끝 여분만 유효 sample placement에서 제외한다. 같은 영상의10~40초를 Fast/Accurate 모두 실제 확인했다. side-data discard padding 등 다른 끝 보정을 임의 허용하지 않는다. [끝 PCM 지원·검증](../../docs/ClipDownloader/phases/PHASE_1_ACCURATE_TERMINAL_PCM_SUPPORT.md)을 따른다.
 
 정상 정보·준비 요약·최종 결과는 stdout, 질문·단계·주의사항·오류·잔존 경로는 stderr다. 리디렉션된 stderr는 단계 전환만 기록한다. 실제 영상/음성 표시 범위는 사용자 원점의 정확한 유리수 초와 반열린 구간으로 표시하며 요청 범위와 다를 수 있다.
 
