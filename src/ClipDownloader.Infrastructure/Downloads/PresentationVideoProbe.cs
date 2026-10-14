@@ -13,18 +13,20 @@ internal sealed class PresentationVideoProbe(IToolLocator locator, ToolPathSetti
         ExecuteAsync(reference, "ffprobe.exe", ToolKind.Ffprobe,
             ["-v", "error", "-protocol_whitelist", "file", "-format_whitelist", "mpegts", "-show_streams", "-show_packets", "-show_data",
                 "-show_entries", "stream=index,codec_type,codec_name,time_base,pix_fmt,width,height:packet=stream_index,pts,size,data,flags", "-of", "json", "-i", reference.File.Path],
-            bytes => new H264CarrierObservationParser().Parse(bytes), token);
+            bytes => new H264CarrierObservationParser().Parse(bytes), TimeSpan.FromSeconds(60), token);
 
+    // Full picture hashing follows the cancellable FFmpeg processing policy, not the ffprobe time limit.
     internal Task<OperationResult<DecodedPictureObservations>> DecodeAsync(CollectedSourceReference reference, CancellationToken token) =>
         ExecuteAsync(reference, "ffmpeg.exe", ToolKind.Ffmpeg,
             ["-v", "error", "-xerror", "-nostdin", "-protocol_whitelist", "file", "-format_whitelist",
                 reference is AuxiliaryHlsCollectedReference ? "mpegts" : "mov", "-copyts", "-i", reference.File.Path,
                 "-map", "0:v:0", "-an", "-c:v", "rawvideo", "-pix_fmt", "yuv420p", "-fps_mode:v", "passthrough",
                 "-enc_time_base:v", "demux", "-f", "framehash", "-hash", "sha256", "-"],
-            bytes => new DecodedPictureObservationParser().Parse(bytes), token);
+            bytes => new DecodedPictureObservationParser().Parse(bytes), null, token);
 
     private async Task<OperationResult<T>> ExecuteAsync<T>(CollectedSourceReference reference, string executable, ToolKind kind,
-        IReadOnlyList<string> args, Func<ReadOnlyMemory<byte>, OperationResult<T>> parse, CancellationToken token) where T : class
+        IReadOnlyList<string> args, Func<ReadOnlyMemory<byte>, OperationResult<T>> parse, TimeSpan? observationTimeout,
+        CancellationToken token) where T : class
     {
         string stage = "FileIdentity";
         try
@@ -41,14 +43,14 @@ internal sealed class PresentationVideoProbe(IToolLocator locator, ToolPathSetti
             stage = "ProbeExecution";
             var version = await runner.RunAsync(new(location.SelectedPath!, ["-version"], directory,
                 ProcessOutputMode.Full, ProcessOutputMode.Tail, TimeSpan.FromSeconds(15)), null, token).ConfigureAwait(false);
-            var failure = Check<T>(version);
+            var failure = Check<T>(version, "PresentationVideoVersion");
             if (failure is not null) return failure;
             if (ToolOutputParser.ReadVersion(kind, new UTF8Encoding(false, true).GetString(version.StandardOutput.Bytes.Span)) is null)
                 return Fail<T>(OperationErrorCode.ProcessFailed, stage);
             token.ThrowIfCancellationRequested();
             var result = await runner.RunAsync(new(location.SelectedPath!, args, directory,
-                ProcessOutputMode.Full, ProcessOutputMode.Tail, TimeSpan.FromSeconds(60)), null, token).ConfigureAwait(false);
-            failure = Check<T>(result);
+                ProcessOutputMode.Full, ProcessOutputMode.Tail, observationTimeout), null, token).ConfigureAwait(false);
+            failure = Check<T>(result, kind == ToolKind.Ffprobe ? "PresentationVideoProbe" : "PresentationVideoDecode");
             if (failure is not null) return failure;
             if (result.StandardError.TotalBytes != 0) return Fail<T>(OperationErrorCode.VerificationFailed, "DecoderReportedError");
             token.ThrowIfCancellationRequested();
@@ -61,15 +63,15 @@ internal sealed class PresentationVideoProbe(IToolLocator locator, ToolPathSetti
         catch (Exception e) when (e is IOException or UnauthorizedAccessException)
         { return Fail<T>(stage == "ProbeExecution" ? OperationErrorCode.ProcessFailed : OperationErrorCode.VerificationFailed, stage); }
     }
-    private static OperationResult<T>? Check<T>(ProcessResult result) where T : class
+    private static OperationResult<T>? Check<T>(ProcessResult result, string field) where T : class
     {
         if (result.Status == ProcessStatus.TerminationFailed || !result.RootExitConfirmed || result.DescendantExitConfirmed != true || !result.StreamsDrained)
             return Fail<T>(OperationErrorCode.ProcessTerminationFailed, "PresentationVideoProbe");
         if (result.Status == ProcessStatus.Cancelled) return OperationResult<T>.Cancelled();
-        if (result.Status == ProcessStatus.TimedOut) return Fail<T>(OperationErrorCode.TimedOut, "PresentationVideoProbe");
-        if (result.Status != ProcessStatus.Exited || result.ExitCode != 0) return Fail<T>(OperationErrorCode.ProcessFailed, "PresentationVideoProbe");
+        if (result.Status == ProcessStatus.TimedOut) return Fail<T>(OperationErrorCode.TimedOut, field);
+        if (result.Status != ProcessStatus.Exited || result.ExitCode != 0) return Fail<T>(OperationErrorCode.ProcessFailed, field);
         if (result.StandardOutput.LimitExceeded || !result.StandardOutput.IsComplete || !result.StandardOutput.ReachedEndOfStream || result.StandardOutput.IsTruncated)
-            return Fail<T>(OperationErrorCode.InvalidMetadata, "PresentationVideoProbe");
+            return Fail<T>(OperationErrorCode.InvalidMetadata, field);
         return null;
     }
     private static async Task<bool> Matches(FileStream file, CollectedSourceReference reference, CancellationToken token)

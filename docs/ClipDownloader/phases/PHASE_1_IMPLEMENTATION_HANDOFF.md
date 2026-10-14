@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 영상 decode 시간 정책 보완(2026-10-14): [시간 정책 수정·검증](PHASE_1_PICTURE_DECODE_TIMEOUT_FIX.md)에서 FFmpeg framehash에 잘못 공유한 FFprobe60초 제한을 제거했다. 기존 FFmpeg 고정 제한 없음/취소 지원 정책으로 맞추고 버전15초·FFprobe60초는 유지한다. 실패 항목도 버전/FFprobe/FFmpeg로 구별한다. build 경고/오류0·Downloader850개 통과·같은 CHZZK Fast 실제 CLI exit0·final hash 동일·정리를 확인했다. 사용자 원래 timeout은 직접 재현하지 못했고 정확한 실패 호출도 미확정이다. 직접 player와 전체 Phase 완료는 Pending이다.
+
 최신 CHZZK 예산 보완(2026-10-14): [제한 예산 보완·실제 지원](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md)을 우선한다. `14791589`의 Fast 46:10~46:40은 목표 파일만 기존 바이트 상한을 초과했다. 제한 실험 성공을 근거로 CLI 기본 획득 예산을 64 MiB / 40초로 조정하고 실제 CLI exit0·final·검사·정리를 확인했다. 별도 전체 A/V decode 성공·실험/CLI final hash 동일, Downloader848개 통과·build 경고/오류0. 아래 기존 상한 유지·미지원 설명은 최초 진단 시점의 이력이다. 모든 구간/Accurate 지원이나 Phase 1 전체 완료로 확대하지 않는다.
 
 최신 CHZZK 획득 상한 진단(2026-10-14): [30초 요청 진단](PHASE_1_CHZZK_FETCH_BUDGET_DIAGNOSIS.md)에서 `14791589`의 Fast 46:10~46:40은 실제 whole segment 18개·36초가 필요해 기존 30초 원본 획득 상한을 넘는 것을 확인했다. planner 오류를 구체화하고 같은 실제 CLI의 실패 표시·정리를 검증했다. Downloader848개 통과·build 경고/오류0. 예산 조정과 목표 구간 생성 지원은 아직 미검증이며 이번 변경을 클립 생성 해결로 표시하지 않는다.
