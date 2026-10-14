@@ -89,3 +89,13 @@ source와 output probe 목적을 분리하고, output의 progressive stsz/stts/c
 `Mp4OutputObservationVerifier`는 native sample/packet/frame, mvhd/tkhd/mdhd, 제한된 empty+content edit, AAC skip/decoded tail을 대조한다. mdhd의 coded presentation span과 DTS duration 합을 구별한다. [FFmpeg8.1 movenc.c](https://raw.githubusercontent.com/FFmpeg/FFmpeg/n8.1/libavformat/movenc.c)의 계산과 실제 header/sample/decode를 함께 확인했다. 이 결과는 source 대응·최종 clip 성공을 뜻하지 않는다.
 
 위 기존 YouTube staging의 output consistency가 성공했다. video valid 범위[0,211/15), audio[0,154522/11025), 첫 AAC skip408/tail padding0을 독립적으로 확인했다. video mdhd158807040과 stts 합158430720의 차이를 오류로 오인하지 않는다. Media Infrastructure128개 실패·skip0. 다음 source payload·시간·decoded 영상 대응과 Accurate 준비/처리는 미완료다.
+
+## Fast source/output 대응
+
+`FastClipVerificationService`는 qualified plan/processing identity와 output 목적 probe를 연결하고, input/staging의 전후 captured hash/read lock을 유지한다. 동일 codec initialization, 정확한 source PTS/DTS, 실제 packet byte payload, 필수 frame/audio coverage와 decoded 영상 hash/크기/선택 해상도를 대조한다. 결과는 검증된 소유 staging과 실제 source 표시 범위이며 host의 최종 파일 확정은 아니다. probe/decode 종료 미확인을 operation ID로 조회하고 이후 검증을 차단한다. 실패·취소·읽기 close 실패에서 success Data를 반환하지 않는다.
+
+CHZZK 첫 통합 실패 `CopyPacketChanged`를 조사했다. source AAC duration1024인 3개 packet에서 output1025/1023/1025가 관찰됐으며 각각 다음 source DTS와의 정확한 차이다. MP4 STTS의 DTS 간격과 AAC decoded1024 support를 분리했다. [FFmpeg8.1 movenc.c](https://raw.githubusercontent.com/FFmpeg/FFmpeg/n8.1/libavformat/movenc.c)의 get_cluster_duration/stts 동작과 실제 bytes를 대조했다. audio 내부 sample은 정확한 연속 source packet의 다음 DTS 차이, 마지막 sample은 source duration으로 검사한다. 임의 1sample tolerance·PTS 이동·값 보정으로 허용하지 않는다. 원본 AAC payload와 decoded sample support, output edit/end 검사는 별도 유지한다.
+
+현재 bounded10~20초 양 사이트 Fast 통합이 성공했다. CHZZK source video[11,22), audio[11,16507/750), staging11281027bytes/SHA256 `360d6fba66306f1427f6220f076ea8f9ec7294e459bb2cd0b76ff87bcc09cdfe`; YouTube137/140 source video[6,301/15), audio[6,220672/11025), staging3469926bytes/SHA256 `52314b66092c858dd4521d8e372a5546d2bc4da5e381eea87a16d0fd7d98ddd8`다. required600/300 frames와 decoded source/output 그림을 대조했다. 선택 모드/화질 fallback은 없다. 실제 파일은 ignored 작업 폴더 `0c9e2d85008b4e1aaf7d4c2132210168` / `8cd1e42c4025407aa0acd66e2d43c13c`와 safe summary로 보존한다.
+
+Fast 추가14개 포함 Downloader758개 실패·skip0. 실제 실험이 로드한 DLL과 동시 빌드가 충돌한 실행은 실패로 기록하며, 해당 실험 종료 후 솔루션 build 경고·오류0을 확인했다. **4c-2의 제한된 양 사이트 Fast 연결은 검증했으며 Accurate4c-3과 전체4단계는 미완료다.**
