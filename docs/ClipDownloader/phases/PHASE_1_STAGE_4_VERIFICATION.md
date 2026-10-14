@@ -26,7 +26,7 @@ indexed/보조 HLS collector에 기존 HLS collector와 같은 trusted storage t
 ## 남은 4단계 gate
 
 - 4a의 제한된 획득 전략 최종 audit와 지원/거절 조건 확인.
-- 4b의 shared native header/sample 해석 및 획득 snapshot 연결. raw probe 성공으로 native coverage/codec preparation을 승격하지 않는다.
+- 4b의 제한된 shared native header/sample 해석 및 획득 snapshot 연결은 아래 후속 기록에서 완료했다. 처리 output/end의 추가 표현은 4c gate에 남긴다.
 - 4c qualification, K/common shift/Fast 출력, Accurate source-start decoder 준비/PCM 재구성, staging·actual output/native/edit/end 검증.
 - 양 사이트/양 모드 실제 clip 및 실패·취소 통합. 전체 Phase 1과 후속5/6은 미완료다.
 
@@ -39,3 +39,13 @@ Phase2·WPF 다운로드 UI·ClipEditor는 진행하지 않는다. 설치·범�
 공유 `Mp4NativeObservationVerifier`는 관찰 파일의 sample/packet/frame count·PTS/DTS/duration·byte 위치/크기·codec 설정·sync/skip 상태를 대조한다. 단일 양수 duration/content edit(rate1, mediaTime≥0)만 해석하며 clipping/multiple/empty edit는 거절한다. HLS 무편집/단일 video 및 indexed 단일 stream 정책은 source adapter에 유지했다. 관찰된 native range는 원격 end/target coverage/decoder 준비 증명이 아니다.
 
 기존 로컬 137/140/CHZZK 사례에서 native sample180/430/213개와 공유 correspondence 성공을 확인했다. AAC edit 반례는 raw/header 관찰을 보존하면서 NativeSampleEvidence UnsupportedInput으로 거절했다. 이전 초안 컴파일에서 남은 source 의존2곳을 제거했고, 새 테스트의 missing PTS 기대 필드1곳을 실제 의미인 NativeFramePtsMissing으로 수정했다. 최종 Core143/Media Infrastructure102/Downloader Infrastructure714개 실패·skip0이며, 다음 qualification/처리 및 4단계 전체는 미완료다.
+
+## 획득 snapshot과 공유 검사 연결
+
+`AcquiredMediaProbeService`는 획득 파일의 captured identity와 verified mapping을 입력으로 공유 probe/native gate를 실행한다. `AcquiredMediaInspection.Create`는 acquisition ID·file ID·경로·길이/SHA-256·관찰 stream 집합·mapping 범위를 대조한다. video declared FPS가 선택 FPS와 달라지면 InvalidMetadata/Execution으로 거절한다. probe 의존성이 다른 request를 반환해도 차단한다. 이 결과는 local probe 연결이며 processing qualification 성공이 아니다.
+
+새 9개 테스트로 content/mapping 미확인, snapshot 교체, coverage 모순, missing PTS, 선택 FPS 변경, 종료 불확실, 취소의 Data=null을 검사했다. 양 사이트10~20초 Accurate 입력을 bounded32MiB/30초 검사 budget으로 새 획득하여 실제 shared probe/native binder 성공을 확인했다. CHZZK `hls-8384` target22,551,871bytes에서 video[2,24), audio[19187/9600,3599/150)을 관찰했고, YouTube137/140 target5,284,376/486,153bytes에서 video[0,24), audio[0,22016/735)을 관찰했다. 초기·refresh·보조 파일 소유권은 기존 registry에 유지한다. source-start prefix 존재만으로 decoder preparation을 확정하지 않았으며 final clip은 아직 만들지 않았다.
+
+실제 harness는 ignored `AcquireAndProbeHls.ps1` / `AcquireAndProbeIndexed.ps1`이고 각 소유 작업폴더에 safe `shared-probe-summary.json`을 남겼다. Source NativeEnd는 Unknown을 유지한다. 제한된 4b 경로는 연결됐으며 다음은 4a 최종 audit와 4c qualification/처리다.
+
+이번 변경 후 Downloader Infrastructure723개 실패·skip0, 솔루션 build 경고·오류0을 확인했다.
