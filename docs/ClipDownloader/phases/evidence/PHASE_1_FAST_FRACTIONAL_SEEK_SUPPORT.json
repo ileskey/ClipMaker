@@ -44,7 +44,20 @@
     "BuildWarnings": 0,
     "BuildErrors": 0
   },
-  "DirectPlayerVerified": false,
+  "AgentContinuousPlaybackVerified": false,
+  "UserPlaybackReport": {
+    "Date": "2026-10-15",
+    "Quote": "fast 검증했어. 성공했고, 음성 싱크도 맞아",
+    "Scope": "qnjEE-wkw8k / 137+140 / 30fps / Fast / [10,40)",
+    "OutputFileName": "out5.mp4",
+    "CliCompletionReported": true,
+    "PlaybackPassed": true,
+    "AudioSyncPassed": true,
+    "VideoRange": "[68/15,1201/30)",
+    "AudioRange": "[68/15,441088/11025)",
+    "UserOutputHashVerified": false,
+    "AllStage6PlayerChecksCompleted": false
+  },
   "Phase1Completed": false,
   "Reference": "https://github.com/FFmpeg/FFmpeg/blob/n8.1/fftools/ffmpeg_demux.c#L1937"
 }

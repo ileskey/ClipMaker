@@ -22,7 +22,13 @@
 - 독립 FFmpeg 전체 A/V decode exit0.
 - 실제 native job root에서 해당 job ID 접두사 폴더0, 출력 디렉터리 staging0.
 
-Fast는 앞선 닫힌 시작점을 사용하므로 이 결과는 요청보다 약5.47초 일찍 시작한다. 표시한 실제 범위를 요청과 같다고 표현하지 않는다. 사용자 Accurate 통과 보고를 이 Fast 파일의 player 재생·동기 확인으로 확대하지 않는다. 이번 Fast의 직접 player 확인과 Phase1 전체 Passed/Completion/Tag는 Pending이다.
+Fast는 앞선 닫힌 시작점을 사용하므로 이 결과는 요청보다 약5.47초 일찍 시작한다. 표시한 실제 범위를 요청과 같다고 표현하지 않는다. 생성 검증 시점에는 이번 Fast의 직접 player 확인이 Pending이었다. Phase1 전체 Passed/Completion/Tag는 Pending이다.
+
+## 사용자 재생·동기 확인
+
+2026-10-15 사용자가 같은 URL/137+140/30fps/Fast/10~40초를 `out5.mp4`로 실행한 완료 로그와 함께 “fast 검증했어. 성공했고, 음성 싱크도 맞아”라고 보고했다. 사용자 재생 성공 및 음성 동기 통과로 기록한다. 보고된 실제 video/audio 범위와 AAC skip240/tail0·zero0/overlap0·SourceEndVerified=false는 위 에이전트 실행 결과와 동일하다. 사용자 출력 파일의 hash 대조나 에이전트의 직접 청취 결과로 표현하지 않는다.
+
+이 사례는 앞선 같은 영상 Accurate 사용자 통과 보고와 함께 YouTube 양 모드의 사용자 확인 증거다. 다른 source/구간 또는 기존 네 final 전체의 검증으로 확대하지 않는다. CHZZK Fast/Accurate의 사용자 재생·동기 확인과 Phase1 전체 완료 판정은 남아 있다.
 
 ## 회귀와 인계
 

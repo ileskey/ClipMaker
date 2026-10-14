@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 사용자 재생 확인(2026-10-15): 움직이는 YouTube `qnjEE-wkw8k`137/140·30fps·10~40초의 Accurate 통과 보고에 이어, Fast 생성 완료·재생 성공·음성 동기 통과를 [기록](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md#사용자-재생동기-확인)했다. 해당 두 사례의 사용자 확인과 아래 기존 네 final 전체의 검증을 구별한다. CHZZK 양 모드의 사용자 재생·동기 확인과 Phase1 전체 완료 판정은 남아 있다. 최신 자동 회귀는1192개 통과다.
+
 최신 Fast 후속(2026-10-15): [분수 seek 지원·실제 검증](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md)에서 움직이는 `qnjEE-wkw8k`137/140·10~40초 Fast의 명령 표현 거절을 보완했다. 실제 CLI·기존 output gate·독립 전체 decode·정리를 통과했으며, 직접 player 확인은 남아 있다.
 
 최신 후속 검증(2026-10-15): [H.264 recovery-point 지원·사용자 재생 확인](PHASE_1_H264_RECOVERY_POINT_SUPPORT.md)에서 움직이는 YouTube `qnjEE-wkw8k`137/140·30fps·Accurate10~40초의 실제 생성·decode와 사용자 재생 통과 보고를 기록했다. 최신 회귀는1185개 통과·build 경고/오류0이다. 이 사용자 보고는 해당 사례에 한정하며 아래 네 final 전체의 재생 확인을 완료한 것으로 세지 않는다. 아래 검증 수·상한·미완료 설명은 각 수행 시점의 이력이다.
