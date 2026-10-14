@@ -1,0 +1,79 @@
+{
+  "Date": "2026-10-14",
+  "SourceId": "wFOjWCLPDDM",
+  "VideoFormat": "137",
+  "AudioFormat": "140",
+  "Mode": "Fast",
+  "Start": 10,
+  "End": 40,
+  "WholeVideoSpan": "1189/25",
+  "WholeAudioSpan": "3568/75",
+  "VideoReferenceCount": 7,
+  "AudioReferenceCount": 5,
+  "VideoPayloadBytes": 1146823,
+  "AudioPayloadBytes": 772256,
+  "ReferenceCoverageIncludesWholeSelectedMedia": true,
+  "PreviousMaximumSeconds": 40,
+  "CurrentMaximumSeconds": 60,
+  "MaximumBytes": 67108864,
+  "BudgetOnlyExperiment": {
+    "Status": "Failed",
+    "Field": "NativeSkipUnsupported",
+    "JobId": "63ba2cf3-4a46-4bfa-8d16-a5bafc4493d9",
+    "FinalExists": false,
+    "RemainingCount": 0
+  },
+  "SourceTail": {
+    "Sha256": "74B3298FD26FD11C10305500154B1A0CDAAAFAE719BDBA5E94B0F9E65FF43F90",
+    "NativeStatus": "Succeeded",
+    "Samples": 2051,
+    "Packets": 2051,
+    "Frames": 2050,
+    "FinalPacketPts": 2097600,
+    "FinalNativeDuration": 384,
+    "FinalFrameDuration": 384,
+    "FinalFrameSampleCount": 1024,
+    "LeadingSkippedSamples": 1600,
+    "TrailingDecodedPaddingSamples": 640,
+    "ObservedRange": {
+      "Start": {
+        "Numerator": 0,
+        "Denominator": 1
+      },
+      "End": {
+        "Numerator": 3568,
+        "Denominator": 75
+      }
+    },
+    "TailSideDataDiscardPadding": null
+  },
+  "SuccessfulExperiment": {
+    "JobId": "f98742f8-28f1-46ac-9afe-dc0f3846e903",
+    "Status": "Succeeded",
+    "FullAudioVideoDecodeExitCode": 0
+  },
+  "CliVerification": {
+    "JobId": "2f004ee2-aaf3-4e76-9358-ae15db116686",
+    "ExitCode": 0,
+    "Bytes": 1365856,
+    "Sha256": "5cf5b04cbfef91f86e965215ca6be0cc7b74f2292da6cc261f55707b7d07bb6f",
+    "VideoRange": "[7,1001/25)",
+    "AudioRange": "[7,17648/441)",
+    "OutputAudioSkip": 2076,
+    "OutputAudioTail": 0,
+    "SourceEndVerified": false,
+    "JobDirectoryCount": 0,
+    "StagingCount": 0
+  },
+  "Validation": {
+    "CorePassed": 143,
+    "MediaPassed": 166,
+    "DownloaderPassed": 851,
+    "Failed": 0,
+    "Skipped": 0,
+    "BuildWarnings": 0,
+    "BuildErrors": 0
+  },
+  "AccurateTerminalPcmSupportVerified": false,
+  "DirectPlayerVerified": false
+}

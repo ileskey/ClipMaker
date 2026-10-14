@@ -2,6 +2,8 @@
 
 2026-10-14. [상한 진단](PHASE_1_CHZZK_FETCH_BUDGET_DIAGNOSIS.md)의 후속이다. 기존 CLI의 32 MiB / 30초는 출력 길이가 아니라 원본 참조 획득 예산이었다. CHZZK `14791589`의 best `hls-8384` / Fast / `00:46:10:00`~`00:46:40:00`은 실제 whole-reference 36초를 요구해 실패했다.
 
+후속 [YouTube30초Fast 검증](PHASE_1_YOUTUBE_THIRTY_SECOND_SUPPORT.md)으로 현재 CLI 시간 예산은60초다. 아래64MiB/40초는 이 CHZZK 검증 시점의값이다.
+
 ## 제한 실험과 변경 근거
 
 | 실행 | 예산 | 결과 |

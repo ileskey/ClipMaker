@@ -39,7 +39,7 @@ public static class ServiceRegistration
         services.AddSingleton<IClipMediaService>(s => new ClipMediaService(new FfprobeMediaProbe(s.GetRequiredService<IToolLocator>(),
             s.GetRequiredService<ToolPathSettings>(), s.GetRequiredService<IProcessRunner>()), s.GetRequiredService<IToolLocator>(),
             s.GetRequiredService<ToolPathSettings>(), s.GetRequiredService<IProcessRunner>()));
-        SignedMediaTime.TryCreate(40, 1, out var span, out _);
+        SignedMediaTime.TryCreate(60, 1, out var span, out _);
         var budget = new SourceInspectionBudget(64 * 1024 * 1024, span!);
         services.AddSingleton<IClipJobService>(s =>
         {

@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 YouTube30초Fast 지원(2026-10-14): [10~40초 지원·검증](PHASE_1_YOUTUBE_THIRTY_SECOND_SUPPORT.md)을 우선한다. `wFOjWCLPDDM`137/140은whole 참조47.56/약47.57초가 필요하고terminal AAC384 duration/1024 decoded count가 추가차단이었다. exact edit끝/native/packet/frame 조건에서640 decoded padding을 분리관찰해Fast실제CLI exit0·final·정리를 확인했다. 현재Phase1 CLI예산은64MiB/60초이며40초기록은이전이력이다. Core143/Media166/Downloader851·총1160개통과·build경고/오류0. terminal Accurate PCM준비·모든구간 지원·직접player·Phase1전체완료는확정하지 않는다.
+
 최신 영상 decode 시간 정책 보완(2026-10-14): [시간 정책 수정·검증](PHASE_1_PICTURE_DECODE_TIMEOUT_FIX.md)에서 FFmpeg framehash에 잘못 공유한 FFprobe60초 제한을 제거했다. 기존 FFmpeg 고정 제한 없음/취소 지원 정책으로 맞추고 버전15초·FFprobe60초는 유지한다. 실패 항목도 버전/FFprobe/FFmpeg로 구별한다. build 경고/오류0·Downloader850개 통과·같은 CHZZK Fast 실제 CLI exit0·final hash 동일·정리를 확인했다. 사용자 원래 timeout은 직접 재현하지 못했고 정확한 실패 호출도 미확정이다. 직접 player와 전체 Phase 완료는 Pending이다.
 
 최신 CHZZK 예산 보완(2026-10-14): [제한 예산 보완·실제 지원](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md)을 우선한다. `14791589`의 Fast 46:10~46:40은 목표 파일만 기존 바이트 상한을 초과했다. 제한 실험 성공을 근거로 CLI 기본 획득 예산을 64 MiB / 40초로 조정하고 실제 CLI exit0·final·검사·정리를 확인했다. 별도 전체 A/V decode 성공·실험/CLI final hash 동일, Downloader848개 통과·build 경고/오류0. 아래 기존 상한 유지·미지원 설명은 최초 진단 시점의 이력이다. 모든 구간/Accurate 지원이나 Phase 1 전체 완료로 확대하지 않는다.
