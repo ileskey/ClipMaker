@@ -1,3 +1,4 @@
+using ClipMaker.Media.Core.Models;
 using ClipDownloader.Application.Models;
 using ClipDownloader.Infrastructure.Downloads;
 using Xunit;

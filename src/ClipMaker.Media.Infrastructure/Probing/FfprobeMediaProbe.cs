@@ -26,6 +26,15 @@ public sealed class FfprobeMediaProbe(IToolLocator locator, ToolPathSettings set
             stage = "ByteIdentityBefore";
             if (!await Matches(input, request.Content, cancellationToken).ConfigureAwait(false))
                 return Failed(MediaFailureKind.InvalidMedia, stage);
+            Mp4FileTimingEvidence? container = null;
+            if (request.InspectContainer)
+            {
+                stage = "ContainerRead";
+                var timing = await new LocalMp4TimingReader().ReadAsync(input, cancellationToken).ConfigureAwait(false);
+                if (timing.Status == MediaOperationStatus.Cancelled) return MediaOperationResult<MediaProbeResult>.Cancelled();
+                if (timing.Status != MediaOperationStatus.Succeeded) return MediaOperationResult<MediaProbeResult>.Failed(timing.Failure!);
+                container = timing.Data!;
+            }
             var location = locator.Locate(new("ffprobe.exe", settings.GetPath("ffprobe.exe")), cancellationToken);
             cancellationToken.ThrowIfCancellationRequested();
             if (location.Status != ToolLocationStatus.Found) return Failed(MediaFailureKind.MissingTool, "Ffprobe");
@@ -56,7 +65,21 @@ public sealed class FfprobeMediaProbe(IToolLocator locator, ToolPathSettings set
             if (parsed.Status != MediaOperationStatus.Succeeded) return MediaOperationResult<MediaProbeResult>.Failed(parsed.Failure!);
             if (request.Detail == MediaProbeDetail.FramesAndPackets && (!parsed.Data!.FramesObserved || !parsed.Data.PacketsObserved))
                 return Failed(MediaFailureKind.InvalidMedia, "IncompleteObservation");
-            return MediaOperationResult<MediaProbeResult>.Succeeded(new(request, match.Groups[1].Value, parsed.Data!));
+            if (container is not null)
+            {
+                var streams = parsed.Data!.Streams;
+                var tracks = container.Initialization.Tracks;
+                if (streams.Count != tracks.Count || streams.Any(s => s.TrackId is null) ||
+                    streams.Select(s => s.TrackId).Distinct().Count() != streams.Count)
+                    return Failed(MediaFailureKind.InvalidMedia, "ContainerTrackIdentity");
+                foreach (var stream in streams)
+                {
+                    var track = tracks.SingleOrDefault(t => t.TrackId == stream.TrackId);
+                    if (track is null || stream.TimeBase.Numerator != 1 || stream.TimeBase.Denominator != track.MediaTimescale)
+                        return Failed(MediaFailureKind.InvalidMedia, "ContainerTrackClock");
+                }
+            }
+            return MediaOperationResult<MediaProbeResult>.Succeeded(new(request, match.Groups[1].Value, parsed.Data!, container));
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested) { return MediaOperationResult<MediaProbeResult>.Cancelled(); }
         catch (DecoderFallbackException) { return Failed(MediaFailureKind.ProcessFailed, "ProbeVersion"); }

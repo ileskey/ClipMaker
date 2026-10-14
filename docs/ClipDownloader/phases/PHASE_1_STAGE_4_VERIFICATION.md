@@ -31,3 +31,11 @@ indexed/보조 HLS collector에 기존 HLS collector와 같은 trusted storage t
 - 양 사이트/양 모드 실제 clip 및 실패·취소 통합. 전체 Phase 1과 후속5/6은 미완료다.
 
 Phase2·WPF 다운로드 UI·ClipEditor는 진행하지 않는다. 설치·범용 format 확장·선택 포맷 변경·whole-video fallback·허용 오차 추가를 하지 않는다.
+
+## 공유 container/native 해석 연결
+
+기존 제한형 MP4 header/fragment sample reader를 공유 Media Infrastructure로 옮기고 Downloader에는 기존 오류 계약을 유지하는 adapter를 남겼다. 같은 reader와 순수 correspondence gate를 acquisition 초기 검사와 shared probe에서 사용한다. FFprobe probe 요청의 `InspectContainer`가 true이면 같은 읽기 lock 안에서 header/sample 관찰을 만들고 raw stream의 명시적 track ID·정수 clock과 대조한다. header 성공과 nested NativeSamples 실패를 구별하여 미지원 progressive/AAC edit 반례를 성공으로 승격하지 않는다.
+
+공유 `Mp4NativeObservationVerifier`는 관찰 파일의 sample/packet/frame count·PTS/DTS/duration·byte 위치/크기·codec 설정·sync/skip 상태를 대조한다. 단일 양수 duration/content edit(rate1, mediaTime≥0)만 해석하며 clipping/multiple/empty edit는 거절한다. HLS 무편집/단일 video 및 indexed 단일 stream 정책은 source adapter에 유지했다. 관찰된 native range는 원격 end/target coverage/decoder 준비 증명이 아니다.
+
+기존 로컬 137/140/CHZZK 사례에서 native sample180/430/213개와 공유 correspondence 성공을 확인했다. AAC edit 반례는 raw/header 관찰을 보존하면서 NativeSampleEvidence UnsupportedInput으로 거절했다. 이전 초안 컴파일에서 남은 source 의존2곳을 제거했고, 새 테스트의 missing PTS 기대 필드1곳을 실제 의미인 NativeFramePtsMissing으로 수정했다. 최종 Core143/Media Infrastructure102/Downloader Infrastructure714개 실패·skip0이며, 다음 qualification/처리 및 4단계 전체는 미완료다.

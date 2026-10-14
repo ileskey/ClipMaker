@@ -1,3 +1,4 @@
+using ClipMaker.Media.Core.Models;
 using System.Security.Cryptography;
 using System.Text;
 using ClipDownloader.Application.Models;

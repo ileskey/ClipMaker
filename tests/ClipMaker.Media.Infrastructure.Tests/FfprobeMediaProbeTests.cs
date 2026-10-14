@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using System.Buffers.Binary;
 using System.Text;
 using ClipMaker.Media.Core.Models;
 using ClipMaker.Media.Core.ValueObjects;
@@ -16,13 +17,13 @@ public sealed class FfprobeMediaProbeTests
     {
         private readonly string directory = Path.Combine(Path.GetFullPath(".artifacts"), "shared-probe-tests", Guid.NewGuid().ToString("N"));
         internal MediaProbeRequest Request { get; }
-        internal Fixture(MediaProbeDetail detail = MediaProbeDetail.FramesAndPackets)
+        internal Fixture(MediaProbeDetail detail = MediaProbeDetail.FramesAndPackets, byte[]? content = null, bool inspectContainer = false)
         {
             Directory.CreateDirectory(directory);
-            string path = Path.Combine(directory, "input.mp4"); byte[] bytes = [1, 2, 3]; File.WriteAllBytes(path, bytes);
+            string path = Path.Combine(directory, "input.mp4"); byte[] bytes = content ?? [1, 2, 3]; File.WriteAllBytes(path, bytes);
             SignedMediaTime.TryCreate(0, 1, out var start, out _); SignedMediaTime.TryCreate(1, 1, out var end, out _);
             PresentationRange.TryCreate(start!, end!, out var range, out _);
-            Request = new(Guid.NewGuid(), Guid.NewGuid(), path, new(bytes.Length, Convert.ToHexString(SHA256.HashData(bytes))), detail, range);
+            Request = new(Guid.NewGuid(), Guid.NewGuid(), path, new(bytes.Length, Convert.ToHexString(SHA256.HashData(bytes))), detail, range, inspectContainer);
         }
         public void Dispose() { File.Delete(Request.Path); Directory.Delete(directory); }
     }
@@ -46,6 +47,47 @@ public sealed class FfprobeMediaProbeTests
         new(Encoding.UTF8.GetBytes(text), Encoding.UTF8.GetByteCount(text), false, false, true, true),
         new(Array.Empty<byte>(), 0, false, false, true, true), null, true, true, true, null);
     private static FfprobeMediaProbe Probe(Runner runner, bool missing = false) => new(new Locator(missing), new(), runner);
+
+    private static byte[] Box(string type, params byte[][] bodies)
+    {
+        var body = bodies.SelectMany(b => b).ToArray(); byte[] result = new byte[8 + body.Length];
+        BinaryPrimitives.WriteUInt32BigEndian(result, (uint)result.Length);
+        Encoding.ASCII.GetBytes(type).CopyTo(result, 4); body.CopyTo(result, 8); return result;
+    }
+    private static byte[] Header(string type, uint value)
+    {
+        var body = new byte[type switch { "mvhd" => 100, "tkhd" => 84, _ => 24 }];
+        BinaryPrimitives.WriteUInt32BigEndian(body.AsSpan(12), value); return Box(type, body);
+    }
+    private static byte[] Container(uint track, uint clock) => Box("moov", Header("mvhd", 1000),
+        Box("trak", Header("tkhd", track), Box("mdia", Header("mdhd", clock))));
+
+    [Theory]
+    [InlineData(1u, 6000u, true)]
+    [InlineData(2u, 6000u, false)]
+    [InlineData(1u, 48000u, false)]
+    public async Task ContainerTrackLinkRequiresExactIdAndClockButHeaderSuccessDoesNotImplyNativeSamples(uint track, uint clock, bool matches)
+    {
+        using var file = new Fixture(content: Container(track, clock), inspectContainer: true);
+        var result = await Probe(new Runner()).ProbeAsync(file.Request, TestContext.Current.CancellationToken);
+        Assert.Equal(matches ? MediaOperationStatus.Succeeded : MediaOperationStatus.Failed, result.Status);
+        if (!matches) { Assert.Equal(MediaFailureKind.InvalidMedia, result.Failure!.Kind); Assert.Null(result.Data); return; }
+        var container = result.Data!.Container!;
+        Assert.Equal(1000u, container.Initialization.MovieTimescale);
+        Assert.Equal(6000u, Assert.Single(container.Initialization.Tracks).MediaTimescale);
+        Assert.Equal(MediaOperationStatus.Failed, container.NativeSamples.Status);
+        Assert.Equal(MediaFailureKind.UnsupportedInput, container.NativeSamples.Failure!.Kind);
+        Assert.Null(container.NativeSamples.Data);
+    }
+
+    [Fact]
+    public async Task MalformedContainerFailsBeforeRunningTool()
+    {
+        using var file = new Fixture(inspectContainer: true); var runner = new Runner();
+        var result = await Probe(runner).ProbeAsync(file.Request, TestContext.Current.CancellationToken);
+        Assert.Equal(MediaFailureKind.InvalidMedia, result.Failure!.Kind);
+        Assert.Null(result.Data); Assert.Empty(runner.Calls);
+    }
 
     [Fact]
     public async Task DetailedProbePreservesMissingPtsAndSignedPacketClockWithoutClaimingNativeFacts()

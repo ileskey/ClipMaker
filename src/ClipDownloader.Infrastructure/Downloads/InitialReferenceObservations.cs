@@ -33,4 +33,13 @@ internal sealed class InitialReferenceObservations
         Packets = Array.AsReadOnly(packets.ToArray());
         PacketsObserved = packetsObserved;
     }
+
+    internal MediaProbeObservations ToShared() => new(
+        Streams.Select(s => new MediaStreamObservation(s.Index, s.Kind, s.TimeBase, s.StartPts, s.DeclaredRate,
+            s.AverageRate, s.TrackId, new(s.Codec.Name, s.Codec.Profile, s.Codec.PixelFormat, s.Codec.SampleFormat,
+                s.Codec.SampleRate, s.Codec.Channels, s.Codec.ExtradataSize))),
+        Frames.Select(f => new MediaFrameObservation(f.StreamIndex, f.Pts, f.Duration, f.SampleCount, f.SampleFormat, f.SampleRate, f.Channels)),
+        Packets.Select(p => new MediaPacketObservation(p.StreamIndex, p.Pts, p.Dts, p.Duration, p.Flags,
+            p.Skip is null ? null : new(p.Skip.SkipSamples, p.Skip.DiscardPadding, p.Skip.SkipReason, p.Skip.DiscardReason),
+            p.HasUninterpretedSideData, p.Size, p.Position)), true, PacketsObserved);
 }

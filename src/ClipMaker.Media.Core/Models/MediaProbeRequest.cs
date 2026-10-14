@@ -14,9 +14,10 @@ public sealed class MediaProbeRequest
     // Requested presentation range is a qualification input, not a seek instruction.
     // The bounded owned file is observed in full, retaining preparation and reorder evidence.
     public PresentationRange? Range { get; }
+    public bool InspectContainer { get; }
 
     public MediaProbeRequest(Guid snapshotId, Guid fileId, string path, MediaFileContentIdentity content,
-        MediaProbeDetail detail, PresentationRange? range = null)
+        MediaProbeDetail detail, PresentationRange? range = null, bool inspectContainer = false)
     {
         if (snapshotId == Guid.Empty || fileId == Guid.Empty) throw new ArgumentException("Local snapshot/file identities are required.");
         ArgumentException.ThrowIfNullOrWhiteSpace(path);
@@ -25,7 +26,7 @@ public sealed class MediaProbeRequest
         if (!Enum.IsDefined(detail)) throw new ArgumentOutOfRangeException(nameof(detail));
         if (detail == MediaProbeDetail.FramesAndPackets && range is null) throw new ArgumentException("Detailed inspection requires a bounded requested range.", nameof(range));
         SnapshotId = snapshotId; FileId = fileId; Path = System.IO.Path.GetFullPath(path);
-        Content = content; Detail = detail; Range = range;
+        Content = content; Detail = detail; Range = range; InspectContainer = inspectContainer;
     }
 }
 
@@ -34,14 +35,17 @@ public sealed class MediaProbeResult
     public MediaProbeRequest Request { get; }
     public string ProbeVersion { get; }
     public MediaProbeObservations Observations { get; }
+    public Mp4FileTimingEvidence? Container { get; }
 
-    public MediaProbeResult(MediaProbeRequest request, string probeVersion, MediaProbeObservations observations)
+    public MediaProbeResult(MediaProbeRequest request, string probeVersion, MediaProbeObservations observations,
+        Mp4FileTimingEvidence? container = null)
     {
         ArgumentNullException.ThrowIfNull(request);
         ArgumentException.ThrowIfNullOrWhiteSpace(probeVersion);
         ArgumentNullException.ThrowIfNull(observations);
         if (request.Detail == MediaProbeDetail.FramesAndPackets && (!observations.FramesObserved || !observations.PacketsObserved))
             throw new ArgumentException("Detailed probe output must include both observation sets.", nameof(observations));
-        Request = request; ProbeVersion = probeVersion; Observations = observations;
+        if (request.InspectContainer != (container is not null)) throw new ArgumentException("Container observation must match the request.", nameof(container));
+        Request = request; ProbeVersion = probeVersion; Observations = observations; Container = container;
     }
 }

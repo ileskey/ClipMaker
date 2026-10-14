@@ -1,3 +1,4 @@
+using ClipMaker.Media.Core.Models;
 using System.Net;
 using System.Text;
 using ClipDownloader.Application.Models;
