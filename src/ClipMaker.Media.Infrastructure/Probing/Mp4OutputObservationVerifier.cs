@@ -69,8 +69,8 @@ public sealed class Mp4OutputObservationVerifier
                 if (packet.Pts != (long)pts || packet.Dts != (long)dts || packet.Duration != sample.Duration ||
                     packet.Position != sample.ByteOffset || packet.Size != sample.Size || packet.HasUninterpretedSideData ||
                     packet.Flags is null || packet.Flags.Contains('C') ||
-                    packet.Flags.Contains('D') && !(stream.Kind == MediaStreamKind.Audio && i == 0 &&
-                        packet.Skip?.SkipSamples == 1024 && new BigInteger(mediaTime) - sample.PresentationTicks == 1024) ||
+                    packet.Flags.Contains('D') && !(stream.Kind == MediaStreamKind.Audio && config.Codec == "aac" &&
+                        pts + 1024 <= delayTicks) ||
                     packet.Flags.Contains('K') != ((sample.Flags & 0x01010000) == 0)) return Fail("OutputPacketContradicted");
                 mapped.Add(new(sample, (long)pts, (long)dts));
             }
@@ -94,7 +94,8 @@ public sealed class Mp4OutputObservationVerifier
                     config.SampleRate != stream.Codec.SampleRate || config.Channels != stream.Codec.Channels ||
                     samples.Any(s => s.PresentationTicks != s.DecodeTicks)) return Fail("OutputAudioCodecUnsupported", true);
                 BigInteger skipped = BigInteger.Max(BigInteger.Zero, new BigInteger(mediaTime) - samples[0].PresentationTicks);
-                if (skipped > 1024) return Fail("OutputAudioPrimingUnsupported", true);
+                if (skipped > uint.MaxValue || skipped >= (BigInteger)samples.Length * 1024)
+                    return Fail("OutputAudioPrimingUnsupported", true);
                 skip = (long)skipped;
                 for (int i = 0; i < packets.Length; i++)
                 {
@@ -103,12 +104,19 @@ public sealed class Mp4OutputObservationVerifier
                     else if (side.SkipSamples != (i == 0 ? skip : 0) || side.DiscardPadding != 0 || side.SkipReason != 0 || side.DiscardReason != 0)
                         return Fail("OutputAudioSkipContradicted");
                 }
-                var audible = mapped.Where((s, i) => i != 0 || skip < 1024).ToArray();
-                if (frames.Length != audible.Length || frames.Length == 0) return Fail("OutputAudioFrameCompleteness");
-                for (int i = 0; i < audible.Length; i++)
+                var audible = new List<(Mp4OutputSample Sample, long Trim)>();
+                long remainingSkip = skip;
+                for (int i = 0; i < mapped.Count; i++)
                 {
-                    long trim = i == 0 && skip < 1024 ? skip : 0;
-                    if (frames[i].Pts != audible[i].Pts + trim || frames[i].SampleCount != 1024 - trim ||
+                    if (remainingSkip > 0 && i > 0 && (BigInteger)mapped[i].Pts - mapped[i - 1].Pts != 1024)
+                        return Fail("OutputAudioPrimingDiscontinuous", true);
+                    long trim = Math.Min(remainingSkip, 1024); remainingSkip -= trim;
+                    if (trim < 1024) audible.Add((mapped[i], trim));
+                }
+                if (remainingSkip != 0 || frames.Length != audible.Count || frames.Length == 0) return Fail("OutputAudioFrameCompleteness");
+                for (int i = 0; i < audible.Count; i++)
+                {
+                    if (frames[i].Pts != audible[i].Sample.Pts + audible[i].Trim || frames[i].SampleCount != 1024 - audible[i].Trim ||
                         frames[i].Channels != config.Channels || frames[i].SampleFormat != stream.Codec.SampleFormat)
                         return Fail("OutputAudioDecodedSupport");
                 }
