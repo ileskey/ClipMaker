@@ -25,7 +25,7 @@ indexed/보조 HLS collector에 기존 HLS collector와 같은 trusted storage t
 
 ## 남은 4단계 gate
 
-- 4a의 제한된 획득 전략 최종 audit와 지원/거절 조건 확인.
+- 4a의 제한된 획득 전략 audit는 아래 후속 기록에서 완료했다. 범용 원격 asset/version·format 지원은 선언하지 않는다.
 - 4b의 제한된 shared native header/sample 해석 및 획득 snapshot 연결은 아래 후속 기록에서 완료했다. 처리 output/end의 추가 표현은 4c gate에 남긴다.
 - 4c qualification, K/common shift/Fast 출력, Accurate source-start decoder 준비/PCM 재구성, staging·actual output/native/edit/end 검증.
 - 양 사이트/양 모드 실제 clip 및 실패·취소 통합. 전체 Phase 1과 후속5/6은 미완료다.
@@ -49,3 +49,11 @@ Phase2·WPF 다운로드 UI·ClipEditor는 진행하지 않는다. 설치·범�
 실제 harness는 ignored `AcquireAndProbeHls.ps1` / `AcquireAndProbeIndexed.ps1`이고 각 소유 작업폴더에 safe `shared-probe-summary.json`을 남겼다. Source NativeEnd는 Unknown을 유지한다. 제한된 4b 경로는 연결됐으며 다음은 4a 최종 audit와 4c qualification/처리다.
 
 이번 변경 후 Downloader Infrastructure723개 실패·skip0, 솔루션 build 경고·오류0을 확인했다.
+
+## 제한된 4a audit
+
+단일 연속 VOD/fMP4 HLS 및 YouTube137/140 direct init/SIDX 전략을 대상으로 선택·source inspection 연결, 초기/target byte identity, cumulatively bounded 읽기, exact HTTP range/total length, native clock/config/edit, 필요한 mapping envelope, CreateNew 소유권·취소·종료 인계를 검토했다. acquisition Data는 target 파일만 포함하고, 초기·refresh·보조 및 실패 잔존 파일은 job resource registry에서 조회한다. cleanup/최종 이동의 host 통합은 후속5/6의 책임으로 남긴다.
+
+확인된 일반 FPS가 바뀔 때 HLS/indexed inspection이 VerificationFailed를 반환하던 분류를 채택 계약대로 InvalidMetadata/Execution으로 수정하고 assertion을 추가했다. Downloader Infrastructure723개 실패·skip0을 재확인했다.
+
+이 범위의 4a 획득과 4b local/native 연결 구현·검증은 완료했다. encrypted/discontinuous/live/master leaf, 무시된 range·짧은 body·budget 초과, multi/empty/clipping edit, 미지원 AAC 설정과 codec/layout은 명시 거절한다. 선택 변경·Best 재선택·whole-video fallback은 없다. 원격 파일 전체 content/version·source global end·decoder preparation을 획득 성공으로 추정하지 않는다. **남은 4단계는 4c qualification/처리/actual output 검증이며 전체4 완료가 아니다.**

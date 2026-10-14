@@ -106,7 +106,7 @@ public sealed partial class SelectedSourceAcquisitionService : ISelectedSourceIn
             var rate=request.Selection.Selection.VideoFormat.FrameRate ?? locators.Data!.Video.Format.FrameRate;
             var observedRate=video.Stream.DeclaredRate ?? MeasuredRate(native,video);
             if(rate is not null && observedRate is { } reported && reported!=rate)
-            {Failed(request.JobId,null);return Failure(OperationErrorCode.VerificationFailed,"SelectedFrameRateChanged");}
+            {Failed(request.JobId,null);return Failure(OperationErrorCode.InvalidMetadata,"SelectedFrameRateChanged");}
             if(observedRate is null) rate=null;
             if(rate is null && request.Purpose.HasFlag(SourceInspectionPurpose.FrameRate)) rate=observedRate;
             var id=Guid.NewGuid(); var stream=new MediaStreamReference(initial.Data.Reference.File.Id,video.Stream.Index,MediaStreamKind.Video);

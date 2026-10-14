@@ -60,6 +60,8 @@ public sealed class SelectedSourceAcquisitionServiceTests
             [r.Observations.Streams[0] with{DeclaredRate=F.Rate(30)}],r.Observations.Frames,r.Observations.Packets,true)});
         var result=await service.InspectAsync(f.Request,TestContext.Current.CancellationToken);
         Assert.Equal("SelectedFrameRateChanged",result.Error!.Field);Assert.Null(result.Data);
+        Assert.Equal(OperationErrorCode.InvalidMetadata, result.Error.Code);
+        Assert.Equal(OperationErrorCategory.Execution, result.Error.Category);
         Assert.Single(service.GetOwnedResources(f.Request.JobId).Files);Assert.NotNull(service.GetOwnedResources(f.Request.JobId).Warning);
     }
     [Theory]
