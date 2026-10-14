@@ -77,7 +77,8 @@ Tag는 Phase 완료점을 쉽게 찾기 위한 이름이며, Base와 Completion�
 | Phase # | 상태 | Base | Completion | Tag | Branch | 검증 | 관련문서 |
 |---|---|---|---|---|---|---|---|
 | Phase 0 | Completed | `fc96883b18c1d6856c92ad6b029d45e095e41e69` | `0759dc52475538df848f765ce30c005cf755107f` | `phase-0-complete` | `main` | Passed | [Phase 0 상세 설계·구현 및 검증 결과](phases/PHASE_0_DESIGN.md) |
-| Phase 1 | In Progress (제한 전략의 구현·필수 검증 완료, Git 완료점 확정 대기) | `0759dc52475538df848f765ce30c005cf755107f` | — | — | `phase/1` | Passed (2026-10-15: 양 사이트·양 모드 사용자 확인, 최종 build 및1195개 회귀) | [최종 검증 인계](phases/PHASE_1_FINAL_VERIFICATION_HANDOFF.md), [설계·이력](phases/PHASE_1_DESIGN.md), [4단계](phases/PHASE_1_STAGE_4_VERIFICATION.md), [5단계](phases/PHASE_1_STAGE_5_VERIFICATION.md), [6단계](phases/PHASE_1_STAGE_6_VERIFICATION.md) |
+| Phase 1 | Completed | `0759dc52475538df848f765ce30c005cf755107f` | `4509f54dadbf140f787bdfd4a16dcc2b1f964c48` | `phase-1-complete` | `phase/1` | Passed (2026-10-15: 양 사이트·양 모드 사용자 확인, 최종 build 및1195개 회귀) | [최종 검증 인계](phases/PHASE_1_FINAL_VERIFICATION_HANDOFF.md), [설계·이력](phases/PHASE_1_DESIGN.md), [6단계](phases/PHASE_1_STAGE_6_VERIFICATION.md) |
+| Phase 2 | Not Started (설계 인계 작성, 상세 설계·구현 미착수) | `4509f54dadbf140f787bdfd4a16dcc2b1f964c48` (설계 예정 기준) | — | — | — (미선택) | Pending | [설계 context 인계](phases/PHASE_2_DESIGN_HANDOFF.md) |
 
 2026-10-14 Git 보완: 기록된 Phase 0 Completion/Phase 1 Base `0759dc5`는 현재 HEAD의 ancestor가 아니며 실제 선행 Phase 0 commit은 `1ca2547`이다. 두 commit의 parent와 source tree는 같고 소스 diff는0이다. 기록 hash를 임의 교체하거나 이력을 변경하지 않는다. [4단계 Git 대조](phases/PHASE_1_STAGE_4_VERIFICATION.md)에서 기준 snapshot과 실제 ancestry를 구별한다.
 

@@ -39,4 +39,6 @@
 
 기록된Base `0759dc52475538df848f765ce30c005cf755107f`는현재HEAD의ancestor가아님을재확인했다. 실제선행 `1ca254790cb9b6daa6bd79539a5c41e91f27cad4`와parent/tree가같고diff0이지만원인미확정이다. 원래Base를수정하거나history를재작성하지않는다. 사용자미추적영상은보존한다.
 
-이번에는필수검증결과를기록하되Completion hash·`phase-1-complete` tag를임의확정하지않는다. 완료점확정전까지Baseline의상태는In Progress(검증완료·기준점확정대기)로유지한다. 실제생성검증/사용자확인완료와공식Git완료점·후속Phase착수를구별한다.
+최종 검증 기록 시점에는 Completion hash/tag 확정을 대기했다. 이후 사용자가 현재 HEAD를 최종 기준으로 확인하고 `phase-1-complete` 태그를 지정했다. 2026-10-15 실제 `git rev-parse phase-1-complete^{commit}` 결과가 `4509f54dadbf140f787bdfd4a16dcc2b1f964c48`임을 확인했다. 이 commit을 Phase1 Completion으로 기록하며 상태 Completed·검증 Passed로 확정한다. 태그를 새로 만들거나 이동하지 않았다.
+
+이후 완료 기록과 [Phase2 설계 인계](PHASE_2_DESIGN_HANDOFF.md)를 추가한 문서 commit은 위 Completion 이후의 인계 정리이며 검증된 기준점을 바꾸지 않는다. Phase2 설계·구현 착수와 완료 기록을 구별한다.

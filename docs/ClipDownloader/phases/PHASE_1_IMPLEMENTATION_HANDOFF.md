@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 완료 확정(2026-10-15): 사용자 지정 `phase-1-complete`의 실제 commit `4509f54dadbf140f787bdfd4a16dcc2b1f964c48`을 확인해 Phase1 Completed/Passed·Completion으로 기록했다. [최종 검증 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)와 [Phase2 설계 준비 인계](PHASE_2_DESIGN_HANDOFF.md)를 우선한다. 아래 완료점/tag 확정대기는 이전 이력이다. 완료 태그는 이동하지 않으며 후속 문서 commit과 제품 검증 기준을 구별한다. Phase2 설계/구현은 이번에 시작하지 않았다.
+
 최신 최종 검증 인계(2026-10-15): CHZZK15537558·45~55초Accurate의사용자재생·음성동기통과를기록했다. 양사이트/양mode의사용자확인과최종build경고/오류0·Core143/Media193/Downloader859·총1195개통과를 [최종 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)에통합했다. 아래해당player Pending은이전이력이다. 제한전략의필수검증은Passed이며Completion hash/tag확정은별개로남긴다. 원래Base/실제ancestor차이와미지원사항을보존하며Phase2로진입하지않는다.
 
 최신 CHZZK Accurate 자료 생성(2026-10-15): 사용자제공15537558·45초부터를45~55초Accurate로실제실행해exit0·final확정을완료했다. [검증 기록](PHASE_1_CHZZK_AUDIBLE_ACCURATE_VERIFICATION.md)에video[432013/9600,528013/9600)·audio[45,55)·zero1/overlap2·AAC skip1024/tail256·독립full decode·600서로다른picture hash·무음아닌음성signal·정리를기록했다. 소리있는검증자료를확보했으나사용자재생·동기확인과Phase1전체완료는Pending이다. 제품변경/build/test재실행은없다.

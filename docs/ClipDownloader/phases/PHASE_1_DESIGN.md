@@ -1,5 +1,7 @@
 # ClipDownloader Phase 1 상세 설계
 
+완료 확정(2026-10-15): 사용자 지정 `phase-1-complete`가 `4509f54dadbf140f787bdfd4a16dcc2b1f964c48`을 가리키는 것을 확인했다. Phase1 Completed/Passed의 공식 기준은 [Baseline](../PHASE_BASELINE.md)과 [최종 검증 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)를 따른다. 아래 Git 확정대기/미완료 문구는 해당 시점의 이력이다. [Phase2 설계 인계](PHASE_2_DESIGN_HANDOFF.md)는 준비 자료이며 설계/구현 완료가 아니다.
+
 최신실제상태(2026-10-15): [최종 검증 인계](PHASE_1_FINAL_VERIFICATION_HANDOFF.md)를우선한다. 채택한제한전략의1~6단계구현·자동/실제통합과양사이트/양mode사용자재생확인을완료했다. 최종build경고/오류0·총1195개통과다. 아래미확정/미구현/Pending은작성시점의이력이며현재지원경계·후속미지원입력과Git Completion/tag확정대기를구분한다. Phase2로자동진입하지않는다.
 
 작성일: 2026-10-09 (Asia/Seoul).
