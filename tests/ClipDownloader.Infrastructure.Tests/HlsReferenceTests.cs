@@ -174,4 +174,33 @@ public sealed class HlsReferenceTests
             Assert.Equal(1, masterHandler.Calls);
         }
     }
+
+    [Theory]
+    [InlineData("size", OperationErrorCode.VerificationFailed, "HlsPlaylistByteBudget")]
+    [InlineData("response", OperationErrorCode.VerificationFailed, "HlsPlaylistHttpResponse")]
+    [InlineData("transport", OperationErrorCode.ProcessFailed, "HlsPlaylistHttpTransport")]
+    public async Task PlaylistReadFailuresExposeSafeCauseWithoutRetryOrLocator(string fault, OperationErrorCode code, string field)
+    {
+        var format = new VideoFormat("hls-selected", 1920, 1080, null, "h264", "aac", StreamPresence.Present, StreamPresence.Present,
+            Transport: FormatTransport.Hls);
+        var locator = new SelectedMediaLocator(format, new("https://media.example/leaf.m3u8?key=SECRET"), null, new Dictionary<string, string>());
+        var handler = new Handler(_ =>
+        {
+            if (fault == "transport") throw new HttpRequestException("SECRET");
+            var response = new HttpResponseMessage(fault == "response" ? HttpStatusCode.Forbidden : HttpStatusCode.OK)
+                { Content = new ByteArrayContent([0]) };
+            if (fault == "size") response.Content.Headers.ContentLength = 2213866;
+            return response;
+        });
+        using var transport = new BoundedSourceHttpReader(handler);
+        var result = await new HlsSelectedPlaylistReader(transport).ReadAsync(locator, HlsMediaPlaylistParser.MaximumBytes,
+            TestContext.Current.CancellationToken);
+        Assert.Equal(code, result.Error!.Code);
+        Assert.Equal(field, result.Error.Field);
+        Assert.DoesNotContain("SECRET", result.Error.Message);
+        Assert.DoesNotContain("media.example", result.Error.Message);
+        if (fault == "size") Assert.Contains("2097152", result.Error.Message);
+        Assert.Equal(1, handler.Calls);
+        Assert.Null(result.Data);
+    }
 }

@@ -1,5 +1,9 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 CHZZK Accurate 시도(2026-10-15): [새입력진단](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md)에서15578184는metadata sourceURL 예외,15683602는별도playlist2MiB상한초과임을확인했다. 46분Accurate는현재source-start획득예산밖이며양실패를재생확인으로세지않는다. CHZZK Accurate 사용자확인은아직남아있다.
+
+최신 CHZZK Fast 재생 확인(2026-10-15): 사용자가14791589·hls-8384·60fps·46:10~46:40·Fast의 `out6.mp4` 재생·음성 동기를 확인했다. [기록](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md#후속-사용자-생성-확인)과 YouTube 양 모드 사용자 확인을 보존한다. CHZZK Accurate의 사용자 확인·Phase1 전체 완료 판정은 남아 있다.
+
 최신 CHZZK 입력 진단(2026-10-15): 새14327648은 [yt-dlp MPD metadata 추출 실패](PHASE_1_CHZZK_MPD_METADATA_DIAGNOSIS.md)로 구간 획득 전에 차단된다. sourceURL 없는 Initialization과 직접 속성 접근 예외를 확인했으며 이 영상 지원이나 CHZZK player 통과로 기록하지 않는다. 문서 진단만 추가했고 기존 HLS 성공 증거와1192개 회귀 결과는 보존한다.
 
 최신 사용자 재생 확인(2026-10-15): 움직이는 YouTube `qnjEE-wkw8k`137/140·30fps·10~40초의 Accurate 통과 보고에 이어, Fast 생성 완료·재생 성공·음성 동기 통과를 [기록](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md#사용자-재생동기-확인)했다. 해당 두 사례의 사용자 확인과 아래 기존 네 final 전체의 검증을 구별한다. CHZZK 양 모드의 사용자 재생·동기 확인과 Phase1 전체 완료 판정은 남아 있다. 최신 자동 회귀는1192개 통과다.

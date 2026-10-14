@@ -2,6 +2,10 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 CHZZK Accurate 진단(2026-10-15): [playlist·위치 제한 진단](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md)에서15578184의 metadata sourceURL 예외와15683602의 hls-8384 playlist2213866bytes/2MiB 검사 상한 초과를 구분했다. byte/HTTP/전송 원인을안전한field로노출하고상한은유지했다. build경고/오류0·Downloader859개통과. 46분Accurate는이playlist문제와별개로현재source-start60초획득전략밖이다. CHZZK Accurate 사용자확인은기존보존final 또는검증된앞쪽HLS구간으로진행해야한다.
+
+최신 CHZZK Fast 사용자 재생 확인(2026-10-15): 사용자가 위14791589 Fast 출력 `out6.mp4`의 재생·음성 동기를 확인했다고 보고했다. [확인 기록](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md#후속-사용자-생성-확인)을 따른다. 현재 사용자 확인은 YouTube Fast/Accurate와 CHZZK Fast이며 아래 해당 항목의Pending은 이전 이력이다. CHZZK Accurate 사용자 확인과 Phase1 전체 완료 판정은 남아 있다.
+
 최신 CHZZK Fast 사용자 생성 확인(2026-10-15): 사용자가14791589·hls-8384·60fps·46:10~46:40·Fast를64MiB/60초에서 실행한 `out6.mp4` 최종 완료 로그를 제공했다. [사용자 결과](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md#후속-사용자-생성-확인)의 실제 범위·AAC 보정은 기존 검증과 동일하다. 직접 재생·음성 동기 보고는 아직 없으며 metadata 성공을 임의 source의 생성 보장으로 확대하지 않는다. CHZZK player 확인·Phase1 전체 완료는Pending이다.
 
 최신 CHZZK 메타데이터 진단(2026-10-15): [DASH 추출 실패 진단](PHASE_1_CHZZK_MPD_METADATA_DIAGNOSIS.md)에서14327648은 metadata 조회부터 yt-dlp2026.08.19의 MPD Initialization sourceURL 직접 접근으로 실패함을 재현했다. 실제 ABR_HLS/MPD의 초기화 항목은range만 있고sourceURL이 없다. 제품과 동일 인자·traceback·API/MPD 구조를 대조했으며 영상 다운로드나 도구 교체는 하지 않았다. 업데이트 해결·기존 indexed 전략 대응·이 영상 생성 지원은 미확정이다. 기존 CHZZK HLS 지원과 구별하고 사용자 양 모드 재생 확인·Phase1 전체 완료는Pending으로 유지한다.
