@@ -123,6 +123,7 @@ public sealed class SourceCollectorLifecycleTests
                 var file = Assert.Single(remaining);
                 Assert.True(File.Exists(file.Path));
                 Assert.Null(file.Content);
+                Assert.Equal(fault is "close" or "close-cancel", file.MayBeInUse);
                 Assert.Equal(fault == "delete", deletionAttempted);
             }
             else

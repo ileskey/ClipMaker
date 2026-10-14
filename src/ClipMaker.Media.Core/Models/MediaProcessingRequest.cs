@@ -23,10 +23,12 @@ public sealed class MediaProcessingResources
     public IReadOnlyList<MediaOwnedProcessingFile> Files { get; }
     public bool HasUnconfirmedProcess { get; }
     public bool NeedsCleanup { get; }
-    public MediaProcessingResources(IEnumerable<MediaOwnedProcessingFile> files, bool hasUnconfirmedProcess, bool needsCleanup)
+    public bool HasUnconfirmedFileHandles { get; }
+    public MediaProcessingResources(IEnumerable<MediaOwnedProcessingFile> files, bool hasUnconfirmedProcess, bool needsCleanup, bool hasUnconfirmedFileHandles = false)
     {
         ArgumentNullException.ThrowIfNull(files);
         Files = Array.AsReadOnly(files.ToArray()); HasUnconfirmedProcess = hasUnconfirmedProcess; NeedsCleanup = needsCleanup;
+        HasUnconfirmedFileHandles = hasUnconfirmedFileHandles;
     }
 }
 

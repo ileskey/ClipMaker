@@ -15,6 +15,7 @@ public sealed class FfmpegMediaProcessingService(IToolLocator locator, ToolPathS
         internal MediaOwnedProcessingFile? File;
         internal bool Unconfirmed;
         internal bool NeedsCleanup;
+        internal bool UnconfirmedHandles;
     }
     private readonly object gate = new();
     private readonly Dictionary<Guid, Job> jobs = [];
@@ -26,7 +27,7 @@ public sealed class FfmpegMediaProcessingService(IToolLocator locator, ToolPathS
     public MediaProcessingResources GetOwnedResources(Guid operationId)
     {
         lock (gate)
-            return jobs.TryGetValue(operationId, out var job) ? new(job.File is null ? [] : [job.File], job.Unconfirmed, job.NeedsCleanup) : new([], false, false);
+            return jobs.TryGetValue(operationId, out var job) ? new(job.File is null ? [] : [job.File], job.Unconfirmed, job.NeedsCleanup, job.UnconfirmedHandles) : new([], false, false);
     }
 
     public async Task<MediaOperationResult<MediaProcessingResult>> ProcessAsync(MediaProcessingRequest request,
@@ -160,7 +161,7 @@ public sealed class FfmpegMediaProcessingService(IToolLocator locator, ToolPathS
                 catch (Exception e) when (e is IOException or UnauthorizedAccessException) { closeFailed = true; }
             if (closeFailed && outcome?.Status == MediaOperationStatus.Succeeded) outcome = Fail(MediaFailureKind.OutputFailed, "ProcessingFileClose");
             lock (gate)
-                if (job is not null) job.NeedsCleanup = job.File is not null;
+                if (job is not null) { job.NeedsCleanup = job.File is not null; job.UnconfirmedHandles |= closeFailed; }
             operations.Release();
         }
         if (outcome?.Status == MediaOperationStatus.Succeeded && cancellationToken.IsCancellationRequested)

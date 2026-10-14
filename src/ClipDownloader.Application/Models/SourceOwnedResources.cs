@@ -7,6 +7,7 @@ public sealed class SourceOwnedResources
     public bool HasUnconfirmedProcess { get; }
     public bool NeedsCleanup { get; }
     public string? Warning => HasUnconfirmedProcess ? "source 프로세스의 종료를 확인하지 못해 자원을 보존했습니다." :
+        Files.Any(f => f.MayBeInUse) ? "source 파일의 닫힘을 확인하지 못해 자원을 보존했습니다." :
         NeedsCleanup && Files.Count != 0 ? "source 작업 실패 또는 취소 후 남은 임시 파일이 있습니다." : null;
 
     public SourceOwnedResources(Guid jobId, IEnumerable<OwnedMediaFile> files, bool hasUnconfirmedProcess, bool needsCleanup)

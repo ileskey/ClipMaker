@@ -150,7 +150,7 @@ internal sealed class HlsReferenceCollector
         completed = null;
         var remainingFiles = new List<OwnedMediaFile>();
         // A failed dispose may leave the file in use; retain it rather than attempting deletion.
-        if (cleanupUnsafe) remainingFiles.Add(file);
+        if (cleanupUnsafe) remainingFiles.Add(new(file.Id, file.Path, file.SourceFormatIds, mayBeInUse: true));
         else if (owned)
         {
             try { deleteOwnedFile(file.Path); }

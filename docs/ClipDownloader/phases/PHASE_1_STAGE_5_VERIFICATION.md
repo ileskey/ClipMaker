@@ -11,3 +11,9 @@
 최종 확정은 등록된 검증 staging의 ID/path/bytes/SHA를 확인하고 overwrite=false 이동을 한 번만 시도한다. 이동 전후 content를 대조한다. 반복 commit은 programming error다. cleanup은 취소 token을 받지 않으며 소유 파일만 개별 삭제하고 작업 폴더는 비재귀 empty delete한다. 종료 미확인 보존 모드에서는 삭제하지 않는다. 정리 경고/잔존 경로는 원래 결과와 별도로 전달한다. OperationResult의 실패 metadata 목록도 immutable snapshot으로 추가했다.
 
 13개 실제 local filesystem 테스트로 입력 이름, 기존 최종 파일 충돌, staging bytes 변경, 성공 후 final 유지, 잠긴 파일의 cleanup warning, 미등록 파일 보존, 반복 정리·commit을 검증했다. 초기 테스트의 정리된 parent 아래 없는 파일을 다시 삭제하는 fixture 오류는 수정했다. 이후13개 통과, 관련 Application/Infrastructure build 경고·오류0. root를 주입한 소유 GUID test 폴더를 사용하며 native tool·영상·패키지 설치는 없었다. Application 준비/실행 조정·실제 양 사이트 통합은 다음 단위에서 진행 중이다.
+
+## 파일 닫힘 미확인 인계 보완
+
+5단계 통합 audit에서4단계 collector가 닫힘 실패 후 보존한 파일의 이유를 외부 owner가 알 수 없었던 점을 확인했다. source OwnedMediaFile에 MayBeInUse, shared processing resources에 HasUnconfirmedFileHandles를 추가했다. HLS/indexed/보조 collector와 PCM/FFmpeg 종료 처리에서 이 정보를 보존한다. process 종료 미확인과 file handle 미확인을 구별하여 정상 취소130을 process 실패로 바꾸지 않으면서도 사용 중일 수 있는 파일을 삭제하지 않는다.
+
+기존 indexed/보조 close/close-cancel/delete lifecycle tests에 보존 flag assertion을 추가해 닫힘 미확인만 flag가 켜짐을 검사했다. 현재 Downloader806개와 최신 Media Infrastructure143개를 실제 build/test로 통과했다. 단순 delete 실패는 원래 cleanup 경고로 구별한다. 새 추출 방식·fallback·범용 decoder 준비 조건을 추가하지 않았다.

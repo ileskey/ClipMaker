@@ -118,7 +118,7 @@ internal sealed class IndexedReferenceCollector
         if (status == OperationStatus.Succeeded && token.IsCancellationRequested) status = OperationStatus.Cancelled;
         if (status == OperationStatus.Succeeded) return new(status, data, null, []);
         var remaining = new List<OwnedMediaFile>();
-        if (unsafeClose) remaining.Add(file);
+        if (unsafeClose) remaining.Add(new(file.Id, file.Path, file.SourceFormatIds, mayBeInUse: true));
         else if (owned)
             try { deleteOwnedFile(file.Path); }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { remaining.Add(file); }

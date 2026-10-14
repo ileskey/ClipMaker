@@ -8,7 +8,8 @@ public sealed record OwnedMediaFile
     public string Path { get; }
     public IReadOnlyList<string> SourceFormatIds { get; }
     public MediaFileContentIdentity? Content { get; }
-    public OwnedMediaFile(Guid id, string path, IEnumerable<string> sourceFormatIds, MediaFileContentIdentity? content = null)
+    public bool MayBeInUse { get; }
+    public OwnedMediaFile(Guid id, string path, IEnumerable<string> sourceFormatIds, MediaFileContentIdentity? content = null, bool mayBeInUse = false)
     {
         if (id == Guid.Empty) throw new ArgumentException("File identity is required.", nameof(id));
         Id = id;
@@ -19,6 +20,7 @@ public sealed record OwnedMediaFile
             throw new ArgumentException("Unique source format identities are required.", nameof(sourceFormatIds));
         SourceFormatIds = Array.AsReadOnly(ids);
         Content = content;
+        MayBeInUse = mayBeInUse;
     }
 }
 

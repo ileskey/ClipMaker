@@ -84,7 +84,7 @@ internal sealed class OutputSession(Guid jobId, Guid stagingFileId, string workD
                 catch (DirectoryNotFoundException) { }
                 catch (Exception e) when (e is IOException or UnauthorizedAccessException) { remaining.Add(WorkDirectory); }
             if (remaining.Count != 0) warnings.Add(mode == WorkspaceCleanupMode.PreservePotentiallyInUse ?
-                "프로세스 종료를 확인하지 못해 사용 중일 수 있는 작업 파일을 보존했습니다." : "일부 소유 임시 파일 또는 작업 폴더를 정리하지 못했습니다.");
+                "파일 또는 프로세스 수명을 확인하지 못해 사용 중일 수 있는 작업 파일을 보존했습니다." : "일부 소유 임시 파일 또는 작업 폴더를 정리하지 못했습니다.");
             return new(removed, remaining, warnings);
         }
         finally { operations.Release(); }

@@ -89,7 +89,7 @@ internal sealed class AuxiliaryHlsReferenceCollector
             return new(status, new(captured, bytes.Length, used + bytes.Length, digest, first), null, []);
         }
         var files = new List<OwnedMediaFile>();
-        if (uncertainClose) files.Add(file);
+        if (uncertainClose) files.Add(new(file.Id, file.Path, file.SourceFormatIds, mayBeInUse: true));
         else if (owned)
             try { deleteOwnedFile(file.Path); }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { files.Add(file); }

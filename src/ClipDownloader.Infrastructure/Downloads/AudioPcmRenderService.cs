@@ -11,8 +11,9 @@ public sealed class AudioPcmRenderService
 {
     private readonly object gate = new();
     private readonly Dictionary<Guid, MediaOwnedProcessingFile?> jobs = [];
+    private readonly HashSet<Guid> unconfirmedHandles = [];
     public MediaProcessingResources GetOwnedResources(Guid operationId)
-    { lock (gate) return jobs.TryGetValue(operationId, out var file) && file is not null ? new([file], false, true) : new([], false, false); }
+    { lock (gate) return jobs.TryGetValue(operationId, out var file) && file is not null ? new([file], false, true, unconfirmedHandles.Contains(operationId)) : new([], false, false, unconfirmedHandles.Contains(operationId)); }
 
     public async Task<OperationResult<MediaAudioRenderInput>> RenderAsync(QualifiedClipPlan plan, Guid operationId,
         Guid fileId, string path, CancellationToken token = default)
@@ -68,7 +69,8 @@ public sealed class AudioPcmRenderService
         {
             foreach (var stream in new[] { input, output }.Where(s => s is not null))
                 try { await stream!.DisposeAsync().ConfigureAwait(false); }
-                catch (Exception e) when (e is IOException or UnauthorizedAccessException) { outcome = Fail("PcmRenderClose", OperationErrorCode.OutputFailed); }
+                catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+                { lock (gate) unconfirmedHandles.Add(operationId); outcome = Fail("PcmRenderClose", OperationErrorCode.OutputFailed); }
         }
         if (token.IsCancellationRequested && outcome?.Status == OperationStatus.Succeeded) return OperationResult<MediaAudioRenderInput>.Cancelled();
         return outcome ?? Fail("PcmRenderFailed");
