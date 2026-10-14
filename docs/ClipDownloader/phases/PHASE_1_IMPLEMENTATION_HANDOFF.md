@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 CHZZK 획득 상한 진단(2026-10-14): [30초 요청 진단](PHASE_1_CHZZK_FETCH_BUDGET_DIAGNOSIS.md)에서 `14791589`의 Fast 46:10~46:40은 실제 whole segment 18개·36초가 필요해 기존 30초 원본 획득 상한을 넘는 것을 확인했다. planner 오류를 구체화하고 같은 실제 CLI의 실패 표시·정리를 검증했다. Downloader848개 통과·build 경고/오류0. 예산 조정과 목표 구간 생성 지원은 아직 미검증이며 이번 변경을 클립 생성 해결로 표시하지 않는다.
+
 현재 상태(2026-10-14): 사용자 후속 지시에 따라 **1~6단계의 제한된 전략·CLI 구현과 자동/실제 통합 검증을 완료했다.** 현재 호스트/실제 CLI/Windows Ctrl+C/전체 회귀·남은 완료 조건은 [6단계 통합 검증](PHASE_1_STAGE_6_VERIFICATION.md), media 지원 범위는 [4단계 통합 검증](PHASE_1_STAGE_4_VERIFICATION.md), workspace·준비/실행·정리는 [5단계 통합 검증](PHASE_1_STAGE_5_VERIFICATION.md)을 우선한다. Core143/Media Infrastructure143/Downloader835개, 총1121개와 솔루션 build 경고/오류0을 확인했다. 실제 CLI 양 사이트/양 모드의 최종 MP4·전체 A/V decode, 다운로드/처리 Ctrl+C130·정리, 기존 WPF 창 생성/정상 종료를 검증했다. 직접 player 영상/음성·동기 확인이 남아 Phase 1 전체 Passed/Completion/Tag는 Pending이며 Phase2로 진입하지 않는다. 아래 최초 준비 설명·이전 미완료 기록은 해당 시점의 이력이다.
 
 최신 AAC 지원 보완(2026-10-14): [실제 지원·검증](PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)에서 wFOjWCLPDDM의137/140·0~14:24를 Fast/Accurate 모두 실제CLI에서 확정했다. 원본1600 skip·부분frame·provider의whole packet 대응과Fast output을검증했으며독립PCM도일치했다. 최종Core143/Media Infrastructure159/Downloader846·총1148개실패/skip0·build 경고/오류0. 아래이영상미지원설명은이전진단시점의이력이며현재지원은새문서를우선한다. 직접player 확인과Phase1 전체완료는아직남았다.

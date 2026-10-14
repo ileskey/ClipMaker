@@ -22,15 +22,23 @@ internal sealed class HlsReferencePlanner
         ArgumentNullException.ThrowIfNull(maximumFetchedSpan);
         if (maximumFetchedSpan.Numerator <= 0 || maximumSegments <= 0) throw new ArgumentOutOfRangeException(nameof(maximumFetchedSpan));
         if (playlistRange.Start.Numerator < 0 || playlistRange.End.CompareTo(playlist.Duration) > 0)
-            return Fail(OperationErrorCode.InvalidRange);
+            return Fail(OperationErrorCode.InvalidRange, "HlsPlaylistRange", "HLS 참조 요청이 playlist 시간 범위를 벗어났습니다.");
         var selected = playlist.Segments.Where(segment => segment.PlaylistRange.End.CompareTo(playlistRange.Start) > 0 &&
             segment.PlaylistRange.Start.CompareTo(playlistRange.End) < 0).ToArray();
-        if (selected.Length == 0) return Fail(OperationErrorCode.VerificationFailed);
-        if (selected.Length > maximumSegments ||
-            (selected[^1].PlaylistRange.End - selected[0].PlaylistRange.Start).CompareTo(maximumFetchedSpan) > 0)
-            return Fail(OperationErrorCode.UnsupportedFormat);
+        if (selected.Length == 0) return Fail(OperationErrorCode.VerificationFailed, "HlsSegmentCoverage", "HLS 참조 요청과 겹치는 세그먼트가 없습니다.");
+        if (selected.Length > maximumSegments)
+            return Fail(OperationErrorCode.UnsupportedFormat, "HlsSegmentCountBudget",
+                FormattableString.Invariant($"HLS 획득에 필요한 세그먼트 {selected.Length}개가 상한 {maximumSegments}개를 초과합니다."));
+        var fetchedSpan = selected[^1].PlaylistRange.End - selected[0].PlaylistRange.Start;
+        if (fetchedSpan.CompareTo(maximumFetchedSpan) > 0)
+            return Fail(OperationErrorCode.UnsupportedFormat, "HlsFetchedSpanBudget",
+                $"HLS 세그먼트 전체 획득 범위 {Seconds(fetchedSpan)}초가 상한 {Seconds(maximumFetchedSpan)}초를 초과합니다. 획득 범위에는 요청 구간 외의 참조 여유 구간도 포함됩니다.");
         return OperationResult<HlsReferencePlan>.Succeeded(new(playlist.Id, playlist.Initialization, Array.AsReadOnly(selected), playlistRange));
     }
-    private static OperationResult<HlsReferencePlan> Fail(OperationErrorCode code) =>
-        OperationResult<HlsReferencePlan>.Failed(new(code, OperationErrorCategory.Execution, "HLS 참조 구간이 playlist/지원 검사 범위를 벗어났습니다."));
+    private static string Seconds(SignedMediaTime time) => time.Denominator.IsOne
+        ? FormattableString.Invariant($"{time.Numerator}")
+        : FormattableString.Invariant($"{time.Numerator}/{time.Denominator}");
+
+    private static OperationResult<HlsReferencePlan> Fail(OperationErrorCode code, string field, string message) =>
+        OperationResult<HlsReferencePlan>.Failed(new(code, OperationErrorCategory.Execution, message, field));
 }

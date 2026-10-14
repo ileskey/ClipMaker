@@ -18,6 +18,8 @@ dotnet run --project apps/ClipDownloader.Cli --no-build -- clip --url "https://c
 
 원본 참조 획득 상한은 기존 실제 검증의 **32 MiB / 30초**다. Accurate에서 필요한 원본 시작 참조도 상한에 포함되므로 모든 요청 위치가 지원되는 것은 아니다. 상한을 넘는 요청은 실패하며 전체 다운로드·mode/quality 변경으로 대체하지 않는다.
 
+30초는 **출력 클립 길이 상한이 아니라 획득할 원본 참조 범위의 상한**이다. HLS Fast는 요청 앞뒤에 초기 참조 길이만큼 여유를 확보하고 겹치는 세그먼트를 통째로 획득한다. 따라서 영상 중간의 30초 요청은 현재 상한으로 처리할 수 없으며, 더 짧은 요청도 세그먼트 경계에 따라 실패할 수 있다. `HlsFetchedSpanBudget` 오류는 필요한 실제 획득 범위와 상한을 표시한다. 구간을 줄여 이 검사를 통과해도 바이트·원본·출력 검사는 별도로 통과해야 한다.
+
 단일 rate1 edit와 정확한 leading skip·decoded frame·provider 대응을 검증할 수 있는 indexed AAC 시작 보정은 지원한다. 여러 packet이 소모되는1600 sample 사례를 Fast/Accurate에서 실제 확인했다. 증거가 없거나 일치하지 않는 보정과 끝 padding 등 범위 밖 입력은 계속 거절한다. [지원 범위·실제 결과](../../docs/ClipDownloader/phases/PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)를 참조한다.
 
 정상 정보·준비 요약·최종 결과는 stdout, 질문·단계·주의사항·오류·잔존 경로는 stderr다. 리디렉션된 stderr는 단계 전환만 기록한다. 실제 영상/음성 표시 범위는 사용자 원점의 정확한 유리수 초와 반열린 구간으로 표시하며 요청 범위와 다를 수 있다.

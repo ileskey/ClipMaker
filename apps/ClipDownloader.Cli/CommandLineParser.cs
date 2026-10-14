@@ -22,6 +22,7 @@ public static class CommandLineParser
         YouTube requires an existing Node.js 22+ on the tool search path; no automatic installation.
         Defaults: best, fast. Existing output directories only; never overwrite.
         Source budget: 32 MiB / 30 seconds per bounded acquisition (including source-start references).
+        HLS whole segments and reference margins count toward this budget; a 30-second clip may exceed it.
         Redirected stdin requires --yes. Exit codes: success 0, execution 1, input 2, cancellation 130.
         """;
 

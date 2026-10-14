@@ -49,10 +49,53 @@ public sealed class HlsReferenceTests
         var crosses = Range(Time(1999332, 1000000), Time(2));
         var both = planner.Plan(data, crosses, Time(4), 2);
         Assert.Equal(2, both.Data!.Segments.Count);
-        Assert.Equal(OperationErrorCode.UnsupportedFormat, planner.Plan(data, crosses, Time(3), 2).Error!.Code);
-        Assert.Equal(OperationErrorCode.UnsupportedFormat, planner.Plan(data, crosses, Time(4), 1).Error!.Code);
-        Assert.Equal(OperationErrorCode.InvalidRange, planner.Plan(data, Range(Time(-1), Time(1)), Time(4), 2).Error!.Code);
-        Assert.Equal(OperationErrorCode.InvalidRange, planner.Plan(data, Range(Time(4), Time(6)), Time(4), 2).Error!.Code);
+        var spanError = planner.Plan(data, crosses, Time(3), 2).Error!;
+        Assert.Equal(OperationErrorCode.UnsupportedFormat, spanError.Code);
+        Assert.Equal("HlsFetchedSpanBudget", spanError.Field);
+        Assert.Contains("4초", spanError.Message);
+        Assert.Contains("상한 3초", spanError.Message);
+        var countError = planner.Plan(data, crosses, Time(4), 1).Error!;
+        Assert.Equal(OperationErrorCode.UnsupportedFormat, countError.Code);
+        Assert.Equal("HlsSegmentCountBudget", countError.Field);
+        Assert.Contains("2개", countError.Message);
+        Assert.Contains("상한 1개", countError.Message);
+        foreach (var invalid in new[] { Range(Time(-1), Time(1)), Range(Time(4), Time(6)) })
+        {
+            var error = planner.Plan(data, invalid, Time(4), 2).Error!;
+            Assert.Equal(OperationErrorCode.InvalidRange, error.Code);
+            Assert.Equal("HlsPlaylistRange", error.Field);
+        }
+        Assert.DoesNotContain("private-test-value", spanError.Message);
+    }
+
+    [Fact]
+    public void ReportsExactFractionalWholeSpanRatherThanRequestedDuration()
+    {
+        var data = Parse(playlist).Data!;
+        var planner = new HlsReferencePlanner();
+        var requested = Range(Time(1), Time(3, 2));
+        var failed = planner.Plan(data, requested, Time(3, 2), 1);
+        Assert.Equal("HlsFetchedSpanBudget", failed.Error!.Field);
+        Assert.Contains("1999333/1000000초", failed.Error.Message);
+        Assert.Contains("상한 3/2초", failed.Error.Message);
+        Assert.Equal(OperationStatus.Succeeded, planner.Plan(data, requested, Time(1999333, 1000000), 1).Status);
+    }
+
+    [Fact]
+    public void ThirtySecondClipWithFastMarginsExceedsThirtySecondWholeReferenceBudget()
+    {
+        var segments = Enumerable.Range(0, 12).Select(i => new HlsSegment(i,
+            new Uri(leaf, $"{i}.m4s"), Range(Time(i * 6), Time((i + 1) * 6)))).ToArray();
+        var data = new HlsMediaPlaylist(leaf, new Uri(leaf, "init.mp4"), segments, Time(72), 100);
+        // Requested [18,48), with one initial-reference span on either side.
+        var fetchWindow = Range(Time(12), Time(54));
+        var planner = new HlsReferencePlanner();
+        var failed = planner.Plan(data, fetchWindow, Time(30), 64);
+        Assert.Equal("HlsFetchedSpanBudget", failed.Error!.Field);
+        Assert.Contains("42초", failed.Error.Message);
+        Assert.Contains("상한 30초", failed.Error.Message);
+        var sufficient = planner.Plan(data, fetchWindow, Time(42), 64);
+        Assert.Equal(7, sufficient.Data!.Segments.Count);
     }
 
     [Theory]
