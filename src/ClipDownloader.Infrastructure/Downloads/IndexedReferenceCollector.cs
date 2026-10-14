@@ -16,8 +16,23 @@ internal sealed record IndexedReferenceCollectionResult(OperationStatus Status, 
 
 // The caller supplies the index and locator from the same confirmed prefix read.
 // Index coordinates are not native or movie presentation coordinates.
-internal sealed class IndexedReferenceCollector(BoundedSourceHttpReader reader)
+internal sealed class IndexedReferenceCollector
 {
+    private readonly BoundedSourceHttpReader reader;
+    private readonly Func<string, Stream> createNewFile;
+    private readonly Action<string> deleteOwnedFile;
+
+    // Trusted storage dependencies; production creates a new file and never overwrites.
+    internal IndexedReferenceCollector(BoundedSourceHttpReader reader, Func<string, Stream>? createNewFile = null,
+        Action<string>? deleteOwnedFile = null)
+    {
+        ArgumentNullException.ThrowIfNull(reader);
+        this.reader = reader;
+        this.createNewFile = createNewFile ?? (path => new FileStream(path, FileMode.CreateNew, FileAccess.Write,
+            FileShare.None, 81920, FileOptions.Asynchronous));
+        this.deleteOwnedFile = deleteOwnedFile ?? File.Delete;
+    }
+
     internal async Task<IndexedReferenceCollectionResult> CollectAsync(Guid fileId, Mp4SidxIndex index,
         PresentationRange requested, SelectedMediaLocator selected, long resourceLength, string workDirectory,
         SourceInspectionBudget budget, long alreadyReadBytes, CancellationToken token)
@@ -49,7 +64,7 @@ internal sealed class IndexedReferenceCollector(BoundedSourceHttpReader reader)
         if (token.IsCancellationRequested) return new(OperationStatus.Cancelled, null, null, []);
         if (!Directory.Exists(workDirectory)) return Fail(OperationErrorCode.OutputFailed);
         var file = new OwnedMediaFile(fileId, Path.Combine(Path.GetFullPath(workDirectory), $"indexed-ref-{fileId:N}.mp4"), [selected.Format.Id]);
-        FileStream? output = null;
+        Stream? output = null;
         bool owned = false, unsafeClose = false;
         var status = OperationStatus.Failed;
         OperationError? error = null;
@@ -57,7 +72,7 @@ internal sealed class IndexedReferenceCollector(BoundedSourceHttpReader reader)
         try
         {
             token.ThrowIfCancellationRequested();
-            output = new(file.Path, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920, FileOptions.Asynchronous);
+            output = createNewFile(file.Path);
             owned = true;
             using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             await output.WriteAsync(index.Initialization, token).ConfigureAwait(false);
@@ -105,7 +120,7 @@ internal sealed class IndexedReferenceCollector(BoundedSourceHttpReader reader)
         var remaining = new List<OwnedMediaFile>();
         if (unsafeClose) remaining.Add(file);
         else if (owned)
-            try { File.Delete(file.Path); }
+            try { deleteOwnedFile(file.Path); }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { remaining.Add(file); }
         return new(status, null, status == OperationStatus.Cancelled ? null : error, remaining.AsReadOnly());
     }

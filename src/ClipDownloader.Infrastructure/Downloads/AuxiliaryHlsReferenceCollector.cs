@@ -11,8 +11,23 @@ internal sealed class AuxiliaryHlsCollectedReference(OwnedMediaFile file, long b
 internal sealed record AuxiliaryHlsCollectionResult(OperationStatus Status, AuxiliaryHlsCollectedReference? Data,
     OperationError? Error, IReadOnlyList<OwnedMediaFile> RemainingFiles);
 
-internal sealed class AuxiliaryHlsReferenceCollector(BoundedSourceHttpReader reader)
+internal sealed class AuxiliaryHlsReferenceCollector
 {
+    private readonly BoundedSourceHttpReader reader;
+    private readonly Func<string, Stream> createNewFile;
+    private readonly Action<string> deleteOwnedFile;
+
+    // Trusted storage dependencies; production creates a new file and never overwrites.
+    internal AuxiliaryHlsReferenceCollector(BoundedSourceHttpReader reader, Func<string, Stream>? createNewFile = null,
+        Action<string>? deleteOwnedFile = null)
+    {
+        ArgumentNullException.ThrowIfNull(reader);
+        this.reader = reader;
+        this.createNewFile = createNewFile ?? (path => new FileStream(path, FileMode.CreateNew, FileAccess.Write,
+            FileShare.None, 81920, FileOptions.Asynchronous));
+        this.deleteOwnedFile = deleteOwnedFile ?? File.Delete;
+    }
+
     internal async Task<AuxiliaryHlsCollectionResult> CollectFirstAsync(SelectedMediaLocator selected,
         string directory, SourceInspectionBudget budget, long alreadyReadBytes, CancellationToken token)
     {
@@ -39,14 +54,14 @@ internal sealed class AuxiliaryHlsReferenceCollector(BoundedSourceHttpReader rea
         if (body.Bytes is not { Length: > 0 } bytes) return Fail(OperationErrorCode.VerificationFailed);
         var id = Guid.NewGuid();
         var file = new OwnedMediaFile(id, Path.Combine(Path.GetFullPath(directory), $"presentation-ref-{id:N}.bin"), [selected.Format.Id]);
-        FileStream? output = null;
+        Stream? output = null;
         bool owned = false, uncertainClose = false;
         OperationStatus status = OperationStatus.Failed;
         OperationError? error = null;
         try
         {
             token.ThrowIfCancellationRequested();
-            output = new(file.Path, FileMode.CreateNew, FileAccess.Write, FileShare.None, 81920, FileOptions.Asynchronous);
+            output = createNewFile(file.Path);
             owned = true;
             await output.WriteAsync(bytes, token).ConfigureAwait(false);
             await output.FlushAsync(token).ConfigureAwait(false);
@@ -54,7 +69,8 @@ internal sealed class AuxiliaryHlsReferenceCollector(BoundedSourceHttpReader rea
             status = OperationStatus.Succeeded;
         }
         catch (OperationCanceledException) when (token.IsCancellationRequested) { status = OperationStatus.Cancelled; }
-        catch (Exception e) when (e is IOException or UnauthorizedAccessException) { error = Error(OperationErrorCode.OutputFailed); }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        { error = Error(!owned && File.Exists(file.Path) ? OperationErrorCode.OutputConflict : OperationErrorCode.OutputFailed); }
         finally
         {
             if (output is not null)
@@ -75,7 +91,7 @@ internal sealed class AuxiliaryHlsReferenceCollector(BoundedSourceHttpReader rea
         var files = new List<OwnedMediaFile>();
         if (uncertainClose) files.Add(file);
         else if (owned)
-            try { File.Delete(file.Path); }
+            try { deleteOwnedFile(file.Path); }
             catch (Exception e) when (e is IOException or UnauthorizedAccessException) { files.Add(file); }
         return new(status, null, status == OperationStatus.Cancelled ? null : error, files.AsReadOnly());
     }
