@@ -33,3 +33,9 @@ Application 성공 job `7ee0156b-62db-4eb9-b545-f4210831779a`의 최종 파일�
 이번 지원은 위 원본·선택 포맷·구간의 **Fast**다. 모든 30초 클립 지원을 보증하지 않는다. segment 길이/경계·비트레이트·source 지원 여부에 따라 64 MiB / 40초를 초과하거나 다른 gate에서 실패할 수 있다. 46분 지점의 Accurate는 기존 source-start prefix 전략상 예산 밖이며 성공으로 표시하지 않는다. 직접 player 영상/음성·동기 확인과 Phase 1 전체 Passed/Completion/Tag는 Pending이다.
 
 사용자 `out.mp4`는 조작하지 않았고 소유한 고유 ignored 출력만 사용했다. 일반 정책 재승인·Phase 2·WPF 다운로드 UI·ClipEditor 변경은 없다.
+
+## 후속 사용자 생성 확인
+
+2026-10-15 사용자가 현재 기본 예산64MiB/60초에서14791589·best hls-8384·60fps·Fast·46:10~46:40을 `out6.mp4`로 실행한 최종 완료 로그를 제공했다. 요청 `[2770,2800)`, 실제 video `[26582413/9600,26880013/9600)`, audio `[26582413/9600,2800)`, AAC skip961/tail0·zero0/overlap0·SourceEndVerified=false로 위 실제 검증과 같은 표시 결과다. 사용자 최종 생성 성공으로 기록하며, 사용자 출력 hash·직접 재생·음성 동기 확인은 보고되지 않았다. 영상 파일은 조작하지 않았다.
+
+이 성공은 해당 source/포맷/구간의 Fast에 한정한다. 메타데이터 조회 성공만으로 획득 예산·native 원본 대응·codec/clock·출력 gate 통과를 보장하지 않는다. CHZZK14327648의 MPD metadata 실패와 구별한다. CHZZK 사용자 player 검증과 Phase1 전체 완료 판정은 남아 있다.
