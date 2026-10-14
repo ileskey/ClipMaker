@@ -16,10 +16,11 @@ public sealed class ConsoleProgress(ICliConsole console, Action<JobProgress>? st
             if (changed) { last = value.Stage; stageLog?.Invoke(value); }
             if (console.ErrorRedirected)
             {
-                if (changed) console.Error($"[{value.Stage}] 진행 중\n");
+                if (changed) console.Error($"[{value.Stage}]{(value.Stage == JobStage.Completed ? " 결과 반환 중" : " 진행 중")}\n");
                 return;
             }
-            string percent = value.Percent is { } number ? $" {number.ToString("0.0", CultureInfo.InvariantCulture)}%" : " 진행 중";
+            string percent = value.Stage == JobStage.Completed ? " 결과 반환 중" :
+                value.Percent is { } number ? $" {number.ToString("0.0", CultureInfo.InvariantCulture)}%" : " 진행 중";
             string line = $"[{value.Stage}]{percent}";
             console.Error("\r" + line.PadRight(previousWidth));
             previousWidth = line.Length;

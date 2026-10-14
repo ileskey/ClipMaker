@@ -177,6 +177,16 @@ public sealed class CliTests
         Assert.Contains("\r[Processing] 50.0%", console.Stderr); Assert.DoesNotContain("raw secret", console.Stderr);
     }
     [Fact]
+    public void CompletedProgressDoesNotPromiseSuccessOrRemainInProgress()
+    {
+        var console = new ConsoleStub(); var progress = new ConsoleProgress(console);
+        progress.Report(new(Guid.NewGuid(), JobStage.Completed, 100, "completed after failure"));
+        Assert.Equal("[Completed] 결과 반환 중\n", console.Stderr);
+        console.Stderr = ""; console.ErrorRedirected = false;
+        progress.Report(new(Guid.NewGuid(), JobStage.Completed, 100, "completed after failure"));
+        Assert.Contains("결과 반환 중", console.Stderr); Assert.DoesNotContain("100", console.Stderr); Assert.DoesNotContain("진행 중", console.Stderr);
+    }
+    [Fact]
     public void CompositionBuildsWithoutWpfAndPreservesSourceOwnerIdentity()
     {
         using var h = new Harness(); using var services = ServiceRegistration.Create(h.Command(), new ConsoleStub(), null);
