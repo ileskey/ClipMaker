@@ -99,3 +99,11 @@ CHZZK 첫 통합 실패 `CopyPacketChanged`를 조사했다. source AAC duration
 현재 bounded10~20초 양 사이트 Fast 통합이 성공했다. CHZZK source video[11,22), audio[11,16507/750), staging11281027bytes/SHA256 `360d6fba66306f1427f6220f076ea8f9ec7294e459bb2cd0b76ff87bcc09cdfe`; YouTube137/140 source video[6,301/15), audio[6,220672/11025), staging3469926bytes/SHA256 `52314b66092c858dd4521d8e372a5546d2bc4da5e381eea87a16d0fd7d98ddd8`다. required600/300 frames와 decoded source/output 그림을 대조했다. 선택 모드/화질 fallback은 없다. 실제 파일은 ignored 작업 폴더 `0c9e2d85008b4e1aaf7d4c2132210168` / `8cd1e42c4025407aa0acd66e2d43c13c`와 safe summary로 보존한다.
 
 Fast 추가14개 포함 Downloader758개 실패·skip0. 실제 실험이 로드한 DLL과 동시 빌드가 충돌한 실행은 실패로 기록하며, 해당 실험 종료 후 솔루션 build 경고·오류0을 확인했다. **4c-2의 제한된 양 사이트 Fast 연결은 검증했으며 Accurate4c-3과 전체4단계는 미완료다.**
+
+## Accurate lossless sample-grid 재구성
+
+source-order decoded PCM offset과 native lattice 위치를 구별하는 `AudioPcmReconstructionPlan`/reconstructor 및 소유 render service를 연결했다. 원본 sample support와 requested ceil 교집합만 쓰고, 확인된 내부 gap은0, 중복은 앞선 값으로 재구성한다. requested Qa는 그대로 유지한다. PCM 길이·전후 hash를 고정하고 CreateNew 충돌/변경/취소/close 실패에서 Data를 성공으로 반환하지 않는다. 생성 파일은 operation별 registry에 보존하며 삭제·최종 확정을 하지 않는다.
+
+독립 occupancy array oracle로 mono/stereo·비정렬 원점·부분 support·내부 gap/overlap의 값을 대조했다. 재구성4개와 소유 render4개 테스트를 통과했다. 현재 작업 중인 실제 source-start decode 경로에서 CHZZK10~20초 PCM480000 samples/3840000bytes를 생성했다. 독립 sample별 first-wins oracle와 byte 동일하며 SHA256 `93e14977216995d596762f7e59dbf507bd403be4fb7723cee9adc53c8e6ea7f3`, 삽입0 sample2개/중복 제거1개다. ignored `CheckPcmOracle.ps1`과 `550217234873477aa6de6ee93804efb4/pcm-oracle-summary.json`을 보존한다.
+
+이 값 검증은 lossless preencode 재구성이며 lossy AAC 출력 PCM byte 동일성 보증이 아니다. 실제 준비 producer/encode/output 연결은 다음 논리 단위에서 검증·기록한다. **Accurate 및 전체4단계 완료가 아니다.**
