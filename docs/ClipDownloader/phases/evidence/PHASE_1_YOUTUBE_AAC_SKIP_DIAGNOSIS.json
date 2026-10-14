@@ -1,0 +1,609 @@
+{
+  "Date": "2026-10-14",
+  "SourceId": "wFOjWCLPDDM",
+  "VideoFormat": "137",
+  "AudioFormat": "140",
+  "FrameRate": "25/1",
+  "RequestedStart": "00:00:00:00",
+  "RequestedEnd": "00:00:14:24",
+  "Mode": "Fast",
+  "SourceBudgetBytes": 33554432,
+  "SourceBudgetSeconds": 30,
+  "BeforeDiagnosis": {
+    "SourceId": "wFOjWCLPDDM",
+    "VideoFormat": "137",
+    "AudioFormat": "140",
+    "FrameRate": "25/1",
+    "Status": "Failed",
+    "Error": {
+      "Code": 14,
+      "Category": 1,
+      "Message": "HLS 원본 참조의 native sample 관계를 지원 범위에서 확인하지 못했습니다.",
+      "Field": "NativeSampleCompleteness"
+    },
+    "Files": [
+      {
+        "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\reported-source\\d5241b0f7d8748d5b7174615fc28cebc\\indexed-ref-3e7b45d651e848a4ad5c86a8037c5270.mp4",
+        "Bytes": 162428,
+        "Sha256": "FD558E6FACCA830956014762C31E7AD97FF230931B00AAA5F7223FC328D6BFC3"
+      },
+      {
+        "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\reported-source\\d5241b0f7d8748d5b7174615fc28cebc\\indexed-ref-68f5b68b97a44e95ac64f804cbfa44e6.mp4",
+        "Bytes": 162832,
+        "Sha256": "79AD63E23505BD4F824017A5169E2171A75869E5F7BA5422677749B086899581"
+      }
+    ],
+    "Observations": [
+      {
+        "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\reported-source\\d5241b0f7d8748d5b7174615fc28cebc\\indexed-ref-3e7b45d651e848a4ad5c86a8037c5270.mp4",
+        "Kind": "Video",
+        "NativeResult": "Succeeded",
+        "NativeFailure": null,
+        "Samples": 175,
+        "Packets": 175,
+        "Frames": 175,
+        "Track": [
+          {
+            "TrackId": 1,
+            "MediaTimescale": 12800,
+            "HasEditList": true,
+            "Edits": [
+              {
+                "MovieDuration": 608768,
+                "MediaTime": 512,
+                "RateInteger": 1,
+                "RateFraction": 0
+              }
+            ],
+            "MovieDuration": 608768,
+            "MediaDuration": 608768
+          }
+        ],
+        "FirstSamples": [
+          {
+            "TrackId": 1,
+            "DecodeTicks": 0,
+            "PresentationTicks": 512,
+            "Duration": 512,
+            "Size": 147868,
+            "Flags": 0,
+            "ByteOffset": 2943
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 512,
+            "PresentationTicks": 2048,
+            "Duration": 512,
+            "Size": 192,
+            "Flags": 65536,
+            "ByteOffset": 150811
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 1024,
+            "PresentationTicks": 1024,
+            "Duration": 512,
+            "Size": 42,
+            "Flags": 65536,
+            "ByteOffset": 151003
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 1536,
+            "PresentationTicks": 1536,
+            "Duration": 512,
+            "Size": 42,
+            "Flags": 65536,
+            "ByteOffset": 151045
+          }
+        ],
+        "LastSamples": [
+          {
+            "TrackId": 1,
+            "DecodeTicks": 87552,
+            "PresentationTicks": 87552,
+            "Duration": 512,
+            "Size": 42,
+            "Flags": 65536,
+            "ByteOffset": 162254
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 88064,
+            "PresentationTicks": 89600,
+            "Duration": 512,
+            "Size": 48,
+            "Flags": 65536,
+            "ByteOffset": 162296
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 88576,
+            "PresentationTicks": 88576,
+            "Duration": 512,
+            "Size": 42,
+            "Flags": 65536,
+            "ByteOffset": 162344
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 89088,
+            "PresentationTicks": 89088,
+            "Duration": 512,
+            "Size": 42,
+            "Flags": 65536,
+            "ByteOffset": 162386
+          }
+        ],
+        "FirstPackets": [
+          {
+            "StreamIndex": 0,
+            "Pts": 0,
+            "Dts": -512,
+            "Duration": 512,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 147868,
+            "Position": 2943
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 1536,
+            "Dts": 0,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 192,
+            "Position": 150811
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 512,
+            "Dts": 512,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 42,
+            "Position": 151003
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 1024,
+            "Dts": 1024,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 42,
+            "Position": 151045
+          }
+        ],
+        "LastPackets": [
+          {
+            "StreamIndex": 0,
+            "Pts": 87040,
+            "Dts": 87040,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 42,
+            "Position": 162254
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 89088,
+            "Dts": 87552,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 48,
+            "Position": 162296
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 88064,
+            "Dts": 88064,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 42,
+            "Position": 162344
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 88576,
+            "Dts": 88576,
+            "Duration": 512,
+            "Flags": "___",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 42,
+            "Position": 162386
+          }
+        ],
+        "FirstFrames": [
+          {
+            "StreamIndex": 0,
+            "Pts": 0,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 512,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 1024,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 1536,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          }
+        ],
+        "LastFrames": [
+          {
+            "StreamIndex": 0,
+            "Pts": 87552,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 88064,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 88576,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 89088,
+            "Duration": 512,
+            "SampleCount": null,
+            "SampleFormat": null,
+            "SampleRate": null,
+            "Channels": null
+          }
+        ]
+      },
+      {
+        "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\reported-source\\d5241b0f7d8748d5b7174615fc28cebc\\indexed-ref-68f5b68b97a44e95ac64f804cbfa44e6.mp4",
+        "Kind": "Audio",
+        "NativeResult": "Failed",
+        "NativeFailure": {
+          "Kind": 2,
+          "Message": "로컬 MP4의 native sample 관계를 지원 범위에서 확인하지 못했습니다.",
+          "Field": "NativeSampleCompleteness"
+        },
+        "Samples": 430,
+        "Packets": 430,
+        "Frames": 429,
+        "Track": [
+          {
+            "TrackId": 1,
+            "MediaTimescale": 44100,
+            "HasEditList": true,
+            "Edits": [
+              {
+                "MovieDuration": 2097984,
+                "MediaTime": 1600,
+                "RateInteger": 1,
+                "RateFraction": 0
+              }
+            ],
+            "MovieDuration": 2097984,
+            "MediaDuration": 2097984
+          }
+        ],
+        "FirstSamples": [
+          {
+            "TrackId": 1,
+            "DecodeTicks": 0,
+            "PresentationTicks": 0,
+            "Duration": 1024,
+            "Size": 371,
+            "Flags": 0,
+            "ByteOffset": 2583
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 1024,
+            "PresentationTicks": 1024,
+            "Duration": 1024,
+            "Size": 422,
+            "Flags": 0,
+            "ByteOffset": 2954
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 2048,
+            "PresentationTicks": 2048,
+            "Duration": 1024,
+            "Size": 389,
+            "Flags": 0,
+            "ByteOffset": 3376
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 3072,
+            "PresentationTicks": 3072,
+            "Duration": 1024,
+            "Size": 396,
+            "Flags": 0,
+            "ByteOffset": 3765
+          }
+        ],
+        "LastSamples": [
+          {
+            "TrackId": 1,
+            "DecodeTicks": 436224,
+            "PresentationTicks": 436224,
+            "Duration": 1024,
+            "Size": 396,
+            "Flags": 0,
+            "ByteOffset": 161369
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 437248,
+            "PresentationTicks": 437248,
+            "Duration": 1024,
+            "Size": 390,
+            "Flags": 0,
+            "ByteOffset": 161765
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 438272,
+            "PresentationTicks": 438272,
+            "Duration": 1024,
+            "Size": 337,
+            "Flags": 0,
+            "ByteOffset": 162155
+          },
+          {
+            "TrackId": 1,
+            "DecodeTicks": 439296,
+            "PresentationTicks": 439296,
+            "Duration": 1024,
+            "Size": 340,
+            "Flags": 0,
+            "ByteOffset": 162492
+          }
+        ],
+        "FirstPackets": [
+          {
+            "StreamIndex": 0,
+            "Pts": -1600,
+            "Dts": -1600,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": {
+              "SkipSamples": 1600,
+              "DiscardPadding": 0,
+              "SkipReason": 0,
+              "DiscardReason": 0
+            },
+            "HasUninterpretedSideData": false,
+            "Size": 371,
+            "Position": 2583
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": -576,
+            "Dts": -576,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 422,
+            "Position": 2954
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 448,
+            "Dts": 448,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 389,
+            "Position": 3376
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 1472,
+            "Dts": 1472,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 396,
+            "Position": 3765
+          }
+        ],
+        "LastPackets": [
+          {
+            "StreamIndex": 0,
+            "Pts": 434624,
+            "Dts": 434624,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 396,
+            "Position": 161369
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 435648,
+            "Dts": 435648,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 390,
+            "Position": 161765
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 436672,
+            "Dts": 436672,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 337,
+            "Position": 162155
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 437696,
+            "Dts": 437696,
+            "Duration": 1024,
+            "Flags": "K__",
+            "Skip": null,
+            "HasUninterpretedSideData": false,
+            "Size": 340,
+            "Position": 162492
+          }
+        ],
+        "FirstFrames": [
+          {
+            "StreamIndex": 0,
+            "Pts": 0,
+            "Duration": 448,
+            "SampleCount": 448,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 448,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 1472,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 2496,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          }
+        ],
+        "LastFrames": [
+          {
+            "StreamIndex": 0,
+            "Pts": 434624,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 435648,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 436672,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          },
+          {
+            "StreamIndex": 0,
+            "Pts": 437696,
+            "Duration": 1024,
+            "SampleCount": 1024,
+            "SampleFormat": "fltp",
+            "SampleRate": null,
+            "Channels": 2
+          }
+        ]
+      }
+    ]
+  },
+  "CorrectedCli": {
+    "Directory": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\reported-source-cli\\21244f5993dc43f9b1e24dd38903dbb9",
+    "ExitCode": 1,
+    "FinalExists": false,
+    "UnsupportedSkipReported": true,
+    "CompletedSaysReturning": true
+  },
+  "CorrectedJobId": "61fa4bea-3390-4def-873c-e4183cb5b893",
+  "RemainingCorrectedJobDirectories": 0,
+  "ImplementationSupportsThisSource": false,
+  "BuildWarnings": 0,
+  "BuildErrors": 0,
+  "Tests": {
+    "Core": 143,
+    "MediaInfrastructure": 147,
+    "Downloader": 837,
+    "Total": 1127,
+    "Failed": 0,
+    "Skipped": 0
+  },
+  "VerifiedCodeCommit": "344b3c4"
+}

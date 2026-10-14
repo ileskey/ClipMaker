@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+후속 사용자 입력 진단: 다른 YouTube source의 AAC1600 skip으로 초기 native/decoded frame 수가 달라지는 미지원 사례를 재현했다. [원인·오류 분류 보완·지원 잔여](PHASE_1_YOUTUBE_AAC_SKIP_DIAGNOSIS.md)를 우선해 읽는다. 성공 지원을 확대하지 않았고 후속 전체 회귀는1127개 통과다. 아래1121개와 네 실제 성공 사례는6단계 수행 시점의 유효한 기록이다.
+
 수행일: 2026-10-14 (Asia/Seoul). 시작 HEAD `0e596ba`, branch `phase/1`, 작업 트리 clean에서 사용자의 6단계 진행 지시로 수행했다. 기존 자동 논리 커밋·bounded 다운로드 허용과 단계별 보고 정책을 유지했다.
 
 현재 상태: **6단계 CLI 구현·자동/실제 통합 검증을 완료했다.** 최종 솔루션 build 경고/오류0, Core143/Media Infrastructure143/Downloader835개, 총1121개 실패/skip0이다. 직접 재생기로 화면/소리를 평가한 검증이 남아 Phase 1 전체 Passed/Completion/Tag는 확정하지 않는다. 기존 제한된 [4단계 지원 범위](PHASE_1_STAGE_4_VERIFICATION.md)와 [5단계 Application 계약](PHASE_1_STAGE_5_VERIFICATION.md)을 유지한다.
