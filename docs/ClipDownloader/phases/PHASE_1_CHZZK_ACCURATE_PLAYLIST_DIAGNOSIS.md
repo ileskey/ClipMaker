@@ -31,3 +31,11 @@ CHZZK Accurate player 검증에는 검증된 HLS source의앞쪽 구간(예:10~2
 이어14791589·hls-8384·Accurate46:10~46:30·20초 요청에서 `HlsSegmentCountBudget`·필요1396개/상한64개를 보고했다. 이는 사용자 실행의 실제 오류다. 제품의 source-start 획득 시작0 및 planner가 segment count를 fetched span보다 먼저 검사하는 순서와 일치한다. 원인 확인을 위해 영상 전체나1396개 segment를 다운로드하지 않았다. 출력 길이를 줄여도 시작부터46분 OUT까지의 참조 요구는 남는다. count 상한만 높여도현재60초span·byte조건의성공을보장하지않는다.
 
 사용자는 “초반에 소리가 있는 다른 영상으로 현재 지원 범위 검증”을 선택했다. 46분 위치 Accurate 지원 확대는 진행하지 않는다. 새 영상 URL과 소리·움직임이 있는 앞쪽 구간을 요청했으며 아직 제공되지 않았다. 새 입력은 metadata/선택 → 제한된 source-start 획득/native 관계 → Accurate 준비/출력 검증 → 전체decode/정리 → 사용자 재생·음성 동기 순서로 확인한다. 준비·자동 생성 성공과 사람 검증을구별하며 CHZZK Accurate 완료는Pending이다.
+
+## 새 후보15654475 실제 시도
+
+2026-10-15 사용자가15654475·00:00:20~를 제공했다. 끝 시간 생략에 대해20~30초·10초 Accurate로 먼저 확인한다고 안내하고 기존 설치 도구·64MiB/60초 예산·별도 ignored 출력에서 실제CLI를실행했다. exit1·Metadata ProcessFailed, final없음이었다. stdout/stderr/summary는 `.artifacts/chzzk-audible-accurate-cli/a9d17051cc144777b30f5d02cb184ccf`에보존한다. metadata 이전실패이므로media구간획득/준비/렌더/출력검증·사람재생은진행하지못했다.
+
+제품과동일한yt-dlp metadata 인자재조회도exit1·`KeyError('sourceURL')`였다. API상태code200·vodStatus ABR_HLS·duration42694초·liveRewindPlaybackJson없음을확인했다. 이번후속에서MPD본문구조를별도재조회하지않았으므로초기화속성이나표준적합성을추정확정하지않는다. 이전MPD추출오류와같은서명이며요청위치/모드변경으로해결되는실패가아니다.
+
+이번후속은진단문서만변경했고도구설치·제품코드변경·미디어다운로드·build/test재실행은없다. 새입력지원·CHZZK Accurate 사용자검증은여전히미완료다. 현재지원범위검증을계속하려면metadata조회에성공하는HLS원본이면서앞쪽에소리가있는자료가필요하다. MPD대응이나46분지원확대는사용자가선택한이번검증과별도작업으로남긴다.
