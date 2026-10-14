@@ -28,6 +28,8 @@ native non-sync와 FFprobe K가 다른 H.264 packet은 확인한 zero-count reco
 
 정상 정보·준비 요약·최종 결과는 stdout, 질문·단계·주의사항·오류·잔존 경로는 stderr다. 리디렉션된 stderr는 단계 전환만 기록한다. 실제 영상/음성 표시 범위는 사용자 원점의 정확한 유리수 초와 반열린 구간으로 표시하며 요청 범위와 다를 수 있다.
 
+Fast에서 검증된 닫힌 IDR 시작점이 마이크로초 단위에 맞지 않으면 입력 seek 명령 좌표만 아래로 반올림한다. 원본 시간·공통 이동량은 정확히 유지하고 실제 출력 검사를 통과해야 확정한다. 움직이는 YouTube10~40초 사례의 실제 시작은 `68/15`초였다. [지원 범위·실제 결과](../../docs/ClipDownloader/phases/PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md)를 참조한다.
+
 Ctrl+C는 취소와 자원 정리를 요청한다. 반복 입력으로 정리를 생략하지 않는다. Finalizing 진입 이후의 늦은 취소는 최종 확정 결과를 따른다. 종료 코드는 성공 `0`, 실행 오류 `1`, 입력 오류 `2`, 취소 `130`이다. 파일 정리 경고와 잔존 경로는 원래 결과를 덮지 않는다.
 
 로그는 `%LOCALAPPDATA%\ClipMaker\ClipDownloader\Logs\clipdownloader-cli-*.log`에 일별/10 MiB 회전과 14개 보존으로 기록한다. 명령 이름·작업 ID·단계·최종 종료 코드만 기록하며 입력 URL, 원시 JSON, 도구 인자, 인증값, 서명 주소를 복제하지 않는다. 로그 실패는 stderr 경고로 알리고 작업 결과는 유지한다. 명시적인 작업 정리가 끝난 뒤 DI owner와 로그를 종료한다.

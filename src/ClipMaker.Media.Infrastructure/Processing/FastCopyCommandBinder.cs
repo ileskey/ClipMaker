@@ -50,11 +50,12 @@ internal sealed class FastCopyCommandBinder
             Time(f.InputPts * f.InputTimeBase.Numerator, f.InputTimeBase.Denominator) + video[0].Translation != f.OutputPts ||
             Time(f.Duration * f.InputTimeBase.Numerator, f.InputTimeBase.Denominator) != f.OutputDuration))
             return Fail("VideoExpectationContradicted");
-        // Seek must be exactly representable in FFmpeg's AV_TIME_BASE. Fast OUT
-        // is a tool stop coordinate; final packet coverage/end must be inspected.
+        // Tool seek is rounded down so it never passes the verified IDR. Keep
+        // the native range/translation exact; output packet/picture verification
+        // must prove the actual result. OUT is likewise only a tool coordinate.
         var micros = Time(1, 1_000_000);
         if (video[0].InputRange.Start.Numerator < 0 || !video[0].InputRange.Start.TryToNativeTicks(micros,
-            NativeTimestampRounding.Exact, out long seek, out _) || !video[0].InputRange.End.TryToNativeTicks(micros,
+            NativeTimestampRounding.Floor, out long seek, out _) || !video[0].InputRange.End.TryToNativeTicks(micros,
             NativeTimestampRounding.Ceiling, out long stop, out _) || stop <= seek) return Fail("CopySeekClockUnsupported");
         if (plan.Inputs.Any(f => string.Equals(f.Path, request.StagingPath, StringComparison.OrdinalIgnoreCase)))
             return Fail("StagingInputConflict");

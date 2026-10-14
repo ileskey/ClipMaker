@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 Fast 분수 seek 지원(2026-10-15): [진단·지원·실제 검증](PHASE_1_FAST_FRACTIONAL_SEEK_SUPPORT.md)에서 같은 움직이는 YouTube10~40초의 CopySeekClockUnsupported가 검증된 IDR `68/15`초를 마이크로초로 정확히 표현할 수 없어 발생함을 확인했다. 명령 시작 좌표만 Floor하고 exact native 계획·translation·Fast IDR·출력 gate는 유지했다. 실제 CLI exit0·video[68/15,1201/30)·audio[68/15,441088/11025)·독립decode·정리를 확인했다. 이 Fast의 직접 player와 Phase1 전체 완료는 Pending이다.
+
 최신 사용자 재생 확인(2026-10-15): 사용자가 직전 `qnjEE-wkw8k`137/140·30fps·10~40초 Accurate 재생 검증에 “좋아 통과야”라고 보고했다. [사용자 확인 기록](PHASE_1_H264_RECOVERY_POINT_SUPPORT.md#사용자-재생-확인)을 따른다. 아래 이 사례의 직접 player Pending은 보고 전 이력이다. CHZZK·YouTube Fast와 기존 네 final 전체의 재생 확인으로 확대하지 않으며 Phase1 전체 Passed/Completion/Tag는 Pending이다.
 
 최신 움직이는 영상 지원(2026-10-15): [H.264 recovery-point 대응·실제검증](PHASE_1_H264_RECOVERY_POINT_SUPPORT.md)을 우선한다. `qnjEE-wkw8k`137/140·30fps·10~40초Accurate의NativeSyncState를실제non-sync/recovery-K 바이트관계로진단했다. exact SEI/intra·같은파일/packet evidence를공유및획득probe에연결해raw표식을보존했고Fast IDR조건은유지했다. 최종CLI exit0·A/V[10,40)·decode·900frames/896서로다른hash·샘플이미지/정리를확인했다. 중간SourceIndex와초기adapter증거누락실패도기록했다. Core143/Media186/Downloader856·총1185개통과·build경고/오류0. 직접player·Phase1전체완료는Pending이다.

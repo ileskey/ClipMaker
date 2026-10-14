@@ -179,6 +179,44 @@ public sealed class FfmpegMediaProcessingServiceTests
     }
 
     [Theory]
+    [InlineData(68, 15, "4.533333")]
+    [InlineData(1, 3, "0.333333")]
+    [InlineData(2, 3, "0.666666")]
+    [InlineData(1, 1, "1")]
+    [InlineData(1, 2000000, "0")]
+    public void FastSeekRoundsOnlyToolCoordinateDownAndKeepsNativePlan(long numerator, long denominator, string seek)
+    {
+        using var f = new Fixture(); var file = f.Request.Plan.Inputs[0];
+        var start = Time(numerator, denominator); var end = Time(120000001, 3000000);
+        PresentationRange.TryCreate(start, end, out var range, out _);
+        var stream = new StreamProcessingPlan(new(file.Id, 0, MediaStreamKind.Video), range!, Time(0) - start, "h264", Time(1, denominator), 0, 100);
+        var frame = new MediaVideoFrameExpectation(numerator, 1, Time(1, denominator), Time(0), Time(1, denominator));
+        var plan = new MediaProcessingPlan(MediaProcessingMode.Fast, [file], [stream], [frame], checked((int)denominator));
+        var result = new FastCopyCommandBinder().Bind(new(Guid.NewGuid(), Guid.NewGuid(), plan, f.Request.StagingPath));
+        Assert.Equal(MediaOperationStatus.Succeeded, result.Status);
+        var args = result.Data!.Arguments.ToList();
+        Assert.Equal(seek, args[args.IndexOf("-ss") + 1]);
+        Assert.Equal("40.000001", args[args.IndexOf("-to") + 1]);
+        Assert.Equal(start, plan.Streams[0].InputRange.Start);
+        Assert.Equal(Time(0) - start, plan.Streams[0].Translation);
+        Assert.Contains($"setts=time_base=1/{denominator}:prescale=1:pts=PTS+({-numerator}):dts=DTS+({-numerator})", args);
+    }
+
+    [Theory]
+    [InlineData(-1, 0, 1)]
+    [InlineData(10000000000000, 10000000000001, 1)]
+    public void FastSeekStillRejectsNegativeAndOverflowingToolCoordinates(long start, long end, long denominator)
+    {
+        using var f = new Fixture(); var file = f.Request.Plan.Inputs[0];
+        PresentationRange.TryCreate(Time(start, denominator), Time(end, denominator), out var range, out _);
+        var stream = new StreamProcessingPlan(new(file.Id, 0, MediaStreamKind.Video), range!, Time(0), "h264", Time(1), 0, 1);
+        var frame = new MediaVideoFrameExpectation(0, 1, Time(1), Time(0), Time(1));
+        var plan = new MediaProcessingPlan(MediaProcessingMode.Fast, [file], [stream], [frame], 1);
+        var result = new FastCopyCommandBinder().Bind(new(Guid.NewGuid(), Guid.NewGuid(), plan, f.Request.StagingPath));
+        Assert.Equal("CopySeekClockUnsupported", result.Failure!.Field);
+    }
+
+    [Theory]
     [InlineData("success", null)]
     [InlineData("outside", "AccurateVideoExpectation")]
     [InlineData("numeric", "AccurateNativeExpressionUnsupported")]
