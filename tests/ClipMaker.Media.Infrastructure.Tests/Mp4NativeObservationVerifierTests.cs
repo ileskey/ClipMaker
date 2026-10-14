@@ -8,6 +8,29 @@ namespace ClipMaker.Media.Infrastructure.Tests;
 public sealed class Mp4NativeObservationVerifierTests
 {
     [Theory]
+    [InlineData("skip", "NativeSkipUnsupported", MediaFailureKind.UnsupportedInput)]
+    [InlineData("missing-skip", "NativeSkipMissing", MediaFailureKind.InvalidMedia)]
+    [InlineData("no-skip", "NativeSampleCompleteness", MediaFailureKind.InvalidMedia)]
+    [InlineData("missing-packet", "NativeSampleCompleteness", MediaFailureKind.InvalidMedia)]
+    public void AudioSkipAcrossPacketBoundaryIsUnsupportedRatherThanMissingDecodedData(string fault, string field, MediaFailureKind kind)
+    {
+        SignedMediaTime.TryCreate(1, 44100, out var clock, out _);
+        var stream = new MediaStreamObservation(0, MediaStreamKind.Audio, clock!, -1600, null, null, 1,
+            new("aac", "LC", null, "fltp", 44100, 2, 2));
+        var samples = new Mp4NativeSampleEvidence([new(1, "aac", 2, new string('a', 64), 44100, 2)],
+            [new(1, 0, 0, 1024, 10, 0, 100), new(1, 1024, 1024, 1024, 20, 0, 110)]);
+        var skip = fault == "no-skip" ? null : new MediaPacketSkipObservation(fault == "missing-skip" ? null : 1600, 0, 0, 0);
+        var packets = new[] { new MediaPacketObservation(0, -1600, -1600, 1024, "K__", skip, false, 10, 100),
+            new MediaPacketObservation(0, -576, -576, 1024, "K__", null, false, 20, 110) };
+        var raw = new MediaProbeObservations([stream], [new(0, 0, 448, 448, "fltp", 44100, 2)],
+            fault == "missing-packet" ? packets[..1] : packets, true, true);
+        var container = new Mp4FileTimingEvidence(new(44100, [new(1, 44100, true, [new(44100, 1600, 1, 0)])]), [],
+            MediaOperationResult<Mp4NativeSampleEvidence>.Succeeded(samples));
+        var result = new Mp4NativeObservationVerifier().Verify(raw, container);
+        Assert.Equal(MediaOperationStatus.Failed, result.Status); Assert.Null(result.Data);
+        Assert.Equal(field, result.Failure!.Field); Assert.Equal(kind, result.Failure.Kind);
+    }
+    [Theory]
     [InlineData("success", null)]
     [InlineData("edit", null)]
     [InlineData("missing-pts", "NativeFramePtsMissing")]

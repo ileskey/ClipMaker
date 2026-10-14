@@ -40,5 +40,6 @@ internal sealed class HlsNativeReferenceVerifier
     }
     private static OperationResult<VerifiedHlsNativeReference> Fail(OperationErrorCode code, string field) =>
         OperationResult<VerifiedHlsNativeReference>.Failed(new(code, OperationErrorCategory.Execution,
-            "HLS 원본 참조의 native sample 관계를 지원 범위에서 확인하지 못했습니다.", field));
+            field == "NativeSkipUnsupported" ? "원본 음성의 시작 건너뛰기 또는 끝 여분 샘플 보정은 현재 획득 검사에서 지원하지 않습니다." :
+                "원본 참조의 native sample 관계를 지원 범위에서 확인하지 못했습니다.", field));
 }

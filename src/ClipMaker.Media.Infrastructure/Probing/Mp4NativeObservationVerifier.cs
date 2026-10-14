@@ -49,7 +49,7 @@ public sealed class Mp4NativeObservationVerifier
             var samples = evidence.Samples.Where(s => s.TrackId == stream.TrackId).ToArray();
             var packets = observations.Packets.Where(p => p.StreamIndex == stream.Index).ToArray();
             var frames = observations.Frames.Where(f => f.StreamIndex == stream.Index).ToArray();
-            if (samples.Length == 0 || samples.Length != packets.Length || samples.Length != frames.Length)
+            if (samples.Length == 0 || samples.Length != packets.Length)
                 return Fail(MediaFailureKind.InvalidMedia, "NativeSampleCompleteness");
             for (int i = 0; i < samples.Length; i++)
             {
@@ -73,6 +73,10 @@ public sealed class Mp4NativeObservationVerifier
                         return Fail(MediaFailureKind.UnsupportedInput, "NativeSkipUnsupported");
                 }
             }
+            // Skip/padding can consume a complete packet or trim a decoded frame.
+            // Identify the unsupported transformation before treating its frame count as corruption.
+            if (samples.Length != frames.Length)
+                return Fail(MediaFailureKind.InvalidMedia, "NativeSampleCompleteness");
             var orderedSamples = samples.OrderBy(s => s.PresentationTicks).ToArray();
             if (frames.Any(f => f.Pts is null)) return Fail(MediaFailureKind.InvalidMedia, "NativeFramePtsMissing");
             var orderedFrames = frames.OrderBy(f => f.Pts).ToArray();

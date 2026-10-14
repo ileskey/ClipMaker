@@ -8,6 +8,18 @@ namespace ClipDownloader.Infrastructure.Tests;
 
 public sealed class HlsNativeReferenceVerifierTests
 {
+    [Fact]
+    public void SkipWithFewerDecodedFramesMapsToUnsupportedWithoutAnHlsOnlyMessage()
+    {
+        var original = Reference();
+        var packets = original.Observations.Packets.ToArray();
+        packets[0] = packets[0] with { Skip = new(1600, 0, 0, 0) };
+        var reference = original with { Observations = new(original.Observations.Streams, original.Observations.Frames.Skip(1), packets, true) };
+        var result = new HlsNativeReferenceVerifier().Verify(reference);
+        Assert.Equal(OperationErrorCode.UnsupportedFormat, result.Error!.Code);
+        Assert.Equal("NativeSkipUnsupported", result.Error.Field); Assert.Null(result.Data);
+        Assert.DoesNotContain("HLS", result.Error.Message); Assert.Contains("지원하지 않습니다", result.Error.Message);
+    }
     [Theory]
     [InlineData("valid")]
     [InlineData("double")]
