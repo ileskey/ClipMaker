@@ -29,3 +29,20 @@ IClipJobService와 immutable ClipRequest/PreparedClip/ClipJobResult/JobProgress�
 부분 workspace 생성 후 취소에서 폴더 삭제가 실패하는 경우도 취소 상태를 유지하도록 cancellation metadata를 연결했다. 전체 Application 재시도/파일 접근 재시도는 없다. ClipJobResult는 성공한 최종 경로만 공개하며 cleanup 이후 사라진 입력 경로/processing plan 대신 사용자 원점 기준 요청·actual video/audio 범위와 sample 보정/skip/tail 요약을 제공한다.
 
 20개 조정 테스트에서 확인 전 쓰기 없음, invalid source/time/range/출력/영상 상태·기능 거절, FPS 변경/unknown 해소, 확정 전후 취소, 이동 충돌의 사용자 파일 유지, 종료 미확인·file handle 보존, media 실패, 성공 후 cleanup warning, 부분 workspace 취소 metadata를 검증했다. fake verified media는 orchestration만 검사하며 실제 미디어 성공으로 대신하지 않는다. workspace13개·조정20개·media composition3개 추가, Downloader807개 실패·skip0. 솔루션 build 경고·오류0, Core143/Media Infrastructure143개 실제 실행 통과.
+
+## 4단계 media adapter와 실제 최종 작업
+
+ClipMediaService는 기존 공유 probe/native binder·K/qualifier·source-start decode/PCM render·processing·Fast/Accurate verifier를 순서대로 연결한다. 생성 operation ID와 모든 파일/종료 미확인 정보를 작업별 registry에서 조회한다. 실패한 probe 이후 처리를 하지 않고, 종료 미확인 후 재사용을 차단하는3개 facade 테스트를 추가했다. 새로운 source 전략이나 최종 출력 검사 우회는 없다.
+
+사용자가 허용한 bounded10~20초 범위로 Application Prepare→Execute를 양 사이트/양 모드에서 실행했다. 실제 기본 app-data jobs 아래 원본/PCM을 만들고, 출력 폴더 staging을 검사한 뒤 최종 clip.mp4로 확정했다. 준비 직후 final 없음, 성공 후 final 존재/기대 hash 유지, 모든 소유 임시 파일·job 폴더 정리를 확인했다. [safe 증거](evidence/PHASE_1_STAGE_5_REAL_JOBS.json)에 네 작업의 결과·hash·파일 수·경고·표시 범위와 이후 재검사를 기록한다.
+
+| 사이트/모드 | final bytes/SHA256 | source/media 소유 파일 | 잔존 파일/작업 폴더 |
+|---|---|---:|---|
+| CHZZK Fast | 11281027 / `360d6fba66306f1427f6220f076ea8f9ec7294e459bb2cd0b76ff87bcc09cdfe` | 3 / 1 | 0 / 0 |
+| YouTube137/140 Fast | 3469926 / `52314b66092c858dd4521d8e372a5546d2bc4da5e381eea87a16d0fd7d98ddd8` | 10 / 1 | 0 / 0 |
+| CHZZK Accurate | 1173183 / `3916abad8217623b35079f2502c185444cac487b56107cb0fd9aaa6714612dde` | 3 / 3 | 0 / 0 |
+| YouTube137/140 Accurate | 4897957 / `c599d0e9beda14a895ac0003f0607aa21b0fa010385f325452742707867801ce` | 10 / 3 | 0 / 0 |
+
+最초 CHZZK Fast harness는4단계 source 좌표 Video/Audio를 기록했고 이후 세 작업은 현재 API의 사용자 좌표 Presentation을 기록했다. 기존 기록을 임의 원점으로 바꾸지 않는다. CHZZK Accurate의 사용자 영상 범위는[96013/9600,192013/9600), 음성[10,20), gap 삽입2/중복 제거1·AAC skip1024/tail256이다. YouTube Accurate는 영상/음성[10,20), skip1024/tail344다. 요청 길이와 video 실제 표시 끝을 같다고 설명하지 않는다. 모든 SourceEndVerified는 false를 유지한다.
+
+ignored RunStage5Job.ps1은 UI 확인이 끝난 호출에 해당하는 Execute를 직접 실행했다. 최초 harness의 PowerShell null→빈 string 변환으로 workspace root 전달이 실패한 실행은 성공으로 세지 않았다. .NET 기본 app-data 경로를 명시해 재실행한 위 네 작업이 성공했다. 데이터/metadata/CLI 확인 계약을 우회하지 않았으며 CLI clip/Y/N/--yes 동작의 검증으로 승격하지 않는다. 설치·whole-video fallback·모드/화질 변경·기존 사용자 파일 덮어쓰기·삭제는 없었다.
