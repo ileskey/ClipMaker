@@ -36,6 +36,7 @@ public sealed class IndexedReferenceCollectorTests
     [InlineData(4)]
     [InlineData(5)]
     [InlineData(6)]
+    [InlineData(7)]
     public async Task CollectsExactSelectedRangesOrFailsWithoutCandidate(int fault)
     {
         string dir = Path.Combine(Path.GetFullPath(".artifacts"), "indexed-collector-tests", Guid.NewGuid().ToString("N"));
@@ -57,7 +58,7 @@ public sealed class IndexedReferenceCollectorTests
             using var cts = new CancellationTokenSource();
             if (fault == 5) cts.Cancel();
             var result = await new IndexedReferenceCollector(reader).CollectAsync(id, index, Range(1, 3), selected,
-                100, dir, new(fault == 4 ? 13 : 14, Time(4)), 10, cts.Token);
+                100, dir, new(fault == 4 ? 13 : 14, Time(fault == 7 ? 3 : 4)), 10, cts.Token);
             if (fault == 0)
             {
                 Assert.Equal(OperationStatus.Succeeded, result.Status);
@@ -73,6 +74,13 @@ public sealed class IndexedReferenceCollectorTests
             else
             {
                 Assert.Null(result.Data);
+                if (fault == 4) Assert.Equal("SourceByteBudget", result.Error!.Field);
+                if (fault == 7)
+                {
+                    Assert.Equal("IndexedFetchedSpanBudget", result.Error!.Field);
+                    Assert.Contains("4초", result.Error.Message);
+                    Assert.Contains("상한 3초", result.Error.Message);
+                }
                 Assert.Equal(fault == 5 ? OperationStatus.Cancelled : OperationStatus.Failed, result.Status);
                 if (fault == 6) Assert.Equal("existing", File.ReadAllText(path));
                 else Assert.False(File.Exists(path));

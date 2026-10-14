@@ -46,17 +46,27 @@ internal sealed class IndexedReferenceCollector
             throw new ArgumentOutOfRangeException(nameof(alreadyReadBytes));
         var refs = index.References.Where(r => r.IndexRange.End.CompareTo(requested.Start) > 0 &&
             r.IndexRange.Start.CompareTo(requested.End) < 0).ToArray();
-        if (refs.Length == 0 || refs.Length > 64 || index.Initialization.IsEmpty ||
+        if (refs.Length == 0 || index.Initialization.IsEmpty ||
             requested.Start.CompareTo(index.References[0].IndexRange.Start) < 0 ||
-            requested.End.CompareTo(index.References[^1].IndexRange.End) > 0) return Fail(OperationErrorCode.UnsupportedFormat);
+            requested.End.CompareTo(index.References[^1].IndexRange.End) > 0)
+            return Fail(OperationErrorCode.UnsupportedFormat, "IndexedReferenceCoverage", "Indexed 요청의 참조 범위/초기화 조건을 확인하지 못했습니다.");
+        if (refs.Length > 64) return Fail(OperationErrorCode.UnsupportedFormat, "IndexedReferenceCountBudget",
+            FormattableString.Invariant($"Indexed 획득에 필요한 참조 {refs.Length}개가 상한 64개를 초과합니다."));
         PresentationRange.TryCreate(refs[0].IndexRange.Start, refs[^1].IndexRange.End, out var actual, out _);
-        if ((actual!.End - actual.Start).CompareTo(budget.MaximumPresentationSpan) > 0) return Fail(OperationErrorCode.UnsupportedFormat);
+        var fetchedSpan = actual!.End - actual.Start;
+        if (fetchedSpan.CompareTo(budget.MaximumPresentationSpan) > 0)
+            return Fail(OperationErrorCode.UnsupportedFormat, "IndexedFetchedSpanBudget",
+                $"Indexed 참조 전체 획득 범위 {Seconds(fetchedSpan)}초가 상한 {Seconds(budget.MaximumPresentationSpan)}초를 초과합니다. 획득 범위에는 요청 구간 외의 참조 여유 구간도 포함됩니다.");
         long planned = alreadyReadBytes;
         foreach (var r in refs)
         {
-            if (r.Start < 0 || r.Bytes <= 0 || r.Bytes > SourceHttpRequest.MaximumReadBytes ||
-                r.Start > resourceLength - r.Bytes || r.Bytes > budget.MaximumBytes - planned)
-                return Fail(OperationErrorCode.UnsupportedFormat);
+            if (r.Start < 0 || r.Bytes <= 0 || r.Start > resourceLength - r.Bytes)
+                return Fail(OperationErrorCode.UnsupportedFormat, "IndexedByteRange", "Indexed 참조의 원본 바이트 범위를 확인하지 못했습니다.");
+            if (r.Bytes > SourceHttpRequest.MaximumReadBytes)
+                return Fail(OperationErrorCode.UnsupportedFormat, "IndexedReferenceByteLimit", "Indexed 단일 참조가 HTTP 읽기 바이트 상한을 초과합니다.");
+            if (r.Bytes > budget.MaximumBytes - planned)
+                return Fail(OperationErrorCode.UnsupportedFormat, "SourceByteBudget",
+                    FormattableString.Invariant($"Indexed 참조의 누적 획득 비용이 바이트 상한 {budget.MaximumBytes} bytes를 초과합니다."));
             planned += r.Bytes;
         }
         var headers = selected.Headers.ToArray();
@@ -128,4 +138,9 @@ internal sealed class IndexedReferenceCollector
     private static OperationError Error(OperationErrorCode code) => new(code, OperationErrorCategory.Execution,
         "Indexed 원본 참조를 제한된 byte 범위와 파일 소유 조건으로 수집하지 못했습니다.");
     private static IndexedReferenceCollectionResult Fail(OperationErrorCode code) => new(OperationStatus.Failed, null, Error(code), []);
+    private static IndexedReferenceCollectionResult Fail(OperationErrorCode code, string field, string message) =>
+        new(OperationStatus.Failed, null, new(code, OperationErrorCategory.Execution, message, field), []);
+    private static string Seconds(SignedMediaTime time) => time.Denominator.IsOne
+        ? FormattableString.Invariant($"{time.Numerator}")
+        : FormattableString.Invariant($"{time.Numerator}/{time.Denominator}");
 }
