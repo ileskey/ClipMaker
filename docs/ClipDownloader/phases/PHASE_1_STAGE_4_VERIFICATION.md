@@ -57,3 +57,17 @@ Phase2·WPF 다운로드 UI·ClipEditor는 진행하지 않는다. 설치·범�
 확인된 일반 FPS가 바뀔 때 HLS/indexed inspection이 VerificationFailed를 반환하던 분류를 채택 계약대로 InvalidMetadata/Execution으로 수정하고 assertion을 추가했다. Downloader Infrastructure723개 실패·skip0을 재확인했다.
 
 이 범위의 4a 획득과 4b local/native 연결 구현·검증은 완료했다. encrypted/discontinuous/live/master leaf, 무시된 range·짧은 body·budget 초과, multi/empty/clipping edit, 미지원 AAC 설정과 codec/layout은 명시 거절한다. 선택 변경·Best 재선택·whole-video fallback은 없다. 원격 파일 전체 content/version·source global end·decoder preparation을 획득 성공으로 추정하지 않는다. **남은 4단계는 4c qualification/처리/actual output 검증이며 전체4 완료가 아니다.**
+
+## 4c qualification과 scoped 의존 조건
+
+공유 input/stream 처리 계획·required video frame 기대값·exact audio lattice/ceil boundary·decoder preparation 입력 계약과 Application의 순수 qualifier를 구현했다. origin/공통축/audio presence, 필요한 mapping scope, codec/pixel 표현, K/공통 이동량, video `[IN,OUT)` membership, empty/필수 audio support와 movie clock 상한을 검사한다. output 표시 끝은 선택 frame의 duration과 구별하여 전달한다. AAC grid에 표현 불가능한 Fast 이동은 UnsupportedFormat으로 거절한다. 관찰 파일 끝을 원본 유효 audio 끝이라고 추정하지 않으며, 요청이 관찰 support를 넘으면 AudioSupportEndUnverified다.
+
+Accurate는 같은 audio/acquisition scope의 Verified decoder preparation, 초기 source 파일 identity와 실제 획득 source-start prefix 연결, 실행한 lossless PCM의 sample count/byte identity를 요구한다. 이 입력이 없으면 DecoderPreparationUnverified/Identity로 차단한다. **준비 계약의 순수 synthetic test 성공은 production decoder 준비 성공이 아니다.** PCM 생산·재구성·encode/output 검증은 아직 남았다.
+
+`ClipRandomAccessInspector`는 captured 파일을 read lock/hash로 재확인하고, 확인된 선행 K packet의 AVCC payload에서 모든 VCL slice가 IDR인지 검사한다. K flag만으로 닫힌 random access라고 선언하지 않으며 mixed/non-IDR, 변경된 파일은 거절한다. 실제 CHZZK10~20초 후보의 K=11/clock48000/필수600 frames, YouTube137/140 후보의 K=6/clock11289600/필수300 frames와 양 stream 공통−K 이동을 확인했다. final MP4는 아직 생성하지 않았다.
+
+이 연결 audit에서 K가 target 앞에 있을 때 기존 B scope가 target에만 한정돼 있던 문제를 발견했다. HLS/indexed acquisition의 B scope를 실제 전체 관찰 native 범위로 수정하고, target coverage scope는 요청 범위에 유지했다. qualifier는 target와 K에 필요한 scope를 별도로 검사한다. source-start가 확인된 leading empty 구간은 byte prefix 대응이 있어야 binder가 허용한다. 이 scope 보완 후 양 사이트 현재 경로의 actual end-to-end 검증은 처리 단위에서 다시 수행한다.
+
+`SourceStartPrefixInspector`는 같은 선택 provenance의 초기 참조와 획득 파일을 실행 전후 길이/SHA-256으로 고정하고, 실제 획득 prefix를 hash하여 초기 참조 전체 bytes와 대조한다. 이 사실은 source-start bytes 대응이며 decoder 상태·PCM 값·범용 준비 길이의 증명이 아니다. 변경/누락/취소에서는 null Data이며 기존 파일을 유지한다.
+
+현재 Downloader Infrastructure744개 실패·skip0. 초기 clock test에서 source 이동이 상쇄되어 실제로 표현 가능한 사례를 잘못 실패 기대한 fixture를 수정했고, 이후 target/K scope·prefix 누락 거절을 추가했다. Fast 실제 mux/native/end와 Accurate decoder/PCM/encode/output gate, 처리 취소/소유권과 숫자 binder 검증은 남았다.

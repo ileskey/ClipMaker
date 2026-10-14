@@ -4,7 +4,7 @@ using ClipDownloader.Application.Models;
 
 namespace ClipDownloader.Infrastructure.Downloads;
 
-internal sealed record H264PicturePayload(string Sha256, bool ContainsIdr, int SliceCount);
+internal sealed record H264PicturePayload(string Sha256, bool ContainsIdr, int SliceCount, bool AllSlicesIdr = false);
 
 // Canonical VCL payload correspondence. Decoder/configuration equality is a separate gate.
 internal sealed class H264PicturePayloadReader
@@ -47,7 +47,7 @@ internal sealed class H264PicturePayloadReader
             }
             using var hash = IncrementalHash.CreateHash(HashAlgorithmName.SHA256);
             Span<byte> sizeBytes = stackalloc byte[4];
-            int slices = 0; bool idr = false;
+            int slices = 0; bool idr = false, allIdr = true;
             foreach (var span in spans)
             {
                 if (span.Length == 0) throw new InvalidDataException();
@@ -62,10 +62,10 @@ internal sealed class H264PicturePayloadReader
                 if (length <= 1) throw new InvalidDataException();
                 BinaryPrimitives.WriteInt32BigEndian(sizeBytes, length);
                 hash.AppendData(sizeBytes); hash.AppendData(nal[..length]);
-                slices++; idr |= kind == 5;
+                slices++; idr |= kind == 5; allIdr &= kind == 5;
             }
             if (slices == 0) throw new InvalidDataException();
-            return OperationResult<H264PicturePayload>.Succeeded(new(Convert.ToHexString(hash.GetHashAndReset()), idr, slices));
+            return OperationResult<H264PicturePayload>.Succeeded(new(Convert.ToHexString(hash.GetHashAndReset()), idr, slices, allIdr));
         }
         catch (Exception e) when (e is InvalidDataException or OverflowException)
         { return OperationResult<H264PicturePayload>.Failed(new(OperationErrorCode.VerificationFailed, OperationErrorCategory.Execution,

@@ -35,7 +35,18 @@ public sealed class AcquiredMediaProbeService(IMediaProbe probe)
                 return Fail(OperationErrorCode.VerificationFailed, "AcquiredProbeIdentity");
             var native = new Mp4NativeObservationVerifier().Verify(result.Data.Observations, result.Data.Container);
             if (native.Status != MediaOperationStatus.Succeeded) return Fail(native.Failure!);
-            inspected.Add(new(result.Data, native.Data!));
+            SourceStartPrefixEvidence? beginning = null;
+            bool needsBeginning = acquisition.Request.Selection.Mode == ClipMode.Accurate || mappings.Any(m =>
+                (native.Data!.Streams.Single(s => s.Stream.Index == m.SourceOffset.Scope.Stream.StreamIndex).ObservedRange.Start +
+                    m.SourceOffset.Value!).CompareTo(m.Coverage.Value!.Start) > 0);
+            if (needsBeginning)
+            {
+                var prefix = await new SourceStartPrefixInspector().InspectAsync(acquisition, file, token).ConfigureAwait(false);
+                if (prefix.Status == OperationStatus.Cancelled) return OperationResult<AcquiredMediaInspection>.Cancelled();
+                if (prefix.Status != OperationStatus.Succeeded) return OperationResult<AcquiredMediaInspection>.Failed(prefix.Error!);
+                beginning = prefix.Data;
+            }
+            inspected.Add(new(result.Data, native.Data!, beginning));
         }
         if (token.IsCancellationRequested) return OperationResult<AcquiredMediaInspection>.Cancelled();
         return AcquiredMediaInspection.Create(acquisition, inspected);

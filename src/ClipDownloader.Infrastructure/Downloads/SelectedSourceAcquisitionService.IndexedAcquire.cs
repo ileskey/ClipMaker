@@ -71,7 +71,9 @@ public sealed partial class SelectedSourceAcquisitionService
             var scope = new MediaObservationScope(id, new(native.Reference.Reference.File.Id, stream.Index, stream.Kind),
                 stream.Kind == MediaStreamKind.Video ? MediaInspectionKind.Frames : MediaInspectionKind.Samples,
                 MediaTimeBasis.Native, required!, ObservationCompleteness.Complete);
-            return new SourceStreamMapping(MediaInspectionFact<SignedMediaTime>.Verified(SignedMediaTime.Zero, scope),
+            var relationScope = new MediaObservationScope(id, scope.Stream, scope.Kind, MediaTimeBasis.Native,
+                native.Streams.Single().ObservedRange, ObservationCompleteness.Complete);
+            return new SourceStreamMapping(MediaInspectionFact<SignedMediaTime>.Verified(SignedMediaTime.Zero, relationScope),
                 MediaInspectionFact<PresentationRange>.Verified(required!, scope));
         }).ToArray();
         token.ThrowIfCancellationRequested();

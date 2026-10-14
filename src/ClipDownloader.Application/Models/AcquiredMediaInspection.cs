@@ -3,7 +3,9 @@ using ClipMaker.Media.Core.ValueObjects;
 
 namespace ClipDownloader.Application.Models;
 
-public sealed record AcquiredFileInspection(MediaProbeResult Probe, Mp4NativeObservation Native);
+public sealed record SourceStartPrefixEvidence(Guid SourceFirstFileId, MediaFileContentIdentity SourceFirstContent,
+    Guid TargetFileId, MediaFileContentIdentity TargetContent, string PrefixSha256);
+public sealed record AcquiredFileInspection(MediaProbeResult Probe, Mp4NativeObservation Native, SourceStartPrefixEvidence? SourceStart = null);
 public sealed record AcquiredStreamInspection(SourceStreamMapping Mapping, MediaProbeResult Probe, Mp4NativeStreamObservation Native);
 
 // Local probe/source mapping binding only; processing qualification is separate.
@@ -35,6 +37,15 @@ public sealed class AcquiredMediaInspection
                 file.Native.Streams.Any(s => !file.Probe.Observations.Streams.Contains(s.Stream)) ||
                 file.Native.Streams.Select(s => s.Stream.Index).Distinct().Count() != file.Native.Streams.Count)
                 return Fail("AcquiredNativeIdentity");
+            if (file.SourceStart is { } beginning)
+            {
+                var first = acquisition.Request.Inspection.Files.SingleOrDefault(f => f.Id == beginning.SourceFirstFileId);
+                if (first?.Content is null || first.Content != beginning.SourceFirstContent ||
+                    beginning.TargetFileId != owned.Id || beginning.TargetContent != owned.Content ||
+                    !first.SourceFormatIds.SequenceEqual(owned.SourceFormatIds) || beginning.SourceFirstContent.Bytes > owned.Content.Bytes ||
+                    !string.Equals(beginning.PrefixSha256, first.Content.Sha256, StringComparison.OrdinalIgnoreCase))
+                    return Fail("SourceStartPrefixIdentity");
+            }
             var expected = acquisition.Mappings.Where(m => m.SourceOffset.Scope.Stream.FileId == owned.Id)
                 .Select(m => m.SourceOffset.Scope.Stream).ToArray();
             if (expected.Length != file.Native.Streams.Count || file.Native.Streams.Any(s =>
@@ -54,7 +65,9 @@ public sealed class AcquiredMediaInspection
             var native = file.Native.Streams.Single(s => s.Stream.Index == mapping.SourceOffset.Scope.Stream.StreamIndex);
             SignedMediaTime offset = mapping.SourceOffset.Value!;
             PresentationRange coverage = mapping.Coverage.Value!;
-            if ((native.ObservedRange.Start + offset).CompareTo(coverage.Start) > 0 ||
+            bool knownLeadingEmpty = file.SourceStart is not null && acquisition.Request.Inspection.Timeline.Origin.Value is { } origin &&
+                origin.CompareTo(coverage.Start) <= 0;
+            if ((native.ObservedRange.Start + offset).CompareTo(coverage.Start) > 0 && !knownLeadingEmpty ||
                 (native.ObservedRange.End + offset).CompareTo(coverage.End) < 0)
                 return Fail("AcquiredProbeCoverage");
             streams.Add(new(mapping, file.Probe, native));
