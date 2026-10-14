@@ -4,6 +4,8 @@
 
 현재 상태(2026-10-14): 사용자 후속 지시에 따라 **1~6단계의 제한된 전략·CLI 구현과 자동/실제 통합 검증을 완료했다.** 현재 호스트/실제 CLI/Windows Ctrl+C/전체 회귀·남은 완료 조건은 [6단계 통합 검증](PHASE_1_STAGE_6_VERIFICATION.md), media 지원 범위는 [4단계 통합 검증](PHASE_1_STAGE_4_VERIFICATION.md), workspace·준비/실행·정리는 [5단계 통합 검증](PHASE_1_STAGE_5_VERIFICATION.md)을 우선한다. Core143/Media Infrastructure143/Downloader835개, 총1121개와 솔루션 build 경고/오류0을 확인했다. 실제 CLI 양 사이트/양 모드의 최종 MP4·전체 A/V decode, 다운로드/처리 Ctrl+C130·정리, 기존 WPF 창 생성/정상 종료를 검증했다. 직접 player 영상/음성·동기 확인이 남아 Phase 1 전체 Passed/Completion/Tag는 Pending이며 Phase2로 진입하지 않는다. 아래 최초 준비 설명·이전 미완료 기록은 해당 시점의 이력이다.
 
+최신 AAC 지원 보완(2026-10-14): [실제 지원·검증](PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)에서 wFOjWCLPDDM의137/140·0~14:24를 Fast/Accurate 모두 실제CLI에서 확정했다. 원본1600 skip·부분frame·provider의whole packet 대응과Fast output을검증했으며독립PCM도일치했다. 최종Core143/Media Infrastructure159/Downloader846·총1148개실패/skip0·build 경고/오류0. 아래이영상미지원설명은이전진단시점의이력이며현재지원은새문서를우선한다. 직접player 확인과Phase1 전체완료는아직남았다.
+
 후속 사용자 검증(2026-10-14): YouTube wFOjWCLPDDM의 AAC1600 skip·부분 frame을 재현했다. [진단·오류 분류 보완](PHASE_1_YOUTUBE_AAC_SKIP_DIAGNOSIS.md)에 source support 잔여를 기록한다. 현재 이 영상은 미지원이며 clip 생성 해결로 표시하지 않는다. 최신 회귀는 Core143/Media Infrastructure147/Downloader837, 총1127개 실패/skip0 및 build 경고/오류0이다. 기존6단계 성공 사례와 일반 정책은 유지한다.
 
 Git 기준 보완: 기록된 `0759dc5`와 실제 branch 선행 Phase 0 commit `1ca2547`은 hash가 다르지만 parent와 source tree가 같다. `0759dc5` 자체는 현재 HEAD의 ancestor가 아니다. 상세 증거는 위4단계 기록에 남겼으며 기준 문서 hash를 임의 교체하거나 Git 이력을 변경하지 않았다.

@@ -1,0 +1,258 @@
+{
+  "Date": "2026-10-14",
+  "CodeCommit": "7adbd74",
+  "SourceId": "wFOjWCLPDDM",
+  "SelectedFormats": [
+    "137",
+    "140"
+  ],
+  "FrameRate": "25/1",
+  "RequestedRange": [
+    "0",
+    "374/25"
+  ],
+  "SourceBudgetBytes": 33554432,
+  "SourceBudgetSeconds": 30,
+  "SourceAudio": {
+    "FirstEffectiveFrameSamples": 448,
+    "LeadingSkippedSamples": 1600,
+    "Packets": 430,
+    "NativeSamples": 430,
+    "FirstEffectivePts": 0,
+    "DecodedFrames": 429
+  },
+  "ProviderAudio": {
+    "PackedTransportTicks": 914,
+    "PackedFrames": 302,
+    "FirstPackedPayloads": [
+      {
+        "PayloadSha256": "F7B7C8EADCFC44EF26FE1076B3E117FD169666995F1F5BD380770DEE20A489F7",
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Samples": 1024
+      },
+      {
+        "PayloadSha256": "5F43E323B0AB5E47A2A48397E0A75D8FE82FF32FFDE70219264735C7890E6E67",
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Samples": 1024
+      },
+      {
+        "PayloadSha256": "C47AD76D9084AC89E1C26DE32A6503CB8692CFA6C19F56116FB4304FF143FA4D",
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Samples": 1024
+      },
+      {
+        "PayloadSha256": "E11F9D7ED0A2F2A511162731E2A77AAC2358C65AD53793549A9E7EB4375A12AC",
+        "SampleRate": 44100,
+        "Channels": 2,
+        "Samples": 1024
+      }
+    ],
+    "FirstNativePayloads": [
+      {
+        "NativePts": 0,
+        "PayloadHash": "DCD71754346A074D79A87404BA2EF74779501F8CA3EA5172909F766C0576508D"
+      },
+      {
+        "NativePts": 1024,
+        "PayloadHash": "0EB95CAF85CF615AA26EE587BEB64F6B78C286C80CC7058E0CCCFBFC4A9F359B"
+      },
+      {
+        "NativePts": 2048,
+        "PayloadHash": "F7B7C8EADCFC44EF26FE1076B3E117FD169666995F1F5BD380770DEE20A489F7"
+      },
+      {
+        "NativePts": 3072,
+        "PayloadHash": "5F43E323B0AB5E47A2A48397E0A75D8FE82FF32FFDE70219264735C7890E6E67"
+      }
+    ]
+  },
+  "InitialFastFailure": {
+    "Mode": "fast",
+    "ExitCode": 1,
+    "FinalExists": false,
+    "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\aac-skip-support\\58b7bedefbe843fd9f0f0e43195b6dce\\fast.mp4",
+    "Sha256": null,
+    "Bytes": 0,
+    "ErrorTail": [
+      "[Completed] 결과 반환 중",
+      "주의: 선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+      "주의: Fast의 실제 시작·끝은 요청 범위와 다를 수 있습니다.",
+      "오류 [VerificationFailed/Execution] MP4 출력의 native sample·edit·decode·표시 끝 관계를 확인하지 못했습니다. (OutputPacketContradicted)",
+      ""
+    ]
+  },
+  "SuccessfulCli": [
+    {
+      "Mode": "accurate",
+      "ExitCode": 0,
+      "FinalExists": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\aac-skip-support\\58b7bedefbe843fd9f0f0e43195b6dce\\accurate.mp4",
+      "Sha256": "03BF09349AB074DB9616F07AC0A077ADA4B90B58264C144F2C9D84B37EA8A768",
+      "Bytes": 1117080,
+      "ErrorTail": [
+        "[Cleaning] 진행 중",
+        "[Completed] 결과 반환 중",
+        "주의: 선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+        "주의: Accurate는 검증한 원본 시작 참조와 sample-grid 표현 범위에서 실행합니다.",
+        ""
+      ]
+    },
+    {
+      "Mode": "fast",
+      "ExitCode": 0,
+      "FinalExists": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\aac-skip-support\\e7b04578a5c647dc9b8cf9c363c14342\\fast.mp4",
+      "Sha256": "8C64E7B5932005CC5A6781A0DF10B1360D768F00B914424696AF9FE27C0166BA",
+      "Bytes": 730538,
+      "ErrorTail": [
+        "[Cleaning] 진행 중",
+        "[Completed] 결과 반환 중",
+        "주의: 선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+        "주의: Fast의 실제 시작·끝은 요청 범위와 다를 수 있습니다.",
+        ""
+      ]
+    }
+  ],
+  "OutputRecheck": [
+    {
+      "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-fast.mp4",
+      "Bytes": 11281027,
+      "Sha256": "360d6fba66306f1427f6220f076ea8f9ec7294e459bb2cd0b76ff87bcc09cdfe",
+      "OutputGate": "Succeeded",
+      "FullDecodeExitCode": 0,
+      "HashUnchanged": true,
+      "AudioSkip": 961,
+      "AudioTail": 0
+    },
+    {
+      "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-accurate.mp4",
+      "Bytes": 1173183,
+      "Sha256": "3916abad8217623b35079f2502c185444cac487b56107cb0fd9aaa6714612dde",
+      "OutputGate": "Succeeded",
+      "FullDecodeExitCode": 0,
+      "HashUnchanged": true,
+      "AudioSkip": 1024,
+      "AudioTail": 256
+    },
+    {
+      "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-fast.mp4",
+      "Bytes": 3469926,
+      "Sha256": "52314b66092c858dd4521d8e372a5546d2bc4da5e381eea87a16d0fd7d98ddd8",
+      "OutputGate": "Succeeded",
+      "FullDecodeExitCode": 0,
+      "HashUnchanged": true,
+      "AudioSkip": 408,
+      "AudioTail": 0
+    },
+    {
+      "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-accurate.mp4",
+      "Bytes": 4897957,
+      "Sha256": "c599d0e9beda14a895ac0003f0607aa21b0fa010385f325452742707867801ce",
+      "OutputGate": "Succeeded",
+      "FullDecodeExitCode": 0,
+      "HashUnchanged": true,
+      "AudioSkip": 1024,
+      "AudioTail": 344
+    },
+    {
+      "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\aac-skip-support\\58b7bedefbe843fd9f0f0e43195b6dce\\accurate.mp4",
+      "Bytes": 1117080,
+      "Sha256": "03bf09349ab074db9616f07ac0a077ada4b90b58264c144f2c9d84b37ea8a768",
+      "OutputGate": "Succeeded",
+      "FullDecodeExitCode": 0,
+      "HashUnchanged": true,
+      "AudioSkip": 1024,
+      "AudioTail": 744
+    },
+    {
+      "Path": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\aac-skip-support\\e7b04578a5c647dc9b8cf9c363c14342\\fast.mp4",
+      "Bytes": 730538,
+      "Sha256": "8c64e7b5932005cc5a6781a0df10b1360d768f00b914424696af9fe27c0166ba",
+      "OutputGate": "Succeeded",
+      "FullDecodeExitCode": 0,
+      "HashUnchanged": true,
+      "AudioSkip": 1600,
+      "AudioTail": 0
+    }
+  ],
+  "PcmOracle": {
+    "Directory": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\aac-pcm-oracle\\1cdb5a2591404d3cb5e23565c05baf33",
+    "SelectedSamples": 659736,
+    "SelectedBytes": 5277888,
+    "FastRequestedPcmPrefixMatches": true,
+    "FastExpectedSha256": "B57B7D5F5A79DB9B48B91CAE544C3717410CE349EA4F0D114440B2180E4D9810",
+    "FastActualSha256": "B57B7D5F5A79DB9B48B91CAE544C3717410CE349EA4F0D114440B2180E4D9810",
+    "AccurateSourceDecodeMatchesIndependentDecode": true,
+    "AccurateRenderedPcmMatchesIndependentPrefix": true,
+    "AccurateExpectedSha256": "B57B7D5F5A79DB9B48B91CAE544C3717410CE349EA4F0D114440B2180E4D9810",
+    "AccurateActualSha256": "B57B7D5F5A79DB9B48B91CAE544C3717410CE349EA4F0D114440B2180E4D9810",
+    "InsertedZeroSamples": 0,
+    "DiscardedOverlapSamples": 0,
+    "LossyAccurateOutputPcmEqualityClaimed": false
+  },
+  "KnownCliWorkspaces": [
+    {
+      "JobId": "7d10583d-77a6-4951-84d9-c43962ef4f6b",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "0b53a0a7-e00b-45b7-9ffa-e45869849179",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "7c55c512-1fb6-429d-a287-233860966477",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "92c0f22e-628d-4f10-a356-21cf8a760e8b",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "77f4d324-11f5-49c5-a844-77245e02a4e1",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "8a38303c-9e3a-450f-9279-a2c53246780a",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "ece23fc0-7530-49a2-9af6-ae1c66a5d002",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "b20b22da-a0ae-4311-901d-254252cc08df",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "61fa4bea-3390-4def-873c-e4183cb5b893",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "c1e3324e-a21a-4dbe-aa21-4a00ad802975",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "86e2cea5-c7ad-423a-8517-d8207b893f34",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "bf27d7cb-7b43-4a4b-b314-5162bdea0034",
+      "RemainingJobDirectories": 0
+    }
+  ],
+  "Regression": {
+    "Skipped": 0,
+    "Downloader": 846,
+    "Total": 1148,
+    "Failed": 0,
+    "MediaInfrastructure": 159,
+    "BuildErrors": 0,
+    "BuildWarnings": 0,
+    "Core": 143
+  },
+  "HumanPlayerAssessmentPerformed": false,
+  "SourceEndVerified": false
+}

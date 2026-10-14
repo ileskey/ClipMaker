@@ -18,7 +18,7 @@ dotnet run --project apps/ClipDownloader.Cli --no-build -- clip --url "https://c
 
 원본 참조 획득 상한은 기존 실제 검증의 **32 MiB / 30초**다. Accurate에서 필요한 원본 시작 참조도 상한에 포함되므로 모든 요청 위치가 지원되는 것은 아니다. 상한을 넘는 요청은 실패하며 전체 다운로드·mode/quality 변경으로 대체하지 않는다.
 
-원본 AAC의 nonzero skip/padding으로 시작 packet 전체가 사라지거나 decoded frame이 잘리는 입력은 현재 source 검사에서 지원하지 않는다. `UnsupportedFormat / NativeSkipUnsupported`는 이 제한을 뜻하며 클립을 생성하지 않는다. [실제 YouTube 사례와 진단](../../docs/ClipDownloader/phases/PHASE_1_YOUTUBE_AAC_SKIP_DIAGNOSIS.md)을 참조한다.
+단일 rate1 edit와 정확한 leading skip·decoded frame·provider 대응을 검증할 수 있는 indexed AAC 시작 보정은 지원한다. 여러 packet이 소모되는1600 sample 사례를 Fast/Accurate에서 실제 확인했다. 증거가 없거나 일치하지 않는 보정과 끝 padding 등 범위 밖 입력은 계속 거절한다. [지원 범위·실제 결과](../../docs/ClipDownloader/phases/PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)를 참조한다.
 
 정상 정보·준비 요약·최종 결과는 stdout, 질문·단계·주의사항·오류·잔존 경로는 stderr다. 리디렉션된 stderr는 단계 전환만 기록한다. 실제 영상/음성 표시 범위는 사용자 원점의 정확한 유리수 초와 반열린 구간으로 표시하며 요청 범위와 다를 수 있다.
 

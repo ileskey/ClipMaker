@@ -1,5 +1,7 @@
 # Phase 1 4단계 통합 검증 기록
 
+후속 지원 범위 보완: [AAC 시작 보정 지원·실제 검증](PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)을 최신 기준으로 읽는다. 단일rate1 edit·leading skip·부분첫frame·provider의생략된보정prefix를 엄격히 대조하는 indexed AAC 시작 보정을 추가했고 Fast/Accurate를 실제 확인했다. 아래모든edit/skip 미지원 설명을 새보완 범위까지 확장해 해석하지 않는다. 나머지지원 제한과4단계 수행기록은 보존한다.
+
 2026-10-14, `phase/1`, Phase Base `0759dc52475538df848f765ce30c005cf755107f` 유지. **검증된 제한 전략 범위에서 4단계(4a 획득→4b 검사→4c 처리)를 완료했다.** 아래 누적 기록의 미완료 설명은 해당 작업 시점의 상태이며 마지막 완료 범위·제한·인계를 현재 기준으로 읽는다. Phase 1 전체와5/6은 미완료다. 개별 커밋 보고를 생략하고 4단계를 통합 보고하는 사용자 지시를 따른다.
 
 ## 획득 및 공유 probe
