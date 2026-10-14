@@ -1,0 +1,300 @@
+{
+  "Date": "2026-10-14",
+  "CodeCommit": "52f07cf",
+  "Scope": "Stage 6 CLI bounded 10-20s jobs, native CTRL_C_EVENT and local A/V decode; human player assessment not performed",
+  "WorkRoot": "C:\\Users\\shiro\\AppData\\Local\\ClipMaker\\ClipDownloader\\jobs",
+  "Commands": [
+    {
+      "Name": "help",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\help.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\help.stderr.txt"
+    },
+    {
+      "Name": "invalid-url",
+      "ExitCode": 2,
+      "Expected": 2,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\invalid-url.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\invalid-url.stderr.txt"
+    },
+    {
+      "Name": "missing-ytdlp",
+      "ExitCode": 1,
+      "Expected": 1,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\missing-ytdlp.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\missing-ytdlp.stderr.txt"
+    },
+    {
+      "Name": "failed-tool",
+      "ExitCode": 1,
+      "Expected": 1,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\failed-tool.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\failed-tool.stderr.txt"
+    },
+    {
+      "Name": "diagnose",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\diagnose.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\diagnose.stderr.txt"
+    },
+    {
+      "Name": "info-chzzk",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\info-chzzk.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\info-chzzk.stderr.txt"
+    },
+    {
+      "Name": "info-youtube",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\info-youtube.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\info-youtube.stderr.txt"
+    },
+    {
+      "Name": "missing-ffmpeg",
+      "ExitCode": 1,
+      "Expected": 1,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\missing-ffmpeg.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\missing-ffmpeg.stderr.txt"
+    },
+    {
+      "Name": "missing-ffprobe",
+      "ExitCode": 1,
+      "Expected": 1,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\missing-ffprobe.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\missing-ffprobe.stderr.txt"
+    },
+    {
+      "Name": "redirected-no-yes",
+      "ExitCode": 2,
+      "Expected": 2,
+      "Passed": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\unconfirmed.mp4",
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\redirected-no-yes.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\redirected-no-yes.stderr.txt"
+    },
+    {
+      "Name": "yes-invalid-time",
+      "ExitCode": 2,
+      "Expected": 2,
+      "Passed": true,
+      "Output": null,
+      "FinalExists": false,
+      "Sha256": null,
+      "Bytes": 0,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\yes-invalid-time.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\yes-invalid-time.stderr.txt"
+    },
+    {
+      "Name": "chzzk-fast",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-fast.mp4",
+      "FinalExists": true,
+      "Sha256": "360D6FBA66306F1427F6220F076EA8F9EC7294E459BB2CD0B76FF87BCC09CDFE",
+      "Bytes": 11281027,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-fast.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-fast.stderr.txt"
+    },
+    {
+      "Name": "chzzk-accurate",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-accurate.mp4",
+      "FinalExists": true,
+      "Sha256": "3916ABAD8217623B35079F2502C185444CAC487B56107CB0FD9AAA6714612DDE",
+      "Bytes": 1173183,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-accurate.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\chzzk-accurate.stderr.txt"
+    },
+    {
+      "Name": "youtube-fast",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-fast.mp4",
+      "FinalExists": true,
+      "Sha256": "52314B66092C858DD4521D8E372A5546D2BC4DA5E381EEA87A16D0FD7D98DDD8",
+      "Bytes": 3469926,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-fast.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-fast.stderr.txt"
+    },
+    {
+      "Name": "youtube-accurate",
+      "ExitCode": 0,
+      "Expected": 0,
+      "Passed": true,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-accurate.mp4",
+      "FinalExists": true,
+      "Sha256": "C599D0E9BEDA14A895AC0003F0607AA21B0FA010385F325452742707867801CE",
+      "Bytes": 4897957,
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-accurate.stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-real\\aaa817ac5abc4d11a3a9b84dc928735f\\youtube-accurate.stderr.txt"
+    }
+  ],
+  "FullDecode": [
+    {
+      "Name": "chzzk-fast",
+      "DecoderExitCode": 0,
+      "Sha256Matches": true
+    },
+    {
+      "Name": "chzzk-accurate",
+      "DecoderExitCode": 0,
+      "Sha256Matches": true
+    },
+    {
+      "Name": "youtube-fast",
+      "DecoderExitCode": 0,
+      "Sha256Matches": true
+    },
+    {
+      "Name": "youtube-accurate",
+      "DecoderExitCode": 0,
+      "Sha256Matches": true
+    }
+  ],
+  "Cancellation": [
+    {
+      "Stage": "Downloading",
+      "JobId": "ece23fc0-7530-49a2-9af6-ae1c66a5d002",
+      "Signal": "Windows CTRL_C_EVENT",
+      "SignalDelivered": true,
+      "ExitCode": 130,
+      "FinalExists": false,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-cancel\\2c5be92bae8e4c1eb60a628bc4d15d9b\\cancelled.mp4",
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-cancel\\2c5be92bae8e4c1eb60a628bc4d15d9b\\stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-cancel\\2c5be92bae8e4c1eb60a628bc4d15d9b\\stderr.txt",
+      "ObservedSourceFileCount": 3,
+      "ObservedOwnedFfmpegProcessIds": [],
+      "ObservedChildrenStillRunning": 0,
+      "RemainingJobDirectories": 0,
+      "ElapsedSeconds": 41.4798769
+    },
+    {
+      "Stage": "Processing",
+      "JobId": "b20b22da-a0ae-4311-901d-254252cc08df",
+      "Signal": "Windows CTRL_C_EVENT",
+      "SignalDelivered": true,
+      "ExitCode": 130,
+      "FinalExists": false,
+      "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-cancel\\b9533ce2a74f4814823db28579700f3b\\cancelled.mp4",
+      "StdoutPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-cancel\\b9533ce2a74f4814823db28579700f3b\\stdout.txt",
+      "StderrPath": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage6-cancel\\b9533ce2a74f4814823db28579700f3b\\stderr.txt",
+      "ObservedSourceFileCount": 3,
+      "ObservedOwnedFfmpegProcessIds": [
+        3180
+      ],
+      "ObservedChildrenStillRunning": 0,
+      "RemainingJobDirectories": 0,
+      "ElapsedSeconds": 91.5018366
+    }
+  ],
+  "ControlledCliJobDirectoryChecks": [
+    {
+      "JobId": "7d10583d-77a6-4951-84d9-c43962ef4f6b",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "0b53a0a7-e00b-45b7-9ffa-e45869849179",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "7c55c512-1fb6-429d-a287-233860966477",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "92c0f22e-628d-4f10-a356-21cf8a760e8b",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "77f4d324-11f5-49c5-a844-77245e02a4e1",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "8a38303c-9e3a-450f-9279-a2c53246780a",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "ece23fc0-7530-49a2-9af6-ae1c66a5d002",
+      "RemainingJobDirectories": 0
+    },
+    {
+      "JobId": "b20b22da-a0ae-4311-901d-254252cc08df",
+      "RemainingJobDirectories": 0
+    }
+  ],
+  "WpfSmoke": {
+    "ProcessId": 17500,
+    "WindowObserved": true,
+    "WindowTitle": "ClipDownloader",
+    "CloseMainWindowAccepted": true,
+    "ExitCode": 0
+  },
+  "FinalRegression": {
+    "SolutionBuildWarnings": 0,
+    "SolutionBuildErrors": 0,
+    "CorePassed": 143,
+    "MediaInfrastructurePassed": 143,
+    "DownloaderPassed": 835,
+    "TotalPassed": 1121,
+    "Failed": 0,
+    "Skipped": 0,
+    "CliTests": 28,
+    "HumanPlayerAssessmentPerformed": false,
+    "CodeCommit": "76939b3"
+  }
+}
