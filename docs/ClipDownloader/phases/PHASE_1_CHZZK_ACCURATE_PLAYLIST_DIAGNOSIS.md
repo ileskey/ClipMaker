@@ -23,3 +23,11 @@
 CHZZK Accurate player 검증에는 검증된 HLS source의앞쪽 구간(예:10~20초)을 사용해야 한다. 새15578184의 추출 문제 또는15683602의 긴playlist 지원은 별도 선행 실험이 필요하며, 임의preroll·전체다운로드·Fast 자동전환으로대체하지 않는다. 앞쪽 위치만으로긴playlist의byte 제한이해결되는것도아니다. 기존6단계 보존 `chzzk-accurate.mp4`를 직접재생해확인하는방법은 새획득없이지원된결과를검증할수있다.
 
 솔루션 build 경고/오류0·Downloader859개 실패/skip0을 확인했다. 새3개 회귀는 실제 관찰한2213866-byte Content-Length, HTTP403, 전송예외를 검사하며 안전한field/message·1회요청·Data없음을 확인한다. Core143/Media193은 이번 변경에서 재실행하지 않았으며 이전 통과 기록과 구분한다. Phase1전체완료와 CHZZK Accurate 사용자확인은Pending이다.
+
+## 후속 사용자 입력과 검증 자료 변경
+
+2026-10-15 사용자는 보존한 CHZZK Accurate 영상이 방송 시작의 무음 부분이어서 재생·음성 동기 검증에 어렵다고 보고했다. 자동 native/decode/PCM 검증 기록은 보존하지만 이 파일만으로 사람이 음성 동기를 확인했다고 판정하지 않는다. 보존 파일을 이용한 사용자 검증 완료 제안은 철회하고, 소리·움직임이 있는 다른 source/앞쪽 구간이 필요하다.
+
+이어14791589·hls-8384·Accurate46:10~46:30·20초 요청에서 `HlsSegmentCountBudget`·필요1396개/상한64개를 보고했다. 이는 사용자 실행의 실제 오류다. 제품의 source-start 획득 시작0 및 planner가 segment count를 fetched span보다 먼저 검사하는 순서와 일치한다. 원인 확인을 위해 영상 전체나1396개 segment를 다운로드하지 않았다. 출력 길이를 줄여도 시작부터46분 OUT까지의 참조 요구는 남는다. count 상한만 높여도현재60초span·byte조건의성공을보장하지않는다.
+
+사용자는 “초반에 소리가 있는 다른 영상으로 현재 지원 범위 검증”을 선택했다. 46분 위치 Accurate 지원 확대는 진행하지 않는다. 새 영상 URL과 소리·움직임이 있는 앞쪽 구간을 요청했으며 아직 제공되지 않았다. 새 입력은 metadata/선택 → 제한된 source-start 획득/native 관계 → Accurate 준비/출력 검증 → 전체decode/정리 → 사용자 재생·음성 동기 순서로 확인한다. 준비·자동 생성 성공과 사람 검증을구별하며 CHZZK Accurate 완료는Pending이다.

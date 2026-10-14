@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 재생 자료 보완(2026-10-15): 사용자가보존CHZZK Accurate의방송초반이무음이라음성동기확인에부족하다고보고했다. 자동생성/native/decode기록을사람검증으로승격하지않는다. 사용자는소리·움직임이있는다른영상의앞쪽구간으로현재지원범위를검증하기로선택했으며새URL/구간을기다린다. [후속 기록](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md#후속-사용자-입력과-검증-자료-변경)에14791589의46분Accurate1396/64 segment 거절도기록했다. 전체Phase완료는Pending이다.
+
 최신 CHZZK Accurate 시도(2026-10-15): [새입력진단](PHASE_1_CHZZK_ACCURATE_PLAYLIST_DIAGNOSIS.md)에서15578184는metadata sourceURL 예외,15683602는별도playlist2MiB상한초과임을확인했다. 46분Accurate는현재source-start획득예산밖이며양실패를재생확인으로세지않는다. CHZZK Accurate 사용자확인은아직남아있다.
 
 최신 CHZZK Fast 재생 확인(2026-10-15): 사용자가14791589·hls-8384·60fps·46:10~46:40·Fast의 `out6.mp4` 재생·음성 동기를 확인했다. [기록](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md#후속-사용자-생성-확인)과 YouTube 양 모드 사용자 확인을 보존한다. CHZZK Accurate의 사용자 확인·Phase1 전체 완료 판정은 남아 있다.
