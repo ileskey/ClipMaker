@@ -1,0 +1,95 @@
+{
+  "Date": "2026-10-14",
+  "SourceId": "14791589",
+  "Format": "hls-8384",
+  "Mode": "Fast",
+  "Start": "00:46:10:00",
+  "End": "00:46:40:00",
+  "RequiredWholeSpanSeconds": 36,
+  "SourceFileBytes": [
+    2220785,
+    2220785,
+    36787855
+  ],
+  "OldByteBudgetTimeAdjusted": {
+    "MaximumBytes": 33554432,
+    "MaximumSeconds": 40,
+    "Result": "Failed",
+    "Error": {
+      "Code": 8,
+      "Category": 1,
+      "Message": "HLS 원본 참조를 검사 budget/파일 소유/완전성 조건으로 수집하지 못했습니다.",
+      "Field": null
+    },
+    "FinalExists": false,
+    "Remaining": [],
+    "OwnedFilesStillExist": 0
+  },
+  "SuccessfulExperiment": {
+    "MaximumBytes": 67108864,
+    "MaximumSeconds": 40,
+    "Result": "Succeeded",
+    "JobId": "7ee0156b-62db-4eb9-b545-f4210831779a",
+    "Sha256": "38CE8173B4574F269161F5E7FE7967798148E648CFEC9F565562A895F87B3974",
+    "Presentation": {
+      "Requested": {
+        "Start": {
+          "Numerator": 2770,
+          "Denominator": 1
+        },
+        "End": {
+          "Numerator": 2800,
+          "Denominator": 1
+        }
+      },
+      "Video": {
+        "Start": {
+          "Numerator": 26582413,
+          "Denominator": 9600
+        },
+        "End": {
+          "Numerator": 26880013,
+          "Denominator": 9600
+        }
+      },
+      "Audio": {
+        "Start": {
+          "Numerator": 26582413,
+          "Denominator": 9600
+        },
+        "End": {
+          "Numerator": 2800,
+          "Denominator": 1
+        }
+      },
+      "SourceEndVerified": false,
+      "InsertedAudioZeroSamples": 0,
+      "DiscardedAudioOverlapSamples": 0,
+      "AudioPrimingSkippedSamples": 961,
+      "AudioDecodedTailPaddingSamples": 0
+    },
+    "Remaining": [],
+    "OwnedFilesStillExist": 0,
+    "FullAudioVideoDecodeExitCode": 0
+  },
+  "Validation": {
+    "BuildWarnings": 0,
+    "BuildErrors": 0,
+    "DownloaderPassed": 848,
+    "DownloaderFailed": 0,
+    "DownloaderSkipped": 0
+  },
+  "DirectPlayerVerified": false,
+  "AccurateAtReportedPositionVerified": false,
+  "CliVerification": {
+    "MaximumBytes": 67108864,
+    "MaximumSeconds": 40,
+    "ExitCode": 0,
+    "JobId": "1f8c64de-ff91-4f60-a6fe-1d5f182146b4",
+    "Bytes": 31798101,
+    "Sha256": "38ce8173b4574f269161f5e7fe7967798148e648cfec9f565562a895f87b3974",
+    "SameBytesAsFullyDecodedExperiment": true,
+    "JobDirectoryCount": 0,
+    "OutputStagingExists": false
+  }
+}

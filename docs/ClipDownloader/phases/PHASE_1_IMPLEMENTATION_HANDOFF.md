@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 CHZZK 예산 보완(2026-10-14): [제한 예산 보완·실제 지원](PHASE_1_CHZZK_FETCH_BUDGET_SUPPORT.md)을 우선한다. `14791589`의 Fast 46:10~46:40은 목표 파일만 기존 바이트 상한을 초과했다. 제한 실험 성공을 근거로 CLI 기본 획득 예산을 64 MiB / 40초로 조정하고 실제 CLI exit0·final·검사·정리를 확인했다. 별도 전체 A/V decode 성공·실험/CLI final hash 동일, Downloader848개 통과·build 경고/오류0. 아래 기존 상한 유지·미지원 설명은 최초 진단 시점의 이력이다. 모든 구간/Accurate 지원이나 Phase 1 전체 완료로 확대하지 않는다.
+
 최신 CHZZK 획득 상한 진단(2026-10-14): [30초 요청 진단](PHASE_1_CHZZK_FETCH_BUDGET_DIAGNOSIS.md)에서 `14791589`의 Fast 46:10~46:40은 실제 whole segment 18개·36초가 필요해 기존 30초 원본 획득 상한을 넘는 것을 확인했다. planner 오류를 구체화하고 같은 실제 CLI의 실패 표시·정리를 검증했다. Downloader848개 통과·build 경고/오류0. 예산 조정과 목표 구간 생성 지원은 아직 미검증이며 이번 변경을 클립 생성 해결로 표시하지 않는다.
 
 현재 상태(2026-10-14): 사용자 후속 지시에 따라 **1~6단계의 제한된 전략·CLI 구현과 자동/실제 통합 검증을 완료했다.** 현재 호스트/실제 CLI/Windows Ctrl+C/전체 회귀·남은 완료 조건은 [6단계 통합 검증](PHASE_1_STAGE_6_VERIFICATION.md), media 지원 범위는 [4단계 통합 검증](PHASE_1_STAGE_4_VERIFICATION.md), workspace·준비/실행·정리는 [5단계 통합 검증](PHASE_1_STAGE_5_VERIFICATION.md)을 우선한다. Core143/Media Infrastructure143/Downloader835개, 총1121개와 솔루션 build 경고/오류0을 확인했다. 실제 CLI 양 사이트/양 모드의 최종 MP4·전체 A/V decode, 다운로드/처리 Ctrl+C130·정리, 기존 WPF 창 생성/정상 종료를 검증했다. 직접 player 영상/음성·동기 확인이 남아 Phase 1 전체 Passed/Completion/Tag는 Pending이며 Phase2로 진입하지 않는다. 아래 최초 준비 설명·이전 미완료 기록은 해당 시점의 이력이다.
