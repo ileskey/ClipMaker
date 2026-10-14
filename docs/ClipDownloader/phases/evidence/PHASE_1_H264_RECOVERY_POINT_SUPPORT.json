@@ -89,6 +89,14 @@
     "BuildWarnings": 0,
     "BuildErrors": 0
   },
-  "DirectPlayerVerified": false,
+  "AgentContinuousPlaybackVerified": false,
+  "UserPlaybackReport": {
+    "Date": "2026-10-15",
+    "Quote": "좋아 통과야",
+    "Passed": true,
+    "Scope": "qnjEE-wkw8k / 137+140 / 30fps / Accurate / [10,40)",
+    "UserOutputHashVerified": false,
+    "AllStage6PlayerChecksCompleted": false
+  },
   "Reference": "https://github.com/FFmpeg/FFmpeg/blob/n8.1/libavcodec/h264_parser.c#L339"
 }

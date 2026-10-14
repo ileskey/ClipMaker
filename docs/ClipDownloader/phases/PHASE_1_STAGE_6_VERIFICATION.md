@@ -1,5 +1,7 @@
 # Phase 1 6단계 — CLI 연결·통합 검증
 
+최신 후속 검증(2026-10-15): [H.264 recovery-point 지원·사용자 재생 확인](PHASE_1_H264_RECOVERY_POINT_SUPPORT.md)에서 움직이는 YouTube `qnjEE-wkw8k`137/140·30fps·Accurate10~40초의 실제 생성·decode와 사용자 재생 통과 보고를 기록했다. 최신 회귀는1185개 통과·build 경고/오류0이다. 이 사용자 보고는 해당 사례에 한정하며 아래 네 final 전체의 재생 확인을 완료한 것으로 세지 않는다. 아래 검증 수·상한·미완료 설명은 각 수행 시점의 이력이다.
+
 최신 후속 지원: [AAC 시작 보정 지원·검증](PHASE_1_AAC_PRIMING_SUPPORT_VERIFICATION.md)에서 신고된source의1600 sample 보정과provider 관계·두mode의최종 확정·독립PCM 대조를 완료했다. 최신 회귀는1148개 통과이며 직접player 확인은 아직 남았다. 아래실패와검증 수는각수행시점의이력이다.
 
 후속 사용자 입력 진단: 다른 YouTube source의 AAC1600 skip으로 초기 native/decoded frame 수가 달라지는 미지원 사례를 재현했다. [원인·오류 분류 보완·지원 잔여](PHASE_1_YOUTUBE_AAC_SKIP_DIAGNOSIS.md)를 우선해 읽는다. 성공 지원을 확대하지 않았고 후속 전체 회귀는1127개 통과다. 아래1121개와 네 실제 성공 사례는6단계 수행 시점의 유효한 기록이다.

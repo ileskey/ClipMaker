@@ -2,6 +2,8 @@
 
 작성일: 2026-10-10 (Asia/Seoul).
 
+최신 사용자 재생 확인(2026-10-15): 사용자가 직전 `qnjEE-wkw8k`137/140·30fps·10~40초 Accurate 재생 검증에 “좋아 통과야”라고 보고했다. [사용자 확인 기록](PHASE_1_H264_RECOVERY_POINT_SUPPORT.md#사용자-재생-확인)을 따른다. 아래 이 사례의 직접 player Pending은 보고 전 이력이다. CHZZK·YouTube Fast와 기존 네 final 전체의 재생 확인으로 확대하지 않으며 Phase1 전체 Passed/Completion/Tag는 Pending이다.
+
 최신 움직이는 영상 지원(2026-10-15): [H.264 recovery-point 대응·실제검증](PHASE_1_H264_RECOVERY_POINT_SUPPORT.md)을 우선한다. `qnjEE-wkw8k`137/140·30fps·10~40초Accurate의NativeSyncState를실제non-sync/recovery-K 바이트관계로진단했다. exact SEI/intra·같은파일/packet evidence를공유및획득probe에연결해raw표식을보존했고Fast IDR조건은유지했다. 최종CLI exit0·A/V[10,40)·decode·900frames/896서로다른hash·샘플이미지/정리를확인했다. 중간SourceIndex와초기adapter증거누락실패도기록했다. Core143/Media186/Downloader856·총1185개통과·build경고/오류0. 직접player·Phase1전체완료는Pending이다.
 
 최신 Accurate terminal PCM 지원(2026-10-14): [끝 AAC 준비·실제 검증](PHASE_1_ACCURATE_TERMINAL_PCM_SUPPORT.md)을 우선한다. `wFOjWCLPDDM`137/140·10~40초는증명된끝640 decoded padding을유효placement에서제외하고전체captured PCM을보존해Accurate실제CLI exit0·A/V[10,40)·최종decode·정리를검증했다. 독립full decode·selected slice와준비/render PCM이byte동일하다. Core143/Media168/Downloader855·총1166개통과·build경고/오류0. 아래terminal Accurate 미완료기록은이전이력이다. 직접player·Phase1전체완료는Pending이다.

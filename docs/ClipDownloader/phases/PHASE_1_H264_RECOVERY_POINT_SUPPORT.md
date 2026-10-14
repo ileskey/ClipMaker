@@ -34,4 +34,10 @@ native/output gate는 video의 non-sync+K 차이를 이 바이트 증거가 정�
 
 원시 진단은 `.artifacts/motion-sync-diagnosis/ca33931448e7437a8070793089493e0d/`, `.artifacts/motion-target-sync/1c71cd3961464f69984f8604bfdd3909/`, final/framehash는 `.artifacts/motion-final-verification/a1eee5a982724de5966d7da7bd77dc3c/`다. 안전한 영속 관찰은 [JSON 증거](evidence/PHASE_1_H264_RECOVERY_POINT_SUPPORT.json)를 따른다. signed URL/headers/원시metadata JSON은 기록하지 않는다.
 
-이 영상/포맷/구간의 Accurate 생성 검증은 완료했다. 일반 open GOP/모든 recovery SEI/다른 codec나구간·remote 전체 동일성을 확정하지 않는다. 직접 player 확인과 Phase1 전체 Passed/Completion/Tag는 Pending이며 Phase2/WPF 다운로드 UI/ClipEditor는 진행하지 않았다.
+이 영상/포맷/구간의 Accurate 생성 검증은 완료했다. 일반 open GOP/모든 recovery SEI/다른 codec나구간·remote 전체 동일성을 확정하지 않는다. 생성 검증 시점에는 직접 player 확인이 Pending이었다. Phase1 전체 Passed/Completion/Tag는 Pending이며 Phase2/WPF 다운로드 UI/ClipEditor는 진행하지 않았다.
+
+## 사용자 재생 확인
+
+2026-10-15 사용자가 재실행 후 재생·동기를 확인하도록 안내받은 뒤 “좋아 통과야”라고 보고했다. 직전 입력인 `qnjEE-wkw8k` / 137+140 / 30fps / Accurate / `[10,40)`의 사용자 재생 검증 통과로 기록한다. 에이전트의 연속 재생·청취 결과나 사용자 파일의 hash 대조 결과로 표현하지 않는다. 사용자 출력 파일의 hash와 개별 측정값은 제공되지 않았다.
+
+이 보고를 CHZZK·YouTube Fast 또는 6단계의 기존 네 final 전체에 대한 재생 확인으로 확대하지 않는다. 해당 미확인 재생 결과 기록과 Phase1 전체 완료 판정은 남아 있다.
