@@ -52,9 +52,22 @@ public sealed class Mp4NativeObservationVerifier
             if (samples.Length == 0 || samples.Length != packets.Length)
                 return Fail(MediaFailureKind.InvalidMedia, "NativeSampleCompleteness");
             bool audio = stream.Kind == MediaStreamKind.Audio;
+            long trailingPadding = 0;
+            if (audio && samples[^1].Duration is > 0 and < 1024)
+            {
+                var terminal = samples[^1];
+                SignedMediaTime.TryCreate((BigInteger)terminal.PresentationTicks + terminal.Duration + translation,
+                    track.MediaTimescale, out var terminalEnd, out _);
+                if (movieEnd is null || terminalEnd != movieEnd ||
+                    samples.Any(s => s.PresentationTicks != s.DecodeTicks) || samples[..^1].Any(s => s.Duration != 1024 ||
+                        (BigInteger)s.PresentationTicks + s.Duration > terminal.PresentationTicks))
+                    return Fail(MediaFailureKind.UnsupportedInput, "NativeTerminalDurationUnsupported");
+                trailingPadding = 1024 - terminal.Duration;
+            }
             BigInteger skipped = audio ? BigInteger.Max(0, -(samples[0].PresentationTicks + translation)) : 0;
             if (skipped > uint.MaxValue || skipped > 0 && (!track.HasEditList || samples[0].PresentationTicks != 0 ||
-                samples[0].DecodeTicks != 0 || samples.Any(s => s.Duration != 1024 || s.PresentationTicks != s.DecodeTicks)))
+                samples[0].DecodeTicks != 0 || samples.Any(s => s.PresentationTicks != s.DecodeTicks) ||
+                samples.Where((s, i) => i != samples.Length - 1 || trailingPadding == 0).Any(s => s.Duration != 1024)))
                 return Fail(MediaFailureKind.UnsupportedInput, "NativeSkipUnsupported");
             long leadingSkip = (long)skipped;
             for (int i = 0; i < samples.Length; i++)
@@ -106,7 +119,8 @@ public sealed class Mp4NativeObservationVerifier
                 var effective = orderedExpected[i]; var frame = orderedFrames[i];
                 if (frame.Pts != effective.Pts || frame.Duration != effective.Duration)
                     return Fail(MediaFailureKind.InvalidMedia, "NativeFrameTiming");
-                if (audio && (frame.SampleCount != effective.Duration ||
+                long decodedSamples = effective.Duration + (i == orderedExpected.Length - 1 ? trailingPadding : 0);
+                if (audio && (frame.SampleCount != decodedSamples ||
                     frame.SampleRate is { } rate && rate != config.SampleRate || frame.Channels is { } channels && channels != config.Channels))
                     return Fail(MediaFailureKind.InvalidMedia, "NativeAudioSamples");
             }
@@ -120,7 +134,7 @@ public sealed class Mp4NativeObservationVerifier
             if (range is null) return Fail(MediaFailureKind.InvalidMedia, "NativeEmptyRange");
             if (movieEnd is not null && (range.Start.Numerator < 0 || range.End.CompareTo(movieEnd) > 0))
                 return Fail(MediaFailureKind.UnsupportedInput, "MovieEditClippingUnsupported");
-            verified.Add(new(stream, config, range, leadingSkip));
+            verified.Add(new(stream, config, range, leadingSkip, trailingPadding));
         }
         return MediaOperationResult<Mp4NativeObservation>.Succeeded(new(verified));
     }

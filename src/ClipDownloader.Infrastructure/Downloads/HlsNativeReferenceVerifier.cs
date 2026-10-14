@@ -6,7 +6,7 @@ using ClipMaker.Media.Core.ValueObjects;
 namespace ClipDownloader.Infrastructure.Downloads;
 
 internal sealed record VerifiedNativeStream(InitialStreamObservation Stream, Mp4TrackConfiguration Configuration,
-    PresentationRange ObservedRange, long LeadingSkippedSamples = 0);
+    PresentationRange ObservedRange, long LeadingSkippedSamples = 0, long TrailingDecodedPaddingSamples = 0);
 internal sealed class VerifiedHlsNativeReference(ProbedInitialReference reference, IEnumerable<VerifiedNativeStream> streams)
 {
     internal ProbedInitialReference Reference { get; } = reference;
@@ -36,7 +36,7 @@ internal sealed class HlsNativeReferenceVerifier
             return Fail(result.Failure!.Kind == MediaFailureKind.UnsupportedInput ? OperationErrorCode.UnsupportedFormat :
                 OperationErrorCode.VerificationFailed, result.Failure.Field ?? "NativeObservation");
         return OperationResult<VerifiedHlsNativeReference>.Succeeded(new(reference, result.Data!.Streams.Select(s =>
-            new VerifiedNativeStream(reference.Observations.Streams.Single(raw => raw.Index == s.Stream.Index), s.Configuration, s.ObservedRange, s.LeadingSkippedSamples))));
+            new VerifiedNativeStream(reference.Observations.Streams.Single(raw => raw.Index == s.Stream.Index), s.Configuration, s.ObservedRange, s.LeadingSkippedSamples, s.TrailingDecodedPaddingSamples))));
     }
     private static OperationResult<VerifiedHlsNativeReference> Fail(OperationErrorCode code, string field) =>
         OperationResult<VerifiedHlsNativeReference>.Failed(new(code, OperationErrorCategory.Execution,

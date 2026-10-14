@@ -8,6 +8,43 @@ namespace ClipMaker.Media.Infrastructure.Tests;
 public sealed class Mp4NativeObservationVerifierTests
 {
     [Theory]
+    [InlineData("success", null)]
+    [InlineData("end", "NativeTerminalDurationUnsupported")]
+    [InlineData("no-edit", "NativeTerminalDurationUnsupported")]
+    [InlineData("middle", "NativeTerminalDurationUnsupported")]
+    [InlineData("count", "NativeAudioSamples")]
+    [InlineData("duration", "NativeFrameTiming")]
+    [InlineData("side-padding", "NativeSkipUnsupported")]
+    public void ShortTerminalAacDurationRequiresExactEditEndAndFullDecodedFrame(string fault, string? field)
+    {
+        SignedMediaTime.TryCreate(1, 44100, out var clock, out _);
+        var stream = new MediaStreamObservation(0, MediaStreamKind.Audio, clock!, 0, null, null, 1,
+            new("aac", "LC", null, "fltp", 44100, 2, 2));
+        var samples = new Mp4NativeSampleEvidence([new(1, "aac", 2, new string('a', 64), 44100, 2)],
+            [new(1, 0, 0, 1024, 10, 0, 100), new(1, 1024, 1024, fault == "middle" ? 1023u : 1024u, 20, 0, 110),
+                new(1, 2048, 2048, 384, 30, 0, 130)]);
+        var raw = new MediaProbeObservations([stream],
+            [new(0, 0, 448, 448, "fltp", 44100, 2), new(0, 448, fault == "duration" ? 1024 : 384,
+                fault == "count" ? 1023 : 1024, "fltp", 44100, 2)],
+            [new(0, -1600, -1600, 1024, "K__", new(1600, 0, 0, 0), false, 10, 100),
+                new(0, -576, -576, 1024, "K__", null, false, 20, 110),
+                new(0, 448, 448, 384, "K__", fault == "side-padding" ? new(0, 640, 0, 0) : null, false, 30, 130)], true, true);
+        var container = new Mp4FileTimingEvidence(new(44100,
+            [new(1, 44100, fault != "no-edit", fault == "no-edit" ? [] : [new(fault == "end" ? 833UL : 832UL, 1600, 1, 0)])]), [],
+            MediaOperationResult<Mp4NativeSampleEvidence>.Succeeded(samples));
+        var result = new Mp4NativeObservationVerifier().Verify(raw, container);
+        if (field is not null)
+        {
+            Assert.Equal(MediaOperationStatus.Failed, result.Status); Assert.Null(result.Data);
+            Assert.Equal(field, result.Failure!.Field); return;
+        }
+        Assert.Equal(MediaOperationStatus.Succeeded, result.Status);
+        var actual = Assert.Single(result.Data!.Streams);
+        Assert.Equal(1600, actual.LeadingSkippedSamples); Assert.Equal(640, actual.TrailingDecodedPaddingSamples);
+        SignedMediaTime.TryCreate(832, 44100, out var end, out _); Assert.Equal(end, actual.ObservedRange.End);
+    }
+
+    [Theory]
     [InlineData("skip", null, MediaFailureKind.UnsupportedInput)]
     [InlineData("missing-skip", "NativeSkipMissing", MediaFailureKind.InvalidMedia)]
     [InlineData("no-skip", "NativeSampleCompleteness", MediaFailureKind.InvalidMedia)]
