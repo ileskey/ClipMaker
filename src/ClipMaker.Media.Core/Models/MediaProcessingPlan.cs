@@ -1,4 +1,5 @@
 using ClipMaker.Media.Core.ValueObjects;
+using System.Numerics;
 
 namespace ClipMaker.Media.Core.Models;
 
@@ -49,11 +50,22 @@ public sealed class StreamProcessingPlan
     public PresentationRange InputRange { get; }
     public SignedMediaTime Translation { get; }
     public string Codec { get; }
-    public StreamProcessingPlan(MediaStreamReference stream, PresentationRange inputRange, SignedMediaTime translation, string codec)
+    public SignedMediaTime InputTimeBase { get; }
+    public BigInteger MinimumInputTimestamp { get; }
+    public BigInteger MaximumInputTimestamp { get; }
+    public int? SampleRate { get; }
+    public int? Channels { get; }
+    public StreamProcessingPlan(MediaStreamReference stream, PresentationRange inputRange, SignedMediaTime translation, string codec,
+        SignedMediaTime inputTimeBase, BigInteger minimumInputTimestamp, BigInteger maximumInputTimestamp, int? sampleRate = null, int? channels = null)
     {
         ArgumentNullException.ThrowIfNull(stream); ArgumentNullException.ThrowIfNull(inputRange);
         ArgumentNullException.ThrowIfNull(translation); ArgumentException.ThrowIfNullOrWhiteSpace(codec);
+        ArgumentNullException.ThrowIfNull(inputTimeBase);
+        if (inputTimeBase.Numerator <= 0 || maximumInputTimestamp < minimumInputTimestamp || sampleRate <= 0 || channels <= 0)
+            throw new ArgumentException("A positive native clock and ordered observed timestamp bounds are required.");
         Stream = stream; InputRange = inputRange; Translation = translation; Codec = codec;
+        InputTimeBase = inputTimeBase; MinimumInputTimestamp = minimumInputTimestamp; MaximumInputTimestamp = maximumInputTimestamp;
+        SampleRate = sampleRate; Channels = channels;
     }
 }
 

@@ -48,6 +48,10 @@ public sealed class ClipProcessingQualifier
         var mode = acquired.Request.Selection.Mode == ClipMode.Fast ? MediaProcessingMode.Fast : MediaProcessingMode.Accurate;
         if (mode == MediaProcessingMode.Accurate && video.Native.Stream.Codec.PixelFormat != "yuv420p")
             return Fail("AccuratePixelFormatUnsupported", unsupported: true);
+        if (inspection.Files.SelectMany(f => f.Probe.Observations.Packets).Any(p => p.Pts is null || p.Dts is null || p.Duration is null))
+            return Fail("NativeTimingUnverified");
+        if (mode == MediaProcessingMode.Fast && video.Probe.Observations.Packets.Any(p => p.StreamIndex == video.Native.Stream.Index && p.Pts < p.Dts))
+            return Fail("FastCompositionTimeUnsupported", unsupported: true);
         SignedMediaTime renderOrigin = start;
         if (mode == MediaProcessingMode.Fast)
         {
@@ -86,15 +90,18 @@ public sealed class ClipProcessingQualifier
         if (frames.Select(f => f.InputPts).Distinct().Count() != frames.Count) return Fail("VideoTimingContradicted");
         var plans = new List<StreamProcessingPlan>();
         PresentationRange.TryCreate((mode == MediaProcessingMode.Fast ? renderOrigin : start) - videoOffset, end - videoOffset, out var videoRange, out _);
-        if (videoRange is null || video.Native.ObservedRange.Start.CompareTo(videoRange.Start) > 0 ||
+        bool knownLeadingVideo = inspection.Files.Single(f => f.Probe.Request.FileId == videoReference.FileId).SourceStart is not null;
+        if (videoRange is null || video.Native.ObservedRange.Start.CompareTo(videoRange.Start) > 0 && !knownLeadingVideo ||
             video.Native.ObservedRange.End.CompareTo(videoRange.End) < 0) return Fail("CoverageIncomplete");
-        plans.Add(new(video.Mapping.SourceOffset.Scope.Stream, videoRange, videoOffset - renderOrigin, "h264"));
+        plans.Add(StreamPlan(video, videoRange, videoOffset - renderOrigin));
         AudioBoundaryPlan? boundary = null;
         if (audios.Length == 1)
         {
             var audio = audios[0];
             var offset = audio.Mapping.SourceOffset.Value! + timeline.SharedAxis.Value!.AudioToVideoOffset;
             if (audio.Native.Stream.Codec.SampleRate is not { } rate) return Fail("AudioLatticeUnverified");
+            if (mode == MediaProcessingMode.Fast && audio.Probe.Observations.Packets.Any(p => p.StreamIndex == audio.Native.Stream.Index && p.Pts != p.Dts))
+                return Fail("FastAudioCompositionUnsupported", unsupported: true);
             var lattice = new AudioSampleLattice(audio.Native.ObservedRange.Start + offset, rate);
             var supportStart = lattice.Origin;
             var supportEnd = audio.Native.ObservedRange.End + offset;
@@ -148,7 +155,7 @@ public sealed class ClipProcessingQualifier
                 end.CompareTo(supportEnd) < 0 ? end : supportEnd;
             PresentationRange.TryCreate(audioStart - offset, audioEnd - offset, out var audioRange, out _);
             if (audioRange is null) return Fail("EmptyRequiredAudioSelection", unsupported: true);
-            plans.Add(new(audio.Mapping.SourceOffset.Scope.Stream, audioRange, offset - audioRender, "aac"));
+            plans.Add(StreamPlan(audio, audioRange, offset - audioRender));
         }
         BigInteger clock = 1;
         foreach (var time in plans.SelectMany(p => new[] { p.Translation, p.InputRange.Start, p.InputRange.End })
@@ -160,6 +167,15 @@ public sealed class ClipProcessingQualifier
         var inputs = acquired.Files.Select(f => new MediaInputFile(f.Id, f.Path, f.Content!));
         var processing = new MediaProcessingPlan(mode, inputs, plans, frames.OrderBy(f => f.InputPts), (int)clock, boundary, decoderPreparation);
         return OperationResult<QualifiedClipPlan>.Succeeded(new(inspection, target!, renderOrigin, processing));
+    }
+
+    private static StreamProcessingPlan StreamPlan(AcquiredStreamInspection stream, PresentationRange range, SignedMediaTime translation)
+    {
+        var ticks = stream.Probe.Observations.Packets.Where(p => p.StreamIndex == stream.Native.Stream.Index)
+            .SelectMany(p => new[] { new BigInteger(p.Pts!.Value), new BigInteger(p.Dts!.Value),
+                new BigInteger(p.Pts.Value) + p.Duration!.Value, new BigInteger(p.Dts.Value) + p.Duration.Value }).ToArray();
+        return new(stream.Mapping.SourceOffset.Scope.Stream, range, translation, stream.Native.Configuration.Codec,
+            stream.Native.Stream.TimeBase, ticks.Min(), ticks.Max(), stream.Native.Stream.Codec.SampleRate, stream.Native.Stream.Codec.Channels);
     }
 
     private static OperationResult<QualifiedClipPlan> Fail(string field, bool unsupported = false) => OperationResult<QualifiedClipPlan>.Failed(

@@ -71,3 +71,13 @@ Accurate는 같은 audio/acquisition scope의 Verified decoder preparation, 초�
 `SourceStartPrefixInspector`는 같은 선택 provenance의 초기 참조와 획득 파일을 실행 전후 길이/SHA-256으로 고정하고, 실제 획득 prefix를 hash하여 초기 참조 전체 bytes와 대조한다. 이 사실은 source-start bytes 대응이며 decoder 상태·PCM 값·범용 준비 길이의 증명이 아니다. 변경/누락/취소에서는 null Data이며 기존 파일을 유지한다.
 
 현재 Downloader Infrastructure744개 실패·skip0. 초기 clock test에서 source 이동이 상쇄되어 실제로 표현 가능한 사례를 잘못 실패 기대한 fixture를 수정했고, 이후 target/K scope·prefix 누락 거절을 추가했다. Fast 실제 mux/native/end와 Accurate decoder/PCM/encode/output gate, 처리 취소/소유권과 숫자 binder 검증은 남았다.
+
+## Fast copy/mux backend 연결
+
+공유 processing request/result와 source URL·format ID 없는 FFmpeg backend를 연결했다. 현재 backend는 Fast H.264/AAC 단일 local movie 축만 지원한다. 분리 stop/translation 축, native audio grid 비정렬, 음수/미표현 seek, 잘못된 frame 기대값과 exact-double 정수 범위를 넘는 `setts` 표현을 거절한다. source packet/PTS/DTS/duration의 관찰 extrema를 계획에 보존하여 rescale 전후와 translation 후 모두 검사한다. Fast stop은 AV_TIME_BASE의 ceil로 명시하고 실제 packet coverage/end 검증을 후속 gate에 요구한다. Accurate backend는 아직 미구현이며 자동 전환하지 않는다.
+
+입력은 처리 전후 captured 길이/SHA-256과 read-only share로 고정한다. staging은 CreateNew로 소유권을 확보하고 no-delete reader를 연속 유지한 채 FFmpeg의 `-y`를 이번 소유 파일에만 사용한다. 기존 staging 충돌에서는 사용자 파일을 덮어쓰지 않는다. 버전15초, 실제 처리 고정 timeout 없음+취소를 사용한다. 실패·취소는 null Data이며 소유 staging과 종료 불확실을 resource registry로 조회한다. 파일을 자동 삭제/최종 이동하지 않는다. output hash 성공은 최종 clip 성공이 아니다.
+
+12개 backend 테스트로 captured 입력 변경, staging 충돌, 취소/늦은 취소, 종료 불확실 우선·재사용 차단, process/stderr 실패, Drain stdout, exact-double 한계를 검사했다. Media Infrastructure114개·Downloader744개 실패·skip0. 솔루션 build 경고·오류0.
+
+새 원격 획득 없이 기존 YouTube137/140 소유 파일을 실제 backend로 copy/mux했다. staging3,469,926bytes, SHA-256 `52314b66092c858dd4521d8e372a5546d2bc4da5e381eea87a16d0fd7d98ddd8`, raw probe/decode1025 frames/packets가 통과했다. video clock1/11289600, audio1/44100, H.264/AAC LC 설정을 확인했다. ignored `processing-real/CopyLocal.ps1`과 소유 폴더 summary를 유지한다. **progressive sample/edit/end 및 source 대응 검증 전이므로 최종 출력 통과로 선언하지 않는다.** 다음은 독립적인 MP4 output 해석/verification과 양 사이트 현재 경로 통합이다.
