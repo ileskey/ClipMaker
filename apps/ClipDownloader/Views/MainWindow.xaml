@@ -17,7 +17,25 @@
             <Label Content="영상 _URL" Target="{Binding ElementName=UrlInput}" />
             <TextBox x:Name="UrlInput" Text="{Binding Url, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" IsEnabled="{Binding CanEdit}" AutomationProperties.Name="영상 URL" AutomationProperties.AutomationId="Url" />
             <Button Content="영상 불러오기" Command="{Binding LoadMetadataCommand}" HorizontalAlignment="Left" Margin="0,8,0,8" AutomationProperties.AutomationId="LoadMetadata" />
-            <TextBlock Text="{Binding MetadataText}" TextWrapping="Wrap" Margin="0,0,0,12" />
+            <GroupBox Header="영상 정보" Margin="0,0,0,12" Padding="8">
+                <StackPanel>
+                    <Border Width="240" Height="135" HorizontalAlignment="Left" Background="#EEEEEE">
+                        <TextBlock Text="{Binding ThumbnailStatus}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" AutomationProperties.Name="썸네일" AutomationProperties.AutomationId="ThumbnailPlaceholder" />
+                    </Border>
+                    <TextBlock Text="제목" Margin="0,8,0,0" />
+                    <TextBox Text="{Binding MetadataPresentation.Title, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="110" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="제목" AutomationProperties.AutomationId="MetadataTitle" />
+                    <TextBlock Text="업로더 / 채널" />
+                    <TextBox Text="{Binding MetadataPresentation.Uploader, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="75" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="업로더 / 채널" AutomationProperties.AutomationId="MetadataUploader" />
+                    <TextBlock Text="총 길이" />
+                    <TextBox Text="{Binding MetadataPresentation.Duration, Mode=OneWay}" IsReadOnly="True" AutomationProperties.Name="총 길이" AutomationProperties.AutomationId="MetadataDuration" />
+                    <TextBlock Text="선택 포맷 FPS" />
+                    <TextBox Text="{Binding MetadataPresentation.FrameRate, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" AutomationProperties.Name="선택 포맷 FPS" AutomationProperties.AutomationId="MetadataFps" />
+                    <TextBlock Text="제공 해상도 (metadata 선언)" />
+                    <TextBox Text="{Binding MetadataPresentation.Resolutions, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" AutomationProperties.Name="제공 해상도 (metadata 선언)" AutomationProperties.AutomationId="MetadataResolutions" />
+                    <Expander Header="정보 확인 사항"><TextBox Text="{Binding MetadataPresentation.Issues, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="160" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="정보 확인 사항" AutomationProperties.AutomationId="MetadataIssues" /></Expander>
+                    <TextBlock Text="영상 불러오기로 재조회하면 시간과 Quality가 초기화됩니다." TextWrapping="Wrap" Foreground="DimGray" />
+                </StackPanel>
+            </GroupBox>
             <TextBlock Text="타임코드 HH:MM:SS:FF · 시계 시간 + FF/FPS · [Start, End)" TextWrapping="Wrap" />
             <StackPanel Orientation="Horizontal" Margin="0,6,0,6" IsEnabled="{Binding CanEdit}">
 <TextBlock Text="Start" Width="65" VerticalAlignment="Center" />

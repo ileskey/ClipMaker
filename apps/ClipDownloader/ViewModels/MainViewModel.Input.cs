@@ -69,6 +69,7 @@ public sealed partial class MainViewModel
         metadata = null; selection = null; metadataRevision++;
         MetadataState = MetadataState.Empty;
         MetadataText = "영상 정보 없음";
+        ClearMetadataPresentation();
         Qualities = [QualityOption.Best];
         InputChanged();
     }
@@ -109,6 +110,7 @@ public sealed partial class MainViewModel
         SetErrors("Range", rangeErrors);
         SelectionText = selection is null ? "선택 정보 없음" : DescribeSelection(selection) +
             (fps is null ? "\nFPS 미확인: FF 상한·구간 순서·길이는 실행 중 검사 대기" : "\n시계 시간 + FF/FPS · 구간 [Start, End)");
+        RefreshMetadataPresentation();
         UpdateValidationSummary();
         NotifyCommands();
     }
@@ -122,12 +124,14 @@ public sealed partial class MainViewModel
         InputChanged();
         metadata = null; selection = null; metadataRevision++;
         MetadataText = "영상 정보 없음";
+        ClearMetadataPresentation();
         MetadataState = MetadataState.Empty;
         Quality = QualityOption.Best;
         Qualities = [QualityOption.Best];
         ValidateInputs();
         if (parsed.Data is null) { StatusText = parsed.Error!.Message; FocusErrorRequested?.Invoke(this, EventArgs.Empty); return; }
         long revision = inputRevision;
+        bool IsCurrent() => Lifetime == AppLifetime.Running && generation == current && revision == inputRevision;
         MetadataState = MetadataState.Loading;
         OperationDetails = "";
         JobState = ClipState.Idle;
@@ -136,16 +140,18 @@ public sealed partial class MainViewModel
         {
             var result = await Task.Run(() => videoInfo.GetVideoInfoAsync(parsed.Data.PageUrl, token));
             ObserveError(result.Error);
+            RetainResources(result.RemainingTemporaryPaths);
+            if (!IsCurrent()) return;
+            if (token.IsCancellationRequested) { MetadataState = MetadataState.Empty; StatusText = "조회를 취소했습니다."; return; }
             RecordOperationDetails(result);
-            if (Lifetime != AppLifetime.Running || generation != current || revision != inputRevision || token.IsCancellationRequested)
-            { MetadataState = MetadataState.Empty; return; }
             if (result.Data is { } info && info.State == VideoState.Completed && info.Duration > TimeSpan.Zero)
             {
                 metadata = info; metadataRevision++;
                 Start.Reset(); End.Reset(); Quality = QualityOption.Best;
-                Qualities = new[] { QualityOption.Best }.Concat(info.Formats.Where(f => f.VideoStream != StreamPresence.Absent && f.Height > 0)
-                    .Select(f => f.Height!.Value).Distinct().OrderDescending().Select(h => { QualityOption.TryCreateResolution(h, out var q, out _); return q!; })).ToArray();
+                Qualities = MetadataPresentation.QualityOptions(info);
                 MetadataText = $"{info.Source.Platform} / {info.Source.Id}\n{info.Title ?? "제목 미확인"} · {info.Uploader ?? "업로더 미확인"}\n길이: {info.Duration}";
+                ValidateInputs();
+                ThumbnailStatus = info.ThumbnailUrl is null ? "썸네일 없음" : "썸네일 획득 연결 대기";
                 MetadataState = MetadataState.Ready;
                 StatusText = "영상 조회 완료. 종료 시간과 MP4 출력 경로를 지정하세요.";
             }
@@ -156,13 +162,13 @@ public sealed partial class MainViewModel
                 FocusErrorRequested?.Invoke(this, EventArgs.Empty);
             }
         }
-        catch (OperationCanceledException) when (token.IsCancellationRequested) { MetadataState = MetadataState.Empty; StatusText = "조회를 취소했습니다."; }
+        catch (OperationCanceledException) when (token.IsCancellationRequested) { if (IsCurrent()) { MetadataState = MetadataState.Empty; StatusText = "조회를 취소했습니다."; } }
         catch (Exception)
         {
             logger.LogError("Unexpected metadata failure");
-            MetadataState = MetadataState.Failed; StatusText = "영상 정보 조회 중 예상하지 못한 오류가 발생했습니다.";
+            if (IsCurrent()) { MetadataState = MetadataState.Failed; StatusText = "영상 정보 조회 중 예상하지 못한 오류가 발생했습니다."; }
         }
-        finally { ValidateInputs(); }
+        finally { if (IsCurrent()) ValidateInputs(); else if (Lifetime != AppLifetime.Running) MetadataState = MetadataState.Empty; }
     }
 
     private async Task CheckPathAsync(string path)
