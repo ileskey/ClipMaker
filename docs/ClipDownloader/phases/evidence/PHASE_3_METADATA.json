@@ -1,0 +1,89 @@
+{
+  "Date": "2026-10-15",
+  "Branch": "phase/3",
+  "Base": "5d5a06e6a6d0b8ec8ea952e738ecf99756a53712",
+  "ValidatedProductCommit": "c4612f7",
+  "PhaseStatus": "In Progress",
+  "Verification": "Pending",
+  "Completion": null,
+  "Environment": {
+    "OS": "Windows 11 Pro 10.0.26200",
+    "YtDlp": "2026.08.19",
+    "FFmpegAndFFprobe": "8.1",
+    "Node": "22.14.0",
+    "ObservedWindowDpi": 144,
+    "WpfRenderDpi": [96, 144, 192]
+  },
+  "AutomatedRegression": {
+    "Core": 143,
+    "MediaInfrastructure": 193,
+    "DownloaderInfrastructure": 940,
+    "Wpf": 77,
+    "TotalPassed": 1353,
+    "Failed": 0,
+    "Skipped": 0,
+    "BuildWarnings": 0,
+    "BuildErrors": 0
+  },
+  "RemoteAcquisitionAndDecode": [
+    {
+      "ObservedAt": "2026-10-15T16:22:51.5296140+09:00",
+      "Platform": "YouTube",
+      "SourceId": "qnjEE-wkw8k",
+      "MetadataStatus": "Succeeded",
+      "Title": "campus労働",
+      "Uploader": "年の瀬早瀬",
+      "Duration": "00:00:42",
+      "SelectedVideo": "137",
+      "SelectedAudio": "140",
+      "SelectedFrameRate": "30/1",
+      "Resolutions": [1080, 720, 480, 360, 240, 144],
+      "ThumbnailUriAccepted": true,
+      "HttpResult": "Succeeded",
+      "ImageKind": "Jpeg",
+      "Bytes": 41289,
+      "HttpMilliseconds": 362,
+      "DecodeMilliseconds": 178,
+      "DecodedWidth": 640,
+      "DecodedHeight": 360,
+      "Frozen": true
+    },
+    {
+      "ObservedAt": "2026-10-15T16:22:56.1293257+09:00",
+      "Platform": "Chzzk",
+      "SourceId": "15537558",
+      "MetadataStatus": "Succeeded",
+      "Title": "반손이.. 터졋ㅅㅓㅓ☆\n",
+      "Uploader": "키유 Kiyuu",
+      "Duration": "03:27:52",
+      "SelectedVideo": "hls-8384",
+      "SelectedAudio": "combined in hls-8384",
+      "SelectedFrameRate": "60/1",
+      "Resolutions": [1080, 720, 480, 360, 144],
+      "ThumbnailUriAccepted": true,
+      "HttpResult": "Succeeded",
+      "ImageKind": "Jpeg",
+      "Bytes": 79365,
+      "HttpMilliseconds": 73,
+      "DecodeMilliseconds": 12,
+      "DecodedWidth": 640,
+      "DecodedHeight": 360,
+      "Frozen": true
+    }
+  ],
+  "ActualWpfObservation": {
+    "ProductCommit": "9989a31",
+    "BothSitesMetadataAndRemoteImageDisplayed": true,
+    "ChzzkPrepareJobId": "5425f8e6-6ba2-487d-b7ec-660921c41300",
+    "YouTubePrepareJobId": "bf65b8ca-8c4b-4e86-ac51-2986217dd753",
+    "ExecutePerformed": false,
+    "ExitLog": "2026-10-15 16:10:22.502 +09:00 Application exiting with code 0",
+    "AppAndMediaToolProcessesAbsentAfterExit": true,
+    "FinalProductWpfRecheck": "Not completed: user stopped Computer Use with physical Escape"
+  },
+  "MediaGeneration": "Not repeated; Phase 3 design 7.3 impact analysis retains Phase 2 four-clip evidence",
+  "RemainingRequiredVerification": [
+    "Actual WPF recheck on the final product build",
+    "Native OS/monitor 100% and 200% DPI observation; target-DPI rendering is separate evidence"
+  ]
+}

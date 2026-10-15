@@ -13,7 +13,7 @@
 
 ## 검증 상태
 
-단위 4 실제 통합·최종 검증은 아직 수행하지 않았다. 새 패키지·도구 설치·원격 push·기존 태그 변경 없음.
+제품 구현·자동 회귀·양 사이트 실제 metadata/HTTP/decode 및 초기 실제 WPF 표시/준비/종료를 검증했다. **최종 보완 빌드의 실제 UI 재확인과 OS 100%/200% native DPI 관찰은 미완료**다. 사용자 물리 Escape로 Computer Use가 중지되어 추가 UI 조작을 중단했다. 따라서 In Progress / Pending이며 Completion/tag를 만들지 않는다. 새 패키지·도구 설치·원격 push·기존 태그 변경 없음.
 
 ## 단위 1 — 상세 텍스트·선택 projection
 
@@ -63,3 +63,56 @@
 - 병렬 실행 77개 중 기존 WindowClosing 1개가 `PackagePart.CleanUpRequestedStreamsList` → `Application.LoadComponent`의 NullReferenceException으로 실패했다. 별도 STA라도 WPF pack-resource cache/데스크톱 focus가 같은 프로세스에서 공유되는 환경임을 고려해 이 WPF 테스트 어셈블리만 직렬 실행한다. 제품은 단일 UI Dispatcher를 사용한다. 이는 실패를 삭제하거나 창 닫기 검사를 생략하는 변경이 아니다.
 - 최초 설정은 설치된 xUnit 4에서 obsolete error(CS0619)를 낸 CollectionBehavior 속성이었다. 패키지의 로컬 XML API를 확인해 `Xunit.v3.Parallelization(Mode = ParallelMode.None)`으로 수정했다. 패키지 버전 변경 없음.
 - 수정 후 `dotnet test tests/ClipDownloader.Tests/ClipDownloader.Tests.csproj --no-restore --nologo`: 77통과·실패/skip 0, 31초. 해당 build에서 경고/오류 없음. 느려진 실행을 수용하고 실제 Window·이미지 취소/종료·재진입 검사를 모두 유지했다.
+
+## 단위 4 — 실제 관찰과 최종 회귀
+
+### 환경과 실제 원격 이미지
+
+- Windows 11 Pro 10.0.26200, yt-dlp 2026.08.19, FFmpeg/FFprobe 8.1, Node 22.14.0. 실제 WPF 관찰 DPI 144(150%). 자동 설치/업데이트 없음.
+- 기존 CLI `diagnose`의 도구 실행/버전 모두 Passed, 실제 양 사이트 `info` 성공. CLI에는 thumbnail 등록/호출을 추가하지 않았다 (`rg Thumbnail apps/ClipDownloader.Cli` source 일치 없음).
+- 최초 CLI smoke는 sandbox의 기존 ProcessRunner named pipe 접근 거절로 실패했고 CIM 읽기도 거절됐다. 일반 권한으로 재실행해 성공했다. Media Infrastructure 회귀도 named pipe 접근 가능한 일반 권한으로 실행했다. sandbox 실패를 제품 성공으로 세지 않았다.
+- 최종 원격 측정은 `c4612f7` product DLL을 참조하는 ignored `.artifacts/phase3-verification/RemoteVerification.csproj`로 16:22:51~16:22:56 +09:00 수행했다. production metadata 서비스 → 제한 HTTP/custom connect/기본 TLS → worker WPF decoder를 호출했다. safe JSON만 [증거](evidence/PHASE_3_METADATA.json)에 기록한다. raw JSON·thumbnail URL/body·서명 주소·인증값은 Git에 넣지 않았다.
+
+| 사이트 / 소스 ID | 선택 | 길이 / FPS | 원격 이미지 | 획득 / decode | 결과 |
+|---|---|---|---|---|---|
+| YouTube / qnjEE-wkw8k | 137 + 140 | 00:00:42 / 30/1 | JPEG 41,289 bytes | 362 / 178 ms | frozen 640×360 |
+| CHZZK / 15537558 | hls-8384 (결합 음성) | 03:27:52 / 60/1 | JPEG 79,365 bytes | 73 / 12 ms | frozen 640×360 |
+
+정상 직접 HTTPS 사례 두 개의 수용성을 확인한 결과다. 모든 CDN/원본 이미지 분포나 메모리 상한을 입증한 결과는 아니다. 기존 parser query/fragment/userinfo/HTTP/IP 거절을 완화하거나 다른 URL로 우회하지 않았다. HTTP 성공은 기본 인증서 검증이 적용된 실제 외부 TLS 성공이며, 제어 endpoint의 인증서 실패 검사와 별도 근거다.
+
+### 실제 WPF 관찰 (초기 구현 9989a31)
+
+- computer-use 스킬의 sky API로 `MainWindow`를 실행하고 양 사이트를 실제 Load했다. Title/Uploader/Duration/선택 FPS/해상도 및 원격 thumbnail 표시 성공을 screenshot과 접근성 tree에서 확인했다. YouTube campus労働 / 年の瀬早瀬, CHZZK 반손이.. 터졋ㅅㅓㅓ☆ / 키유 Kiyuu를 표시했다. 제공 해상도는 각각 1080·720·480·360·240·144 / 1080·720·480·360·144p다.
+- URL을 바꾸면 이전 필드/이미지/선택이 즉시 제거됐다. 재조회 성공 시 End=0·Quality=Best가 됐고 Output/Mode가 유지됐다. 이미지 성공으로 실행 상태/입력 값을 덮지 않았다.
+- 실제 준비 요약: CHZZK JobId `5425f8e6-6ba2-487d-b7ec-660921c41300`, YouTube `bf65b8ca-8c4b-4e86-ac51-2986217dd753`, 둘 다 Fast 0~10초·64 MiB/60초 예산·명시 실행 대기. URL 변경으로 확인이 폐기됨을 관찰했다. Execute는 실행하지 않았고 `phase3-prepare-only.mp4` 부재를 확인했다.
+- 16:10:22.502 +09:00 앱 종료 로그 `Application exiting with code 0`, 이후 ClipDownloader/yt-dlp/ffmpeg/ffprobe 프로세스 부재를 확인했다. App의 DI → 종료 로그 → logger/SelfLog 순서는 소스상 그대로이며, 이미지 완료 전 실제 Window 닫기 금지는 제어 fake/STA 테스트 증거다. live 자식 종료 실패를 강제로 유발한 검증은 아니다.
+- 원격 이미지는 빨리 완료되어 live 이미지 지연 중 전용 취소/반복 Close를 관찰했다고 주장하지 않는다. 지연 HTTP·취소 무시 decode·직렬화·Prepare 가능·동일 확인 유지·반복 Window.Close/경고 확인은 결정론적 fake와 실제 STA Window 테스트에서 검증했다.
+- UI 도구의 `user input was detected` 오류는 세션 재초기화 후 복구해 위 관찰을 수행했다. 최소 크기 mouse resize 시도는 성공 증거로 세지 않고 이후 620×480 실제 Window 테스트로 검증했다.
+- 임시 remote harness 첫 build는 실행 중인 앱 PID 43580의 DLL 잠금(MSB3026/MSB3021)으로 실패했다. 이후 `--no-restore -p:BuildProjectReferences=false`로 기존 DLL을 참조해 실행했고 앱 정상 종료 후 최종 솔루션 build를 수행했다. 제품 지원 문제나 정상 build로 잘못 기록하지 않는다.
+- `c4612f7` 최종 빌드의 화면 재확인을 위해 Computer Use 재실행을 요청했으나 도구가 사용자 물리 Escape로 중지됐다고 반환했다. 이후 Computer Use 호출은 하지 않았다. 마지막 실행 요청으로 창이 열렸는지는 재관찰하지 않아 미확인이다. 앞선 화면 관찰을 최종 보완 빌드의 실제 UI 통과로 소급하지 않는다.
+
+### 최종 빌드·네 프로젝트 회귀
+
+제품/테스트 기준 `c4612f7`. 이후에는 결과 문서·증거 정리와 기존 Infrastructure AssemblyInfo의 불필요한 빈 줄 diff 복원만 수행했다(계약/동작 변경 없음).
+
+`dotnet build ClipMaker.slnx --no-restore --nologo`: 성공, 경고/오류 0.
+
+각 csproj에 `dotnet test <csproj> --no-build --no-restore --nologo` 실행:
+
+| 프로젝트 | 통과 | 실패 / skip |
+|---|---:|---:|
+| ClipMaker.Media.Core.Tests | 143 | 0 / 0 |
+| ClipMaker.Media.Infrastructure.Tests | 193 | 0 / 0 |
+| ClipDownloader.Infrastructure.Tests | 940 | 0 / 0 |
+| ClipDownloader.Tests | 77 | 0 / 0 |
+| 합계 | **1,353** | **0 / 0** |
+
+기존 1,230 + 신규 HTTP/연결 81 + 신규 WPF 42 = 1,353이다. WPF 직렬 실행은 32초였고 병렬 pack-resource 실패의 확정 원인을 입증한 것은 아니다. 공유 자원 경합 가설에 따른 검증 환경 보완이며 실패 이력을 보존한다.
+
+### 유지한 경계와 남은 완료 조건
+
+- Core/Media Infrastructure/Application selector·UseCases/기존 source Downloads/CLI의 제품 diff는 0이다. media/source DI와 원본 예산도 유지한다. PreparedClip 동일 객체 1회·모든 실행 입력 무효화·최종 ClipJobResult 성공·FPS null Range=null·잔존 경고 누적 회귀를 통과했다.
+- 설계 7.3에 따라 기존 네 클립/사용자 A/V 증거는 Phase 2 기록을 유지한다. 새 미디어 생성·A/V 재생 확인을 했다고 주장하지 않는다. 일부 CHZZK MPD metadata 실패, 먼 Accurate 위치, playlist 2 MiB/계획 64 segment, SourceEndVerified=false와 codec/clock 경계는 해결된 것으로 표시하지 않는다.
+- **남음:** 최종 보완 빌드의 실제 WPF Load/이미지/입력/종료 재확인, OS 100%와 200% native DPI에서 실제 화면·키보드/복사/스크롤 관찰. 150% actual + 96/144/192 렌더/STA 검증을 이 조건의 완전 대체로 세지 않는다. 남은 조건 때문에 Baseline In Progress / Pending·Completion/tag 없음.
+- 설계 정책 변경은 없다. 주소 차단표·PNG CRC·알림 재진입 guard·테스트 직렬화는 경계의 구체화/검증 보완이며 각 근거와 trade-off는 위 단위에 기록했다. Queue/Player/ClipEditor/새 패키지/도구 설치를 추가하지 않았다.
+- 사용자 원본 설계/인계 두 untracked 파일은 수정하지 않았으며 `.artifacts/phase3-verification/inputs`에도 사본을 보존했다. 설계 원본 SHA256 `E7452BB9E99D3094CB37ACECB169F1C0299DB223173F5208FE7E3262CA819484`, 인계 원본 `382BE2106D08C3DE3A49CA6DCABE9DFCE81BA83A394EFC4050AAC6DD226F92F0`. 이 미추적 문서가 HEAD에 포함됐다고 가정하지 않는다.
