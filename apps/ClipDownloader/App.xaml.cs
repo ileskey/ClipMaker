@@ -31,7 +31,7 @@ public partial class App : System.Windows.Application
             viewModel = services.GetRequiredService<MainViewModel>();
             var window = services.GetRequiredService<MainWindow>();
             MainWindow = window;
-            window.Closing += (_, _) => BeginShutdown();
+            window.ShutdownStarted += (_, _) => BeginShutdown();
             window.Show();
             services.GetRequiredService<ILogger<App>>().LogInformation("Application initialized");
             logProblemTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(250),
@@ -67,7 +67,6 @@ public partial class App : System.Windows.Application
         if (exiting) return;
         exiting = true;
         logProblemTimer?.Stop();
-        viewModel?.Stop();
     }
 
     protected override void OnExit(ExitEventArgs e)

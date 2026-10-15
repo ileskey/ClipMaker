@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="tests/ClipDownloader.Tests/ClipDownloader.Tests.csproj" />
   <Project Path="apps/ClipDownloader.Cli/ClipDownloader.Cli.csproj" />
   <Project Path="apps/ClipDownloader/ClipDownloader.csproj" />
   <Project Path="src/ClipMaker.Media.Core/ClipMaker.Media.Core.csproj" />
