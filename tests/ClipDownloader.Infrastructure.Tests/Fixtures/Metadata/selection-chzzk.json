@@ -1,0 +1,73 @@
+{
+  "id": "15430558",
+  "live_status": "was_live",
+  "duration": 2667,
+  "upload_date": "20260929",
+  "is_live": false,
+  "has_drm": false,
+  "_type": "video",
+  "title": "Anonymous metadata fixture",
+  "uploader": "Anonymous uploader",
+  "formats": [
+    {
+      "format_id": "hls-192",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 256,
+      "height": 144,
+      "vcodec": "avc1.4D000C",
+      "acodec": "mp4a.40.2",
+      "vbr": null,
+      "abr": null,
+      "protocol": "m3u8_native"
+    },
+    {
+      "format_id": "hls-696",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 640,
+      "height": 360,
+      "vcodec": "avc1.4D001E",
+      "acodec": "mp4a.40.2",
+      "vbr": null,
+      "abr": null,
+      "protocol": "m3u8_native"
+    },
+    {
+      "format_id": "hls-1692",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 852,
+      "height": 480,
+      "vcodec": "avc1.4D001F",
+      "acodec": "mp4a.40.2",
+      "vbr": null,
+      "abr": null,
+      "protocol": "m3u8_native"
+    },
+    {
+      "format_id": "hls-3192",
+      "fps": 60.0,
+      "has_drm": false,
+      "width": 1280,
+      "height": 720,
+      "vcodec": "avc1.640028",
+      "acodec": "mp4a.40.2",
+      "vbr": null,
+      "abr": null,
+      "protocol": "m3u8_native"
+    },
+    {
+      "format_id": "hls-8384",
+      "fps": 60.0,
+      "has_drm": false,
+      "width": 1920,
+      "height": 1080,
+      "vcodec": "avc1.64002A",
+      "acodec": "mp4a.40.2",
+      "vbr": null,
+      "abr": null,
+      "protocol": "m3u8_native"
+    }
+  ]
+}

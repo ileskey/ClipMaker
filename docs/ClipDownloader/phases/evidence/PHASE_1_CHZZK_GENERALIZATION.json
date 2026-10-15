@@ -1,0 +1,423 @@
+{
+  "Cases": [
+    {
+      "Executions": {
+        "c1080-fractional-source-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 502692
+        },
+        "c1080-fractional-encode-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 0
+        },
+        "c1080-fractional-frames-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 142030
+        },
+        "c1080-fractional-decode-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 0
+        },
+        "c1080-fractional-local-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 457128
+        },
+        "c1080-fractional-prefix-audio-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 54445
+        },
+        "c1080-fractional-acquire-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 480
+        }
+      },
+      "Filter": {
+        "graph": "[0:v:0]settb=expr=1/48000,setpts=PTS-95935,trim=start_pts=0:end_pts=480000[v];[0:a:0]asettb=expr=1/48000,asetpts=PTS-96000,atrim=start_pts=0:end_pts=480000[a]",
+        "clock": 48000,
+        "targetStart": 4475935,
+        "targetEnd": 4955935,
+        "videoShift": 95935,
+        "audioShift": 96000
+      },
+      "Files": [
+        {
+          "Name": "prefix.mp4",
+          "Bytes": 15620453
+        },
+        {
+          "Name": "trimmed.mp4",
+          "Bytes": 1360890
+        }
+      ],
+      "Output": {
+        "videoCount": 600,
+        "expectedCount": 600,
+        "exactVideoPts": true,
+        "firstVideoPts": [
+          65,
+          833,
+          1649
+        ],
+        "lastVideoPts": [
+          477665,
+          478433,
+          479249
+        ],
+        "audioDecodedSamples": 480256,
+        "firstAudio": [
+          {
+            "media_type": "audio",
+            "pts": 0,
+            "duration": 1024,
+            "nb_samples": 1024
+          }
+        ],
+        "lastAudio": [
+          {
+            "media_type": "audio",
+            "pts": 479233,
+            "duration": 767,
+            "nb_samples": 1024
+          }
+        ]
+      },
+      "Criteria": {
+        "Id": "c1080-fractional",
+        "Format": "hls-8384",
+        "requestedIn": 91.25,
+        "requestedOut": 101.25,
+        "acquisitionIn": 89.25,
+        "acquisitionOut": 103.25,
+        "sourceReferenceInterval": "90%106",
+        "originPolicy": "min confirmed source stream start_pts, candidate matching input seek semantics"
+      },
+      "Coverage": {
+        "clock": 48000,
+        "sourceOriginCandidate": 95935,
+        "targetStart": 4475935,
+        "targetEnd": 4955935,
+        "streamOrigins": {
+          "0": 4380000,
+          "1": 4379935
+        },
+        "mappings": [
+          {
+            "streamIndex": 0,
+            "anchors": 855,
+            "relationOrigin": 4380000,
+            "localTargetStart": 95935,
+            "localTargetEnd": 575935,
+            "localPacketCount": 855,
+            "unknown": 0,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          },
+          {
+            "streamIndex": 1,
+            "anchors": 668,
+            "relationOrigin": 4379935,
+            "localTargetStart": 96000,
+            "localTargetEnd": 576000,
+            "localPacketCount": 668,
+            "unknown": 0,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          }
+        ],
+        "sourceStarts": [
+          {
+            "index": 0,
+            "pts": 12000,
+            "timeBase": "1/6000"
+          },
+          {
+            "index": 1,
+            "pts": 95935,
+            "timeBase": "1/48000"
+          }
+        ],
+        "neededVideo": 600,
+        "videoCovered": 600,
+        "neededAudio": 470,
+        "audioCovered": 470
+      },
+      "Samples": {
+        "inputSelectedSamples": 479999,
+        "inputGapSamples": 2,
+        "inputOverlapSamples": 1,
+        "outputPresentedSamples": 479999,
+        "outputGapSamples": 2,
+        "outputOverlapSamples": 1,
+        "containerEnd": 480000,
+        "timeBase": "1/48000"
+      },
+      "Id": "c1080-fractional"
+    },
+    {
+      "Executions": {
+        "c720-fractional-decode-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 0
+        },
+        "c720-fractional-local-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 455607
+        },
+        "c720-fractional-frames-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 142032
+        },
+        "c720-fractional-acquire-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 479
+        },
+        "c720-fractional-prefix-audio-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 54445
+        },
+        "c720-fractional-source-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 550137
+        },
+        "c720-fractional-encode-execution": {
+          "Status": 0,
+          "ExitCode": 0,
+          "RootExitConfirmed": true,
+          "DescendantExitConfirmed": true,
+          "StreamsDrained": true,
+          "IsComplete": true,
+          "IsTruncated": false,
+          "stdoutBytes": 0
+        }
+      },
+      "Filter": {
+        "graph": "[0:v:0]settb=expr=1/48000,setpts=PTS-95815,trim=start_pts=0:end_pts=480000[v];[0:a:0]asettb=expr=1/48000,asetpts=PTS-96000,atrim=start_pts=0:end_pts=480000[a]",
+        "clock": 48000,
+        "targetStart": 4479007,
+        "targetEnd": 4959007,
+        "videoShift": 95815,
+        "audioShift": 96000
+      },
+      "Files": [
+        {
+          "Name": "prefix.mp4",
+          "Bytes": 5931219
+        },
+        {
+          "Name": "trimmed.mp4",
+          "Bytes": 957413
+        }
+      ],
+      "Output": {
+        "videoCount": 600,
+        "expectedCount": 600,
+        "exactVideoPts": true,
+        "firstVideoPts": [
+          185,
+          985,
+          1785
+        ],
+        "lastVideoPts": [
+          477785,
+          478585,
+          479385
+        ],
+        "audioDecodedSamples": 480256,
+        "firstAudio": [
+          {
+            "media_type": "audio",
+            "pts": 0,
+            "duration": 1024,
+            "nb_samples": 1024
+          }
+        ],
+        "lastAudio": [
+          {
+            "media_type": "audio",
+            "pts": 479231,
+            "duration": 769,
+            "nb_samples": 1024
+          }
+        ]
+      },
+      "Criteria": {
+        "Id": "c720-fractional",
+        "Format": "hls-3192",
+        "requestedIn": 91.25,
+        "requestedOut": 101.25,
+        "acquisitionIn": 89.25,
+        "acquisitionOut": 103.25,
+        "sourceReferenceInterval": "90%106",
+        "originPolicy": "min confirmed source stream start_pts, candidate matching input seek semantics"
+      },
+      "Coverage": {
+        "clock": 48000,
+        "sourceOriginCandidate": 99007,
+        "targetStart": 4479007,
+        "targetEnd": 4959007,
+        "streamOrigins": {
+          "0": 4383192,
+          "1": 4383007
+        },
+        "mappings": [
+          {
+            "streamIndex": 0,
+            "anchors": 854,
+            "relationOrigin": 4383192,
+            "localTargetStart": 95815,
+            "localTargetEnd": 575815,
+            "localPacketCount": 854,
+            "unknown": 0,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          },
+          {
+            "streamIndex": 1,
+            "anchors": 657,
+            "relationOrigin": 4383007,
+            "localTargetStart": 96000,
+            "localTargetEnd": 576000,
+            "localPacketCount": 667,
+            "unknown": 10,
+            "unresolved": 0,
+            "resolvedDuplicates": 0
+          }
+        ],
+        "sourceStarts": [
+          {
+            "index": 0,
+            "pts": 12599,
+            "timeBase": "1/6000"
+          },
+          {
+            "index": 1,
+            "pts": 99007,
+            "timeBase": "1/48000"
+          }
+        ],
+        "neededVideo": 600,
+        "videoCovered": 600,
+        "neededAudio": 470,
+        "audioCovered": 470
+      },
+      "Samples": {
+        "inputSelectedSamples": 480001,
+        "inputGapSamples": 1,
+        "inputOverlapSamples": 2,
+        "outputPresentedSamples": 480001,
+        "outputGapSamples": 1,
+        "outputOverlapSamples": 2,
+        "containerEnd": 480000,
+        "timeBase": "1/48000"
+      },
+      "Id": "c720-fractional"
+    }
+  ],
+  "CommonTargetControl": {
+    "Note": "Offline control only; reused 1080p candidate to isolate target difference, not a product origin policy",
+    "CommonHashes": 470,
+    "OriginAuthorityEstablished": false,
+    "SourceTargetEndHeldConstant": 4955935,
+    "SourceTargetStartHeldConstant": 4475935,
+    "HighPackets": 470,
+    "LowPacketsAtSameTarget": 470
+  },
+  "CrossFormatAudio": {
+    "Ambiguous": 0,
+    "MatchingAudioPayloads": 661,
+    "DeltaDistribution": {
+      "-1": 180,
+      "0": 301,
+      "1": 180
+    }
+  },
+  "TargetSelection": {
+    "HighPackets": 470,
+    "HighOnly": 3,
+    "TargetDeltaSamples": 3072,
+    "CommonHashes": 467,
+    "LowOnly": 3,
+    "HighTargetStart": 4475935,
+    "TargetDeltaSeconds": 0.064,
+    "LowPackets": 470,
+    "LowTargetStart": 4479007
+  }
+}

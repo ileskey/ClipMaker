@@ -1,0 +1,7 @@
+[chzzk:video] Extracting URL: [REDACTED_URL]
+[chzzk:video] 15430558: Downloading video info
+[chzzk:video] 15430558: Downloading m3u8 information
+[info] 15430558: Downloading 1 format(s): hls-3192
+[info] 15430558: Downloading 1 time ranges: 90.0-100.0
+[download] Destination: <experiment-root>\c720.mp4
+

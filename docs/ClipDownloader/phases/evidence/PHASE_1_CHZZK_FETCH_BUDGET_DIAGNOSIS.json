@@ -1,0 +1,52 @@
+{
+  "SourceId": "14791589",
+  "Format": "hls-8384",
+  "RequestedStart": 2770,
+  "RequestedEnd": 2800,
+  "RequestedSpan": 30,
+  "MaximumFetchedSpan": 30,
+  "MaximumBytes": 33554432,
+  "FirstReferenceSpan": "2",
+  "Origin": "19187/9600",
+  "VideoObservedStart": "2",
+  "FetchWindowStart": "26572787/9600",
+  "FetchWindowEnd": "26899187/9600",
+  "SelectedSegmentCount": 18,
+  "WholeReferenceStart": "2766",
+  "WholeReferenceEnd": "2802",
+  "WholeReferenceSpan": "36",
+  "FirstSequence": 1383,
+  "LastSequence": 1400,
+  "PlanStatus": "Failed",
+  "Error": {
+    "Code": 8,
+    "Category": 1,
+    "Message": "HLS 참조 구간이 playlist/지원 검사 범위를 벗어났습니다.",
+    "Field": null
+  },
+  "TargetSegmentsDownloaded": false,
+  "InitialFiles": [
+    {
+      "Bytes": 2220785,
+      "Sha256": "250B089D6733D07D1ACEB01EB6272F0706255358216AE66270155B7627DFF9AA"
+    }
+  ],
+  "CliVerification": {
+    "ExitCode": 1,
+    "Field": "HlsFetchedSpanBudget",
+    "WholeReferenceSpanSeconds": 36,
+    "MaximumFetchedSpanSeconds": 30,
+    "FinalExists": false,
+    "JobId": "723a9205-48ef-467b-92d3-56bbb82fe87b",
+    "JobDirectoryExists": false,
+    "OutputStagingExists": false
+  },
+  "Validation": {
+    "BuildWarnings": 0,
+    "BuildErrors": 0,
+    "DownloaderPassed": 848,
+    "DownloaderFailed": 0,
+    "DownloaderSkipped": 0,
+    "TargetClipSupportVerified": false
+  }
+}

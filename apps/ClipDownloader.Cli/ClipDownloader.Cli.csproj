@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+    <PackageReference Include="Serilog" Version="4.4.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
+    <ProjectReference Include="../../src/ClipDownloader.Application/ClipDownloader.Application.csproj" />
+    <ProjectReference Include="../../src/ClipDownloader.Infrastructure/ClipDownloader.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/ClipMaker.Media.Infrastructure/ClipMaker.Media.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

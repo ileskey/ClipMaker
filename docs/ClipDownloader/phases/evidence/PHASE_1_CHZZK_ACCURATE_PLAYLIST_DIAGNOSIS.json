@@ -1,0 +1,38 @@
+{
+  "Date": "2026-10-15",
+  "StartHead": "ac28755",
+  "MetadataFailure": {
+    "VideoId": "15578184",
+    "YtDlpVersion": "2026.08.19",
+    "ProductArgumentsReproduced": true,
+    "ExitCode": 1,
+    "Error": "KeyError('sourceURL')",
+    "ManifestSeparatelyInspected": false
+  },
+  "PlaylistFailure": {
+    "VideoId": "15683602",
+    "Format": "hls-8384",
+    "Mode": "Accurate",
+    "RequestedRange": "[2770,2800)",
+    "HttpStatus": 200,
+    "ContentLength": 2213866,
+    "ContentEncoding": [],
+    "MaximumPlaylistBytes": 2097152,
+    "BoundedReaderFailure": "SizeLimitExceeded",
+    "FieldAfterFix": "HlsPlaylistByteBudget",
+    "ActualProductReaderAfterFixVerified": true,
+    "PlaylistLimitUnchanged": true,
+    "MediaDownloaded": false,
+    "ClipGenerationVerified": false,
+    "RawMetadataOrPlaylistSaved": false
+  },
+  "Validation": {
+    "BuildWarnings": 0,
+    "BuildErrors": 0,
+    "DownloaderPassed": 859,
+    "Failed": 0,
+    "Skipped": 0,
+    "CoreAndMediaRerun": false
+  },
+  "Phase1Completed": false
+}

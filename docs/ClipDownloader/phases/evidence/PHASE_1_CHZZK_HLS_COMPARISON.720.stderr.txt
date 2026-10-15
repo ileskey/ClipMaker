@@ -1,0 +1,24 @@
+[debug] Encodings: locale cp949, fs utf-8, pref cp949, out cp949 (dumb,No ANSI), error cp949 (dumb,No ANSI), screen cp949 (dumb,No ANSI)
+[REDACTED_SENSITIVE_LINE]
+" -ss 90 -t 10 -extension_picky 0 -i "[REDACTED_URL]" -c copy -f mp4 file:<experiment-root>\c720.mp4.part
+Input #0, hls, from '[REDACTED_URL]':
+  Duration: 00:44:27.56, start: 2.062646, bitrate: 0 kb/s
+  Stream #0:0[0x0](und): Video: h264 (High), 1 reference frame (avc1 / 0x31637661), yuv420p(tv, bt709, left), 1280x720 [SAR 1:1 DAR 16:9], 1019 kb/s, 60 fps, 60 tbr, 6k tbn, start 2.099833 (default)
+  Stream #0:1[0x0](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s, start 2.062646 (default)
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (copy)
+Output #0, mp4, to 'file:<experiment-root>\c720.mp4.part':
+  Stream #0:0(und): Video: h264 (High), 1 reference frame (avc1 / 0x31637661), yuv420p(tv, bt709, left), 1280x720 [SAR 1:1 DAR 16:9], q=2-31, 1019 kb/s, 60 fps, 60 tbr, 12k tbn (default)
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s (default)
+frame=    0 fps=0.0 q=-1.0 size=       0KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:00.51    [mov,mp4,m4a,3gp,3g2,mj2 @ 00000243eaa87840] Found duplicated MOOV Atom. Skipped it
+frame=   67 fps= 66 q=-1.0 size=       0KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:01.02    [in#0/hls @ 00000243ea8291c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  240 fps=155 q=-1.0 size=    1280KiB time=00:00:02.01 bitrate=5215.2kbits/s speed= 1.3x elapsed=0:00:01.55    [in#0/hls @ 00000243ea8291c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  360 fps=174 q=-1.0 size=    2048KiB time=00:00:04.01 bitrate=4177.7kbits/s speed=1.95x elapsed=0:00:02.06    [in#0/hls @ 00000243ea8291c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  600 fps=233 q=-1.0 size=    3584KiB time=00:00:08.00 bitrate=3667.6kbits/s speed=3.11x elapsed=0:00:02.57    [vist#0:0/h264 @ 00000243ea828a40] All consumers of this stream are done
+frame=  719 fps=233 q=-1.0 size=    4352KiB time=00:00:10.01 bitrate=3561.4kbits/s speed=3.24x elapsed=0:00:03.09    [aist#0:1/aac @ 00000243ea9dd640] All consumers of this stream are done
+[out#0/mp4 @ 00000243eaf9ba00]   Output stream #0:0 (video): 719 packets muxed (4390398 bytes); 
+[out#0/mp4 @ 00000243eaf9ba00]   Output stream #0:1 (audio): 515 packets muxed (263669 bytes); 
+frame=  719 fps=215 q=-1.0 Lsize=    4563KiB time=00:00:10.00 bitrate=3736.2kbits/s speed=2.99x elapsed=0:00:03.34    
+[in#0/hls @ 00000243ea828f80]   Input stream #0:0 (video): 720 packets read (4391075 bytes); 
+[in#0/hls @ 00000243ea828f80]   Input stream #0:1 (audio): 516 packets read (264151 bytes); 
+Exiting with exit code 0

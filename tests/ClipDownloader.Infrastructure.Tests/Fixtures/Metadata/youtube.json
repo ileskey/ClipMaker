@@ -1,0 +1,423 @@
+{
+  "id": "sFXPM_sfJNo",
+  "duration": 226,
+  "live_status": "not_live",
+  "upload_date": "20261009",
+  "is_live": false,
+  "_type": "video",
+  "title": "Anonymous metadata fixture",
+  "uploader": "Anonymous uploader",
+  "formats": [
+    {
+      "format_id": "sb3",
+      "acodec": "none",
+      "vcodec": "none",
+      "width": 48,
+      "height": 27,
+      "fps": 0.4424778761061947
+    },
+    {
+      "format_id": "sb2",
+      "acodec": "none",
+      "vcodec": "none",
+      "width": 80,
+      "height": 45,
+      "fps": 0.504424778761062
+    },
+    {
+      "format_id": "sb1",
+      "acodec": "none",
+      "vcodec": "none",
+      "width": 160,
+      "height": 90,
+      "fps": 0.504424778761062
+    },
+    {
+      "format_id": "sb0",
+      "acodec": "none",
+      "vcodec": "none",
+      "width": 320,
+      "height": 180,
+      "fps": 0.504424778761062
+    },
+    {
+      "format_id": "233",
+      "has_drm": false,
+      "vcodec": "none"
+    },
+    {
+      "format_id": "234",
+      "has_drm": false,
+      "vcodec": "none"
+    },
+    {
+      "format_id": "139-drc",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "mp4a.40.5"
+    },
+    {
+      "format_id": "249-drc",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "opus"
+    },
+    {
+      "format_id": "250-drc",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "opus"
+    },
+    {
+      "format_id": "139",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "mp4a.40.5"
+    },
+    {
+      "format_id": "249",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "opus"
+    },
+    {
+      "format_id": "250",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "opus"
+    },
+    {
+      "format_id": "140-drc",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "mp4a.40.2"
+    },
+    {
+      "format_id": "251-drc",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "opus"
+    },
+    {
+      "format_id": "140",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "mp4a.40.2"
+    },
+    {
+      "format_id": "251",
+      "fps": null,
+      "height": null,
+      "has_drm": false,
+      "width": null,
+      "vcodec": "none",
+      "acodec": "opus"
+    },
+    {
+      "format_id": "602",
+      "fps": 15.0,
+      "has_drm": false,
+      "width": 256,
+      "height": 144,
+      "vcodec": "vp09.00.10.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "269",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 256,
+      "height": 144,
+      "vcodec": "avc1.4D400C",
+      "acodec": "none"
+    },
+    {
+      "format_id": "160",
+      "fps": 30,
+      "height": 144,
+      "has_drm": false,
+      "width": 256,
+      "vcodec": "avc1.4D400C",
+      "acodec": "none"
+    },
+    {
+      "format_id": "603",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 256,
+      "height": 144,
+      "vcodec": "vp09.00.11.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "278",
+      "fps": 30,
+      "height": 144,
+      "has_drm": false,
+      "width": 256,
+      "vcodec": "vp9",
+      "acodec": "none"
+    },
+    {
+      "format_id": "394",
+      "fps": 30,
+      "height": 144,
+      "has_drm": false,
+      "width": 256,
+      "vcodec": "av01.0.00M.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "229",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 426,
+      "height": 240,
+      "vcodec": "avc1.4D4015",
+      "acodec": "none"
+    },
+    {
+      "format_id": "133",
+      "fps": 30,
+      "height": 240,
+      "has_drm": false,
+      "width": 426,
+      "vcodec": "avc1.4D4015",
+      "acodec": "none"
+    },
+    {
+      "format_id": "604",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 426,
+      "height": 240,
+      "vcodec": "vp09.00.20.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "242",
+      "fps": 30,
+      "height": 240,
+      "has_drm": false,
+      "width": 426,
+      "vcodec": "vp9",
+      "acodec": "none"
+    },
+    {
+      "format_id": "395",
+      "fps": 30,
+      "height": 240,
+      "has_drm": false,
+      "width": 426,
+      "vcodec": "av01.0.00M.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "230",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 640,
+      "height": 360,
+      "vcodec": "avc1.4D401E",
+      "acodec": "none"
+    },
+    {
+      "format_id": "134",
+      "fps": 30,
+      "height": 360,
+      "has_drm": false,
+      "width": 640,
+      "vcodec": "avc1.4D401E",
+      "acodec": "none"
+    },
+    {
+      "format_id": "605",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 640,
+      "height": 360,
+      "vcodec": "vp09.00.21.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "243",
+      "fps": 30,
+      "height": 360,
+      "has_drm": false,
+      "width": 640,
+      "vcodec": "vp9",
+      "acodec": "none"
+    },
+    {
+      "format_id": "396",
+      "fps": 30,
+      "height": 360,
+      "has_drm": false,
+      "width": 640,
+      "vcodec": "av01.0.01M.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "231",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 854,
+      "height": 480,
+      "vcodec": "avc1.4D401F",
+      "acodec": "none"
+    },
+    {
+      "format_id": "135",
+      "fps": 30,
+      "height": 480,
+      "has_drm": false,
+      "width": 854,
+      "vcodec": "avc1.4D401F",
+      "acodec": "none"
+    },
+    {
+      "format_id": "606",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 854,
+      "height": 480,
+      "vcodec": "vp09.00.30.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "244",
+      "fps": 30,
+      "height": 480,
+      "has_drm": false,
+      "width": 854,
+      "vcodec": "vp9",
+      "acodec": "none"
+    },
+    {
+      "format_id": "397",
+      "fps": 30,
+      "height": 480,
+      "has_drm": false,
+      "width": 854,
+      "vcodec": "av01.0.04M.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "232",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 1280,
+      "height": 720,
+      "vcodec": "avc1.64001F",
+      "acodec": "none"
+    },
+    {
+      "format_id": "136",
+      "fps": 30,
+      "height": 720,
+      "has_drm": false,
+      "width": 1280,
+      "vcodec": "avc1.64001F",
+      "acodec": "none"
+    },
+    {
+      "format_id": "609",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 1280,
+      "height": 720,
+      "vcodec": "vp09.00.31.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "247",
+      "fps": 30,
+      "height": 720,
+      "has_drm": false,
+      "width": 1280,
+      "vcodec": "vp9",
+      "acodec": "none"
+    },
+    {
+      "format_id": "398",
+      "fps": 30,
+      "height": 720,
+      "has_drm": false,
+      "width": 1280,
+      "vcodec": "av01.0.05M.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "270",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 1920,
+      "height": 1080,
+      "vcodec": "avc1.640028",
+      "acodec": "none"
+    },
+    {
+      "format_id": "137",
+      "fps": 30,
+      "height": 1080,
+      "has_drm": false,
+      "width": 1920,
+      "vcodec": "avc1.640028",
+      "acodec": "none"
+    },
+    {
+      "format_id": "614",
+      "fps": 30.0,
+      "has_drm": false,
+      "width": 1920,
+      "height": 1080,
+      "vcodec": "vp09.00.40.08",
+      "acodec": "none"
+    },
+    {
+      "format_id": "248",
+      "fps": 30,
+      "height": 1080,
+      "has_drm": false,
+      "width": 1920,
+      "vcodec": "vp9",
+      "acodec": "none"
+    },
+    {
+      "format_id": "399",
+      "fps": 30,
+      "height": 1080,
+      "has_drm": false,
+      "width": 1920,
+      "vcodec": "av01.0.08M.08",
+      "acodec": "none"
+    }
+  ]
+}

@@ -1,0 +1,227 @@
+{
+  "Date": "2026-10-14",
+  "Scope": "Application stage 5 bounded 10-20 second jobs; stage 6 CLI not implemented",
+  "WorkRoot": "C:\\Users\\shiro\\AppData\\Local\\ClipMaker\\ClipDownloader\\jobs",
+  "WorkspaceRecheckEnvironment": "Same unsandboxed app-data resolution as actual jobs",
+  "Rows": [
+    {
+      "Summary": {
+        "Status": "Succeeded",
+        "JobId": "28227984-d64e-4f74-80de-dc108650cf29",
+        "Mode": "Fast",
+        "Error": null,
+        "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage5-real\\e85a6750025a4ca0a9404665578b9b24\\clip.mp4",
+        "Warnings": [
+          "선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+          "Fast의 실제 시작·끝은 요청 범위와 다를 수 있습니다."
+        ],
+        "Remaining": [],
+        "FinalExists": true,
+        "Sha256": "360D6FBA66306F1427F6220F076EA8F9EC7294E459BB2CD0B76FF87BCC09CDFE",
+        "SourceFiles": 3,
+        "MediaFiles": 1,
+        "OwnedFilesStillExist": 0,
+        "Video": {
+          "Start": {
+            "Numerator": 11,
+            "Denominator": 1
+          },
+          "End": {
+            "Numerator": 22,
+            "Denominator": 1
+          }
+        },
+        "Audio": {
+          "Start": {
+            "Numerator": 11,
+            "Denominator": 1
+          },
+          "End": {
+            "Numerator": 16507,
+            "Denominator": 750
+          }
+        }
+      },
+      "SummaryPath": ".artifacts/stage5-real/e85a6750025a4ca0a9404665578b9b24/job-summary.json",
+      "CurrentFinalHashMatches": true,
+      "OwnedWorkDirectoriesRemaining": 0
+    },
+    {
+      "Summary": {
+        "Status": "Succeeded",
+        "JobId": "06a22092-18f6-4a58-8e42-8b13dc36b6d9",
+        "Mode": "Fast",
+        "Error": null,
+        "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage5-real\\41bfa344665f4435bfb961e65f70caf5\\clip.mp4",
+        "Warnings": [
+          "선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+          "Fast의 실제 시작·끝은 요청 범위와 다를 수 있습니다."
+        ],
+        "Remaining": [],
+        "FinalExists": true,
+        "Sha256": "52314B66092C858DD4521D8E372A5546D2BC4DA5E381EEA87A16D0FD7D98DDD8",
+        "SourceFiles": 10,
+        "MediaFiles": 1,
+        "OwnedFilesStillExist": 0,
+        "Presentation": {
+          "Requested": {
+            "Start": {
+              "Numerator": 10,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 20,
+              "Denominator": 1
+            }
+          },
+          "Video": {
+            "Start": {
+              "Numerator": 6,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 301,
+              "Denominator": 15
+            }
+          },
+          "Audio": {
+            "Start": {
+              "Numerator": 6,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 220672,
+              "Denominator": 11025
+            }
+          },
+          "SourceEndVerified": false,
+          "InsertedAudioZeroSamples": 0,
+          "DiscardedAudioOverlapSamples": 0,
+          "AudioPrimingSkippedSamples": 408,
+          "AudioDecodedTailPaddingSamples": 0
+        }
+      },
+      "SummaryPath": ".artifacts/stage5-real/41bfa344665f4435bfb961e65f70caf5/job-summary.json",
+      "CurrentFinalHashMatches": true,
+      "OwnedWorkDirectoriesRemaining": 0
+    },
+    {
+      "Summary": {
+        "Status": "Succeeded",
+        "JobId": "e9a632ad-eb4c-411a-b649-d9421c183d96",
+        "Mode": "Accurate",
+        "Error": null,
+        "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage5-real\\5e23aa88eb0d463da24b84eef5477fbc\\clip.mp4",
+        "Warnings": [
+          "선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+          "Accurate는 검증한 원본 시작 참조와 sample-grid 표현 범위에서 실행합니다."
+        ],
+        "Remaining": [],
+        "FinalExists": true,
+        "Sha256": "3916ABAD8217623B35079F2502C185444CAC487B56107CB0FD9AAA6714612DDE",
+        "SourceFiles": 3,
+        "MediaFiles": 3,
+        "OwnedFilesStillExist": 0,
+        "Presentation": {
+          "Requested": {
+            "Start": {
+              "Numerator": 10,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 20,
+              "Denominator": 1
+            }
+          },
+          "Video": {
+            "Start": {
+              "Numerator": 96013,
+              "Denominator": 9600
+            },
+            "End": {
+              "Numerator": 192013,
+              "Denominator": 9600
+            }
+          },
+          "Audio": {
+            "Start": {
+              "Numerator": 10,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 20,
+              "Denominator": 1
+            }
+          },
+          "SourceEndVerified": false,
+          "InsertedAudioZeroSamples": 2,
+          "DiscardedAudioOverlapSamples": 1,
+          "AudioPrimingSkippedSamples": 1024,
+          "AudioDecodedTailPaddingSamples": 256
+        }
+      },
+      "SummaryPath": ".artifacts/stage5-real/5e23aa88eb0d463da24b84eef5477fbc/job-summary.json",
+      "CurrentFinalHashMatches": true,
+      "OwnedWorkDirectoriesRemaining": 0
+    },
+    {
+      "Summary": {
+        "Status": "Succeeded",
+        "JobId": "025dd5dc-58b5-4e11-8426-8b2d9003dac0",
+        "Mode": "Accurate",
+        "Error": null,
+        "Output": "C:\\DevelopingFiles\\repositories\\git\\ClipMaker\\.artifacts\\stage5-real\\f6999b88362f4a31b8b64ffdbdeff3d6\\clip.mp4",
+        "Warnings": [
+          "선택 화질은 메타데이터의 선언을 기준으로 합니다.",
+          "Accurate는 검증한 원본 시작 참조와 sample-grid 표현 범위에서 실행합니다."
+        ],
+        "Remaining": [],
+        "FinalExists": true,
+        "Sha256": "C599D0E9BEDA14A895AC0003F0607AA21B0FA010385F325452742707867801CE",
+        "SourceFiles": 10,
+        "MediaFiles": 3,
+        "OwnedFilesStillExist": 0,
+        "Presentation": {
+          "Requested": {
+            "Start": {
+              "Numerator": 10,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 20,
+              "Denominator": 1
+            }
+          },
+          "Video": {
+            "Start": {
+              "Numerator": 10,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 20,
+              "Denominator": 1
+            }
+          },
+          "Audio": {
+            "Start": {
+              "Numerator": 10,
+              "Denominator": 1
+            },
+            "End": {
+              "Numerator": 20,
+              "Denominator": 1
+            }
+          },
+          "SourceEndVerified": false,
+          "InsertedAudioZeroSamples": 0,
+          "DiscardedAudioOverlapSamples": 0,
+          "AudioPrimingSkippedSamples": 1024,
+          "AudioDecodedTailPaddingSamples": 344
+        }
+      },
+      "SummaryPath": ".artifacts/stage5-real/f6999b88362f4a31b8b64ffdbdeff3d6/job-summary.json",
+      "CurrentFinalHashMatches": true,
+      "OwnedWorkDirectoriesRemaining": 0
+    }
+  ]
+}

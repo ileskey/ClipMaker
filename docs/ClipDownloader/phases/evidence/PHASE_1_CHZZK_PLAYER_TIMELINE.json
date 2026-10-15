@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-11",
+  "head": "20b5ba3712b9f40a54beddc11573d0676b506301",
+  "branch": "phase/1",
+  "videoNo": 15430558,
+  "browser": "Codex In-app Browser",
+  "scope": "One anonymous player session; UI quality changes and read-only DOM observations; no direct SourceBuffer or initPTS access",
+  "script": {
+    "publicUrl": "https://ssl.pstatic.net/static/nng/glive/resource/p/static/js/player-vendor-B7YwD4RF.js",
+    "bytes": 6637952,
+    "sha256": "FFB936C4BA3747A71D546E3F65F0F262E7DDAF29F2B65D3360E3DC8B0ACFE468",
+    "offsetUnit": "Zero-based UTF-16 character index in downloaded script",
+    "passthroughOriginCalculationOffsets": [1287254, 5362827],
+    "initPtsObjectAssignmentOffsets": [1287983, 5363556],
+    "bufferAppendingNegativeOffsetOffsets": [1207680, 5282532],
+    "nativeCurrentTimeGetterOffset": 71388,
+    "routeActuallyUsed": "Not directly identified; bundle contains two matching HLS timing paths"
+  },
+  "observations": [
+    { "stage": "initial AX after delayed navigation", "mediaErrorText": "미디어를 재생할 수 없습니다", "note": "Transient UI observation; later media DOM reports no error" },
+    { "stage": "first media DOM", "currentTime": 6.794296, "duration": 2667.563333, "paused": false, "readyState": 4, "error": null, "buffered": [{ "start": 0, "end": 53.930688 }] },
+    { "stage": "paused; settings show auto 1080p", "currentTime": 19.711694, "duration": 2667.563333, "paused": true, "videoElementOwnKeys": [], "initPtsLogEntries": 0 },
+    { "stage": "720p selected; progress click", "currentTime": 83.964544, "duration": 2667.563333, "paused": true, "readyState": 1 },
+    { "stage": "720p; after keyboard seek", "currentTime": 88.964544, "duration": 2667.563333, "paused": true, "readyState": 4, "ariaValueNow": 88, "ariaValueText": "1 분 29 초 총 시간 44 분 28 초" },
+    { "stage": "720p confirmed; intermediate seek", "currentTime": 93.964544, "duration": 2667.563333, "paused": true, "readyState": 4, "ariaValueNow": 93, "ariaValueText": "1 분 34 초 총 시간 44 분 28 초", "buffered": [{ "start": 2.037188, "end": 4.010688 }, { "start": 18.005355, "end": 80 }, { "start": 82.005355, "end": 120 }] },
+    { "stage": "1080p selected; loading", "currentTime": 93.964544, "duration": 2667.561333, "paused": true, "readyState": 1 },
+    { "stage": "1080p confirmed; loaded", "currentTime": 93.964544, "duration": 2667.561333, "paused": true, "readyState": 4, "error": null, "buffered": [{ "start": 2.005334, "end": 3.989333 }, { "start": 91.989355, "end": 152 }] }
+  ],
+  "boundaryComparisons": [
+    { "format": "hls-3192", "segmentIndex": 1, "originCandidate48k": 99007, "sourceVideoStart48k": 196792, "sourceAudioEnd48k": 291520, "predictedVideoStart": 2.0371875, "observedBufferedStart": 2.037188, "startAbsoluteErrorSeconds": 0.0000005, "predictedAudioEnd": 4.0106875, "observedBufferedEnd": 4.010688, "endAbsoluteErrorSeconds": 0.0000005, "kind": "Indirect boundary fit, not direct runtime initPTS read" },
+    { "format": "hls-8384", "segmentIndex": 1, "originCandidate48k": 95935, "sourceAudioEnd48k": 287423, "predictedAudioEnd": 3.9893333333333333, "observedBufferedEnd": 3.989333, "endAbsoluteErrorSeconds": 0.0000003333333333, "observedStartNotUsedAsCompleteSegmentBoundary": 2.005334, "kind": "Indirect boundary fit; buffered start is clipped and not equated to first packet" }
+  ],
+  "conditionalSourceContentPrediction": {
+    "assumption": "Each inferred offset maps raw packet PTS to media currentTime throughout its selected-quality playback context",
+    "originDifference48k": 3072,
+    "originDifferenceSeconds": 0.064,
+    "previousSameAudioRawPtsDifference48k": [-1, 0, 1],
+    "predictedSameAudioPresentationDifference48k": [-3073, -3072, -3071],
+    "actuallyMeasuredInBrowser": false
+  },
+  "limitations": [
+    "Navigation tool returned after approximately 3375 seconds; repeated media buffering amount and network transfer volume not measured",
+    "UI slider cannot accept accessibility setValue; exact fractional IN 91.25 was not tested",
+    "Two adjacent Right key inputs yielded one 5-second change; another key action yielded a further 5-second change",
+    "Browser DOM does not expose session initPTS or SourceBuffer timestampOffset; no such log entry was available",
+    "Buffered boundary correspondence is indirect and does not prove exact displayed-frame or decoded-audio content mapping",
+    "One source and one player session only; no claim about all CHZZK players or playback sessions"
+  ],
+  "verdict": "Player has contextual origin normalization code and quality-dependent boundary evidence. No authority for a single quality-independent user-time zero established; product policy remains pending."
+}

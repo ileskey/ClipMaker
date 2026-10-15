@@ -132,6 +132,6 @@ Phase 0은 요구사항과 전체 구조를 기준으로 새 context를 시작�
 
 ## 8. 적용 범위와 현재 상태
 
-이 문서는 Phase 설계 운영 규칙을 정리한 결과다. Phase 0 상세 설계, 구현 및 검증의 완료를 의미하지 않는다.
+이 문서는 Phase 설계 운영 규칙을 정의하며, 각 Phase의 실제 완료 여부는 [Phase Baseline](PHASE_BASELINE.md)과 해당 Phase의 실제 검증 기록을 따른다.
 
-다음 작업은 이 규칙과 프로젝트 구조 설계를 기준으로 Phase 0의 MVVM, DI, logging, 도구 경로 관리, 테스트 구성 및 완료 조건을 구체화하는 것이다.
+2026-10-07 기준 Phase 0은 구현·필수 검증을 완료했다. 완료 기준점과 후속 제약은 [Phase 0 완료 인계](phases/PHASE_0_COMPLETION_HANDOFF.md)에 정리했다. 다음 작업은 [Phase 1 설계 준비 자료](phases/PHASE_1_DESIGN_CHECKLIST.md)를 사용하여 새 context에서 Phase 1 상세 설계를 진행하는 것이다. 준비 자료 작성 자체는 Phase 1 설계 확정·구현·검증 완료를 의미하지 않는다.

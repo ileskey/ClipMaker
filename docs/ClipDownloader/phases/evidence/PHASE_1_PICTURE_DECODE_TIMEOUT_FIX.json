@@ -1,0 +1,45 @@
+{
+  "Date": "2026-10-14",
+  "SourceId": "14791589",
+  "Format": "hls-8384",
+  "Mode": "Fast",
+  "Start": "00:46:10:00",
+  "End": "00:46:40:00",
+  "ReportedFailure": {
+    "Code": "TimedOut",
+    "Field": "PresentationVideoProbe",
+    "OriginalFailingInvocationConfirmed": false,
+    "OriginalTimeoutReproduced": false
+  },
+  "RetainedOutputFramehashMeasurement": {
+    "InputSha256": "38CE8173B4574F269161F5E7FE7967798148E648CFEC9F565562A895F87B3974",
+    "ExitCode": 0,
+    "ElapsedSeconds": 34.8883535,
+    "Frames": 1860,
+    "OutputBytes": 208543,
+    "StderrBytes": 0
+  },
+  "TimePolicy": {
+    "VersionSeconds": 15,
+    "FfprobeSeconds": 60,
+    "FfmpegPictureDecodeSeconds": null,
+    "UserCancellationSupported": true
+  },
+  "Validation": {
+    "BuildWarnings": 0,
+    "BuildErrors": 0,
+    "DownloaderPassed": 850,
+    "DownloaderFailed": 0,
+    "DownloaderSkipped": 0
+  },
+  "DirectPlayerVerified": false,
+  "CliVerification": {
+    "ExitCode": 0,
+    "JobId": "00722829-e06a-4701-9290-96ea7ce6d416",
+    "Bytes": 31798101,
+    "Sha256": "38ce8173b4574f269161f5e7fe7967798148e648cfec9f565562a895f87b3974",
+    "SameBytesAsPreviouslyFullyDecodedOutput": true,
+    "JobDirectoryCount": 0,
+    "OutputStagingCount": 0
+  }
+}

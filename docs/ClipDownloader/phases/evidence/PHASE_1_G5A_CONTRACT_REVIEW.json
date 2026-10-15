@@ -1,0 +1,270 @@
+{
+  "date": "2026-10-12",
+  "head": "f48aa91062cdc82fe98bc3f8a377365c6e09d9b7",
+  "branch": "phase/1",
+  "scope": "G5a document/numeric contract review only, no product services or new media execution",
+  "coordinates": [
+    {
+      "case": "c1080-fractional",
+      "status": "Exact equation checked against existing G2 evidence; no media rerun",
+      "B": 4380000,
+      "localIn": 95935,
+      "unknownPackets": 0,
+      "sourceOut": 4955935,
+      "localOut": 575935,
+      "existingCoveragePassed": true,
+      "origin": 95935,
+      "sourceIn": 4475935,
+      "clock": 48000,
+      "stream": 0
+    },
+    {
+      "case": "c1080-fractional",
+      "status": "Exact equation checked against existing G2 evidence; no media rerun",
+      "B": 4379935,
+      "localIn": 96000,
+      "unknownPackets": 0,
+      "sourceOut": 4955935,
+      "localOut": 576000,
+      "existingCoveragePassed": true,
+      "origin": 95935,
+      "sourceIn": 4475935,
+      "clock": 48000,
+      "stream": 1
+    },
+    {
+      "case": "c720-fractional",
+      "status": "Exact equation checked against existing G2 evidence; no media rerun",
+      "B": 4383192,
+      "localIn": 95815,
+      "unknownPackets": 0,
+      "sourceOut": 4959007,
+      "localOut": 575815,
+      "existingCoveragePassed": true,
+      "origin": 99007,
+      "sourceIn": 4479007,
+      "clock": 48000,
+      "stream": 0
+    },
+    {
+      "case": "c720-fractional",
+      "status": "Exact equation checked against existing G2 evidence; no media rerun",
+      "B": 4383007,
+      "localIn": 96000,
+      "unknownPackets": 10,
+      "sourceOut": 4959007,
+      "localOut": 576000,
+      "existingCoveragePassed": true,
+      "origin": 99007,
+      "sourceIn": 4479007,
+      "clock": 48000,
+      "stream": 1
+    }
+  ],
+  "nativeCeil": [
+    {
+      "case": "half-sample-ceil-grid",
+      "sampleRate": 48000,
+      "renderResidualDenominator": 480000,
+      "sourceOut": 1185185,
+      "ceilOut": "118519",
+      "sourceClock": 480000,
+      "renderResidualNumerator": "5",
+      "status": "Exact native ceil arithmetic, existing G3c case presence verified; no PCM rerun",
+      "sourceIn": 704705,
+      "samples": "48048",
+      "ceilIn": "70471"
+    },
+    {
+      "case": "neither-aligned-ceil-grid",
+      "sampleRate": 48000,
+      "renderResidualDenominator": 480000,
+      "sourceOut": 1185188,
+      "ceilOut": "118519",
+      "sourceClock": 480000,
+      "renderResidualNumerator": "4",
+      "status": "Exact native ceil arithmetic, existing G3c case presence verified; no PCM rerun",
+      "sourceIn": 704706,
+      "samples": "48048",
+      "ceilIn": "70471"
+    }
+  ],
+  "signedCeilControls": [
+    {
+      "n": -1,
+      "d": 2,
+      "expected": 0
+    },
+    {
+      "n": -3,
+      "d": 2,
+      "expected": -1
+    },
+    {
+      "n": -2,
+      "d": 2,
+      "expected": -1
+    },
+    {
+      "n": 1,
+      "d": 2,
+      "expected": 1
+    }
+  ],
+  "nativeCorrectionRebaseControl": {
+    "oldB": 4380000,
+    "correction": 24,
+    "oldLocal": 95935,
+    "newLocal": 95959,
+    "wrongReuseBSource": 4475959,
+    "newB": 4379976,
+    "clock": 48000,
+    "source": 4475935
+  },
+  "doubleBoundary": {
+    "conclusion": "Exact rational model does not imply FFmpeg double expression representability",
+    "roundtripInteger": "9007199254740992",
+    "exactInteger": "9007199254740993"
+  },
+  "copyBoundaryInterpretations": [
+    {
+      "pictureHashesEqual": true,
+      "rawSourceSamples": 96256,
+      "sourceSkip": 1024,
+      "decision": "Do not qualify simple copy as preservation success; raw count is not declared valid end",
+      "rawCopySamples": 96272,
+      "copySkip": 1008,
+      "decisionStatus": "Contract interpretation of existing experiment",
+      "case": "avc"
+    },
+    {
+      "pictureHashesEqual": true,
+      "rawSourceSamples": 96000,
+      "sourceSkip": 312,
+      "decision": "Do not qualify simple copy as preservation success; raw count is not declared valid end",
+      "rawCopySamples": 96624,
+      "copySkip": 336,
+      "decisionStatus": "Contract interpretation of existing experiment",
+      "case": "vp9"
+    },
+    {
+      "pictureHashesEqual": true,
+      "rawSourceSamples": 96000,
+      "sourceSkip": 312,
+      "decision": "Do not qualify simple copy as preservation success; raw count is not declared valid end",
+      "rawCopySamples": 96624,
+      "copySkip": 336,
+      "decisionStatus": "Contract interpretation of existing experiment",
+      "case": "av1"
+    }
+  ],
+  "errorMappings": {
+    "cases": [
+      {
+        "category": "Input",
+        "condition": "RequestedResolutionUnavailable",
+        "code": "UnsupportedFormat"
+      },
+      {
+        "category": "Execution",
+        "condition": "KnownUnsupportedProcessingStrategy",
+        "code": "UnsupportedFormat"
+      },
+      {
+        "category": "Execution",
+        "condition": "SourceRelationOrRequiredCoverageUnverified",
+        "code": "VerificationFailed"
+      },
+      {
+        "category": "Execution",
+        "condition": "RequiredRateStillUnknown",
+        "code": "UnknownFrameRate"
+      },
+      {
+        "category": "Execution",
+        "condition": "OutputSampleOrTimeContradiction",
+        "code": "VerificationFailed"
+      },
+      {
+        "category": "Execution",
+        "condition": "SourceSelectionChanged",
+        "code": "InvalidMetadata"
+      },
+      {
+        "category": "Execution",
+        "condition": "ToolExecutableAbsent",
+        "code": "MissingTool"
+      },
+      {
+        "category": "Execution",
+        "condition": "ToolNonzeroExit",
+        "code": "ProcessFailed"
+      },
+      {
+        "category": "Execution",
+        "condition": "TerminationUnconfirmed",
+        "code": "ProcessTerminationFailed"
+      }
+    ],
+    "status": "Proposed mapping, existing enum names verified, product behavior not implemented"
+  },
+  "sourceReferences": [
+    {
+      "sha256": "e14c5731a6b38f2688ef846dcbfb42985a9a37b25691d7dc477d23dd10b6be3f",
+      "path": "src/ClipDownloader.Application/Models/OperationResult.cs"
+    },
+    {
+      "sha256": "ecc43ec4d0ec24243b07c1a73f61524700ce0c760177747925dc454309309e6d",
+      "path": "src/ClipDownloader.Application/Models/FormatSelection.cs"
+    },
+    {
+      "sha256": "f00a3aefdd0a607c4a31696049178522bf037aa04b0098286a124af6f35fe9a5",
+      "path": "src/ClipDownloader.Application/Models/VideoInfo.cs"
+    },
+    {
+      "sha256": "57c8ed636d01ff4e5ed8d24e86e5dcf0012d55dd04bb42a82d46c57bbd469704",
+      "path": "src/ClipDownloader.Application/Validation/FormatSelector.cs"
+    },
+    {
+      "sha256": "6aaeb9d93f8bb688a9a29ad71147d3e2cb73a9d4b3dd6213787ebf65ec8bb498",
+      "path": "src/ClipMaker.Media.Core/ValueObjects/Timecode.cs"
+    },
+    {
+      "sha256": "312967a9573e09d0ed48788512a3d1242bc2483c58a13ad9708e607c91467a13",
+      "path": "src/ClipMaker.Media.Core/ValueObjects/MediaTimeRange.cs"
+    },
+    {
+      "sha256": "f9e3c19a18db10db24bba04d837dba386775165ea7b0b724c177cf0b57f89bc0",
+      "path": "docs/ClipDownloader/phases/evidence/PHASE_1_G2_COVERAGE.json"
+    },
+    {
+      "sha256": "72ea68283993ade7069b96ab4eec0c8f8ee6ee6411da734526bee331eef29444",
+      "path": "docs/ClipDownloader/phases/evidence/PHASE_1_G3C_AV_BOUNDARIES.json"
+    },
+    {
+      "sha256": "ee4cf223bebfc5b6b41f80efa76d134f7f7e4c582ef9627338b556b1de7dd321",
+      "path": "docs/ClipDownloader/phases/evidence/PHASE_1_G4C1_CADENCE.json"
+    },
+    {
+      "sha256": "1757b0a58648d0449e87f638bbffa841a83d3e6a86b8b4e1176ccacec9a3ed79",
+      "path": "docs/ClipDownloader/phases/evidence/PHASE_1_G4C2_CODEC_BOUNDARIES.json"
+    },
+    {
+      "sha256": "a923e9ea5632ffb06a5284f1b16bbc149621892151cfc9d04da3db10d80de16c",
+      "path": "docs/ClipDownloader/phases/PHASE_1_CONTRACT_INTEGRATION.md"
+    }
+  ],
+  "checks": "Document arithmetic and existing evidence/code compatibility assertions passed",
+  "reviewScript": {
+    "initialFailure": "PowerShell ++ on BigInteger failed; corrected to explicit BigInteger addition, final review exit0",
+    "path": ".artifacts/phase1-g5a-contract-20261012-01/Review.ps1",
+    "sha256": "44385c68bd5e1fdc63f96ac59740994bd62ee7d494e00b3c5872012a42d3ccc1"
+  },
+  "unresolved": [
+    "G5b CLR/API details and exact supported strategy set",
+    "FPS-unknown prepare and bounded inspection request",
+    "Decoder preparation guarantee/rejection scope and lossy value claims",
+    "Empty target or no required audio support result rules",
+    "Readiness audit and implementation commit/test sequence"
+  ]
+}

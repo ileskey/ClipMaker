@@ -1,0 +1,25 @@
+[debug] Encodings: locale cp949, fs utf-8, pref cp949, out cp949 (dumb,No ANSI), error cp949 (dumb,No ANSI), screen cp949 (dumb,No ANSI)
+[REDACTED_SENSITIVE_LINE]
+" -ss 90 -t 10 -extension_picky 0 -i "[REDACTED_URL]" -c copy -f mp4 file:<experiment-root>\c1080.mp4.part
+Input #0, hls, from '[REDACTED_URL]':
+  Duration: 00:44:27.56, start: 1.998646, bitrate: 0 kb/s
+  Stream #0:0[0x0](und): Video: h264 (High), 1 reference frame (avc1 / 0x31637661), yuv420p(tv, bt709, left), 1920x1080 [SAR 1:1 DAR 16:9], 8000 kb/s, 59.94 fps, 60 tbr, 6k tbn, start 2.000000 (default)
+  Stream #0:1[0x0](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s, start 1.998646 (default)
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (copy)
+Output #0, mp4, to 'file:<experiment-root>\c1080.mp4.part':
+  Stream #0:0(und): Video: h264 (High), 1 reference frame (avc1 / 0x31637661), yuv420p(tv, bt709, left), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 8000 kb/s, 59.94 fps, 60 tbr, 12k tbn (default)
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s (default)
+frame=    0 fps=0.0 q=-1.0 size=       0KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:00.51    [tcp @ 000001f11017c200] Successfully connected to 43.174.9.196 port 443
+frame=   16 fps= 15 q=-1.0 size=       0KiB time=N/A bitrate=N/A speed=N/A elapsed=0:00:01.03    [in#0/hls @ 000001f10fb591c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  139 fps= 89 q=-1.0 size=    2048KiB time=00:00:02.31 bitrate=7240.0kbits/s speed=1.49x elapsed=0:00:01.55    [in#0/hls @ 000001f10fb591c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  240 fps=116 q=-1.0 size=    3840KiB time=00:00:03.99 bitrate=7874.9kbits/s speed=1.93x elapsed=0:00:02.07    frame=  337 fps=130 q=-1.0 size=    4864KiB time=00:00:05.01 bitrate=7939.6kbits/s speed=1.94x elapsed=0:00:02.58    [in#0/hls @ 000001f10fb591c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  360 fps=116 q=-1.0 size=    5888KiB time=00:00:06.00 bitrate=8039.1kbits/s speed=1.93x elapsed=0:00:03.10    frame=  417 fps=115 q=-1.0 size=    6912KiB time=00:00:06.98 bitrate=8107.2kbits/s speed=1.93x elapsed=0:00:03.61    [in#0/hls @ 000001f10fb591c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  540 fps=131 q=-1.0 size=    8960KiB time=00:00:09.00 bitrate=8154.4kbits/s speed=2.18x elapsed=0:00:04.12    [in#0/hls @ 000001f10fb591c0] HLS request for url '[REDACTED_URL]', offset 0, playlist 0
+frame=  600 fps=129 q=-1.0 size=    9728KiB time=00:00:09.98 bitrate=7977.7kbits/s speed=2.15x elapsed=0:00:04.64    [aist#0:1/aac @ 000001f1100fd640] All consumers of this stream are done
+[out#0/mp4 @ 000001f11066f9c0]   Output stream #0:0 (video): 600 packets muxed (10000773 bytes); 
+[out#0/mp4 @ 000001f11066f9c0]   Output stream #0:1 (audio): 422 packets muxed (216262 bytes); 
+frame=  600 fps=127 q=-1.0 Lsize=    9992KiB time=00:00:10.00 bitrate=8184.6kbits/s speed=2.12x elapsed=0:00:04.71    
+[in#0/hls @ 000001f10fb58f80]   Input stream #0:0 (video): 601 packets read (10174351 bytes); 
+[in#0/hls @ 000001f10fb58f80]   Input stream #0:1 (audio): 423 packets read (216731 bytes); 
+Exiting with exit code 0

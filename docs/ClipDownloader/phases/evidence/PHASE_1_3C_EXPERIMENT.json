@@ -1,0 +1,1521 @@
+{
+  "Synthetic": [
+    {
+      "stage": "avc:generate",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.5258877,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "avc:copy",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1916242,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "avc:copy:probe",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.3376779,
+      "stderrBytes": 0,
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "2.006000"
+        }
+      }
+    },
+    {
+      "stage": "avc:copy:decode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.2001896,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "avc:encode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.3224803,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "avc:encode:probe",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1695787,
+      "stderrBytes": 0,
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "2.005000"
+        }
+      }
+    },
+    {
+      "stage": "avc:encode:decode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1910312,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "vp9:generate",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 2.7859713,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "vp9:copy",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.182687,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "vp9:copy:probe",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.2907308,
+      "stderrBytes": 0,
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "2.001000"
+        }
+      }
+    },
+    {
+      "stage": "vp9:copy:decode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1921396,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "vp9:encode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.3017872,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "vp9:encode:probe",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1647944,
+      "stderrBytes": 0,
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "2.000000"
+        }
+      }
+    },
+    {
+      "stage": "vp9:encode:decode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1773039,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "av1:generate",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.5799366,
+      "stderrBytes": 1371,
+      "data": null
+    },
+    {
+      "stage": "av1:copy",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1872122,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "av1:copy:probe",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1720327,
+      "stderrBytes": 0,
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "av1",
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "2.001000"
+        }
+      }
+    },
+    {
+      "stage": "av1:copy:decode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.1826455,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "av1:encode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.3179925,
+      "stderrBytes": 0,
+      "data": null
+    },
+    {
+      "stage": "av1:encode:probe",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.160236,
+      "stderrBytes": 0,
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1"
+          },
+          {
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "duration": "2.000000"
+        }
+      }
+    },
+    {
+      "stage": "av1:encode:decode",
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "seconds": 0.2120856,
+      "stderrBytes": 0,
+      "data": null
+    }
+  ],
+  "Site": [
+    {
+      "stage": "tools",
+      "status": 0,
+      "passed": true,
+      "tools": [
+        {
+          "Tool": 0,
+          "Version": "2026.08.19",
+          "Error": null
+        },
+        {
+          "Tool": 1,
+          "Version": "8.1-full_build-www.gyan.dev",
+          "Error": null
+        },
+        {
+          "Tool": 2,
+          "Version": "8.1-full_build-www.gyan.dev",
+          "Error": null
+        }
+      ]
+    },
+    {
+      "stage": "metadata",
+      "Name": "chzzk",
+      "status": 0,
+      "Error": null,
+      "state": 1,
+      "duration": 2667,
+      "formatCount": 5
+    },
+    {
+      "stage": "criteria",
+      "id": "c720",
+      "start": 90,
+      "end": 100,
+      "video": {
+        "Id": "hls-3192",
+        "Width": 1280,
+        "Height": 720,
+        "FrameRate": {
+          "Numerator": 60,
+          "Denominator": 1
+        },
+        "VideoCodec": "avc1.640028",
+        "AudioCodec": "mp4a.40.2",
+        "VideoStream": 1,
+        "AudioStream": 1
+      },
+      "audio": null
+    },
+    {
+      "stage": "c720:acquire",
+      "eventType": "start",
+      "utc": "2026-10-10T22:12:59.1758478+09:00"
+    },
+    {
+      "stage": "c720:acquire",
+      "eventType": "end",
+      "utc": "2026-10-10T22:13:03.0770743+09:00",
+      "seconds": 3.9012587,
+      "Status": 0,
+      "ExitCode": 1,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 396,
+      "stderrBytes": 2244,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": true
+    },
+    {
+      "stage": "criteria",
+      "id": "c1080",
+      "start": 90,
+      "end": 100,
+      "video": {
+        "Id": "hls-8384",
+        "Width": 1920,
+        "Height": 1080,
+        "FrameRate": {
+          "Numerator": 60,
+          "Denominator": 1
+        },
+        "VideoCodec": "avc1.64002A",
+        "AudioCodec": "mp4a.40.2",
+        "VideoStream": 1,
+        "AudioStream": 1
+      },
+      "audio": null
+    },
+    {
+      "stage": "c1080:acquire",
+      "eventType": "start",
+      "utc": "2026-10-10T22:13:03.0959601+09:00"
+    },
+    {
+      "stage": "c1080:acquire",
+      "eventType": "end",
+      "utc": "2026-10-10T22:13:07.0724743+09:00",
+      "seconds": 3.9765188,
+      "Status": 0,
+      "ExitCode": 1,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 397,
+      "stderrBytes": 2254,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": true
+    },
+    {
+      "stage": "metadata",
+      "Name": "youtube",
+      "status": 0,
+      "Error": null,
+      "state": 1,
+      "duration": 226,
+      "formatCount": 43
+    },
+    {
+      "stage": "criteria",
+      "id": "yavc",
+      "start": 90,
+      "end": 100,
+      "video": {
+        "Id": "137",
+        "Width": 1920,
+        "Height": 1080,
+        "FrameRate": {
+          "Numerator": 30,
+          "Denominator": 1
+        },
+        "VideoCodec": "avc1.640028",
+        "AudioCodec": null,
+        "VideoStream": 1,
+        "AudioStream": 2
+      },
+      "audio": {
+        "Id": "140",
+        "Width": null,
+        "Height": null,
+        "FrameRate": null,
+        "VideoCodec": null,
+        "AudioCodec": "mp4a.40.2",
+        "VideoStream": 2,
+        "AudioStream": 1
+      }
+    },
+    {
+      "stage": "yavc:acquire",
+      "eventType": "start",
+      "utc": "2026-10-10T22:13:15.308295+09:00"
+    },
+    {
+      "stage": "yavc:acquire",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:33.03694+09:00",
+      "seconds": 137.7286908,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 513,
+      "stderrBytes": 6250,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "file",
+      "id": "yavc",
+      "extension": ".mp4",
+      "bytes": 3981543
+    },
+    {
+      "stage": "yavc:input:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:33.0613738+09:00"
+    },
+    {
+      "stage": "yavc:input:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:33.2453281+09:00",
+      "seconds": 0.183958,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 907,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yavc:input",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/15360",
+            "start_time": "0.000000",
+            "duration": "10.133008"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/44100",
+            "start_time": "0.000000",
+            "duration": "10.009002"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "start_time": "0.000000",
+          "duration": "10.133008"
+        }
+      }
+    },
+    {
+      "stage": "yavc:input:frames",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:33.2488066+09:00"
+    },
+    {
+      "stage": "yavc:input:frames",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:33.8340731+09:00",
+      "seconds": 0.5852684,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 5885,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "pts-window",
+      "id": "yavc:input",
+      "count": 120,
+      "first": [
+        0,
+        512,
+        1024
+      ],
+      "differences": {
+        "512": 119
+      }
+    },
+    {
+      "stage": "yavc:copy",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:33.8578113+09:00"
+    },
+    {
+      "stage": "yavc:copy",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:34.060648+09:00",
+      "seconds": 0.2028388,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yavc:copy:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:34.0612236+09:00"
+    },
+    {
+      "stage": "yavc:copy:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:34.2420535+09:00",
+      "seconds": 0.1808321,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 907,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yavc:copy",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/15360",
+            "start_time": "0.000000",
+            "duration": "10.033333"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/44100",
+            "start_time": "0.000000",
+            "duration": "10.009002"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "start_time": "0.000000",
+          "duration": "10.033333"
+        }
+      }
+    },
+    {
+      "stage": "yavc:copy:decode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:34.2434999+09:00"
+    },
+    {
+      "stage": "yavc:copy:decode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:34.6634166+09:00",
+      "seconds": 0.41992,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yavc:encode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:34.6641576+09:00"
+    },
+    {
+      "stage": "yavc:encode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:38.2383048+09:00",
+      "seconds": 3.5741509,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yavc:encode:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:38.2395011+09:00"
+    },
+    {
+      "stage": "yavc:encode:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:38.6466283+09:00",
+      "seconds": 0.407131,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 907,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yavc:encode",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/15360",
+            "start_time": "0.000000",
+            "duration": "10.033333"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/44100",
+            "start_time": "0.000000",
+            "duration": "10.008005"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "start_time": "0.000000",
+          "duration": "10.033333"
+        }
+      }
+    },
+    {
+      "stage": "yavc:encode:decode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:38.6483162+09:00"
+    },
+    {
+      "stage": "yavc:encode:decode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:15:39.683144+09:00",
+      "seconds": 1.0348325,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "criteria",
+      "id": "yvp9",
+      "start": 90,
+      "end": 100,
+      "video": {
+        "Id": "248",
+        "Width": 1920,
+        "Height": 1080,
+        "FrameRate": {
+          "Numerator": 30,
+          "Denominator": 1
+        },
+        "VideoCodec": "vp9",
+        "AudioCodec": null,
+        "VideoStream": 1,
+        "AudioStream": 2
+      },
+      "audio": {
+        "Id": "251",
+        "Width": null,
+        "Height": null,
+        "FrameRate": null,
+        "VideoCodec": null,
+        "AudioCodec": "opus",
+        "VideoStream": 2,
+        "AudioStream": 1
+      }
+    },
+    {
+      "stage": "yvp9:acquire",
+      "eventType": "start",
+      "utc": "2026-10-10T22:15:39.6855253+09:00"
+    },
+    {
+      "stage": "yvp9:acquire",
+      "eventType": "end",
+      "utc": "2026-10-10T22:17:58.3673074+09:00",
+      "seconds": 138.6818549,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 514,
+      "stderrBytes": 4600,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "file",
+      "id": "yvp9",
+      "extension": ".webm",
+      "bytes": 2256400
+    },
+    {
+      "stage": "yvp9:input:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:17:58.3696051+09:00"
+    },
+    {
+      "stage": "yvp9:input:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:17:58.6085446+09:00",
+      "seconds": 0.2389427,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 857,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yvp9:input",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "vp9",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/1000",
+            "start_time": "0.000000",
+            "duration": "20.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/1000",
+            "start_time": "0.000000"
+          }
+        ],
+        "format": {
+          "format_name": "matroska,webm",
+          "start_time": "0.000000",
+          "duration": "20.000000"
+        }
+      }
+    },
+    {
+      "stage": "yvp9:input:frames",
+      "eventType": "start",
+      "utc": "2026-10-10T22:17:58.6095223+09:00"
+    },
+    {
+      "stage": "yvp9:input:frames",
+      "eventType": "end",
+      "utc": "2026-10-10T22:17:59.3487608+09:00",
+      "seconds": 0.7392409,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 5908,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "pts-window",
+      "id": "yvp9:input",
+      "count": 120,
+      "first": [
+        9979,
+        10012,
+        10046
+      ],
+      "differences": {
+        "33": 79,
+        "34": 40
+      }
+    },
+    {
+      "stage": "yvp9:copy",
+      "eventType": "start",
+      "utc": "2026-10-10T22:17:59.3505532+09:00"
+    },
+    {
+      "stage": "yvp9:copy",
+      "eventType": "end",
+      "utc": "2026-10-10T22:17:59.5618702+09:00",
+      "seconds": 0.2113196,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 91,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yvp9:copy:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:17:59.5626626+09:00"
+    },
+    {
+      "stage": "yvp9:copy:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:17:59.7490543+09:00",
+      "seconds": 0.1863973,
+      "Status": 0,
+      "ExitCode": 1,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 8,
+      "stderrBytes": 290,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": true
+    },
+    {
+      "stage": "yvp9:copy:decode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:17:59.7498416+09:00"
+    },
+    {
+      "stage": "yvp9:copy:decode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:17:59.9412631+09:00",
+      "seconds": 0.1914236,
+      "Status": 0,
+      "ExitCode": -1094995529,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 394,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": true
+    },
+    {
+      "stage": "yvp9:encode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:17:59.9421773+09:00"
+    },
+    {
+      "stage": "yvp9:encode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:18:02.9640231+09:00",
+      "seconds": 3.021848,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yvp9:encode:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:18:02.9648151+09:00"
+    },
+    {
+      "stage": "yvp9:encode:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:18:03.1714695+09:00",
+      "seconds": 0.2066557,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 907,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yvp9:encode",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/15360",
+            "start_time": "9.966016",
+            "duration": "10.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/48000",
+            "start_time": "0.000000",
+            "duration": "19.993000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "start_time": "0.000000",
+          "duration": "19.993000"
+        }
+      }
+    },
+    {
+      "stage": "yvp9:encode:decode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:18:03.1731045+09:00"
+    },
+    {
+      "stage": "yvp9:encode:decode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:18:03.7654283+09:00",
+      "seconds": 0.5923258,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "criteria",
+      "id": "yav1",
+      "start": 90,
+      "end": 100,
+      "video": {
+        "Id": "399",
+        "Width": 1920,
+        "Height": 1080,
+        "FrameRate": {
+          "Numerator": 30,
+          "Denominator": 1
+        },
+        "VideoCodec": "av01.0.08M.08",
+        "AudioCodec": null,
+        "VideoStream": 1,
+        "AudioStream": 2
+      },
+      "audio": {
+        "Id": "251",
+        "Width": null,
+        "Height": null,
+        "FrameRate": null,
+        "VideoCodec": null,
+        "AudioCodec": "opus",
+        "VideoStream": 2,
+        "AudioStream": 1
+      }
+    },
+    {
+      "stage": "yav1:acquire",
+      "eventType": "start",
+      "utc": "2026-10-10T22:18:03.7672258+09:00"
+    },
+    {
+      "stage": "yav1:acquire",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:17.00706+09:00",
+      "seconds": 133.2398755,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 514,
+      "stderrBytes": 5127,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "file",
+      "id": "yav1",
+      "extension": ".webm",
+      "bytes": 1930571
+    },
+    {
+      "stage": "yav1:input:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:17.0087135+09:00"
+    },
+    {
+      "stage": "yav1:input:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:17.1603406+09:00",
+      "seconds": 0.1516284,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 857,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yav1:input",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "av1",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/1000",
+            "start_time": "0.000000",
+            "duration": "20.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/1000",
+            "start_time": "0.000000"
+          }
+        ],
+        "format": {
+          "format_name": "matroska,webm",
+          "start_time": "0.000000",
+          "duration": "20.000000"
+        }
+      }
+    },
+    {
+      "stage": "yav1:input:frames",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:17.162175+09:00"
+    },
+    {
+      "stage": "yav1:input:frames",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:17.9162408+09:00",
+      "seconds": 0.7540675,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 5908,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "pts-window",
+      "id": "yav1:input",
+      "count": 120,
+      "first": [
+        9979,
+        10012,
+        10046
+      ],
+      "differences": {
+        "33": 79,
+        "34": 40
+      }
+    },
+    {
+      "stage": "yav1:copy",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:17.9172343+09:00"
+    },
+    {
+      "stage": "yav1:copy",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:18.0973892+09:00",
+      "seconds": 0.1801561,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yav1:copy:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:18.0980097+09:00"
+    },
+    {
+      "stage": "yav1:copy:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:18.2514406+09:00",
+      "seconds": 0.1534316,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 907,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yav1:copy",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "av1",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/16000",
+            "start_time": "9.979000",
+            "duration": "10.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "opus",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/48000",
+            "start_time": "0.000000",
+            "duration": "19.993000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "start_time": "0.000000",
+          "duration": "19.993000"
+        }
+      }
+    },
+    {
+      "stage": "yav1:copy:decode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:18.253877+09:00"
+    },
+    {
+      "stage": "yav1:copy:decode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:18.8234993+09:00",
+      "seconds": 0.5696244,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yav1:encode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:18.8241017+09:00"
+    },
+    {
+      "stage": "yav1:encode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:20.6050224+09:00",
+      "seconds": 1.7809221,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "yav1:encode:probe",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:20.6054902+09:00"
+    },
+    {
+      "stage": "yav1:encode:probe",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:20.751805+09:00",
+      "seconds": 0.1463159,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 907,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    },
+    {
+      "stage": "probe-data",
+      "id": "yav1:encode",
+      "data": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 1920,
+            "height": 1080,
+            "r_frame_rate": "30/1",
+            "avg_frame_rate": "30/1",
+            "time_base": "1/15360",
+            "start_time": "9.966016",
+            "duration": "10.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "r_frame_rate": "0/0",
+            "avg_frame_rate": "0/0",
+            "time_base": "1/48000",
+            "start_time": "0.000000",
+            "duration": "19.993000"
+          }
+        ],
+        "format": {
+          "format_name": "mov,mp4,m4a,3gp,3g2,mj2",
+          "start_time": "0.000000",
+          "duration": "19.993000"
+        }
+      }
+    },
+    {
+      "stage": "yav1:encode:decode",
+      "eventType": "start",
+      "utc": "2026-10-10T22:20:20.7530234+09:00"
+    },
+    {
+      "stage": "yav1:encode:decode",
+      "eventType": "end",
+      "utc": "2026-10-10T22:20:21.1760124+09:00",
+      "seconds": 0.4229909,
+      "Status": 0,
+      "ExitCode": 0,
+      "RootExitConfirmed": true,
+      "DescendantExitConfirmed": true,
+      "StreamsDrained": true,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "http403": false,
+      "networkError": false,
+      "invalidArgument": false,
+      "errorMessages": false
+    }
+  ]
+}

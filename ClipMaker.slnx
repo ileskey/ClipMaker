@@ -1,8 +1,11 @@
 <Solution>
+  <Project Path="apps/ClipDownloader.Cli/ClipDownloader.Cli.csproj" />
   <Project Path="apps/ClipDownloader/ClipDownloader.csproj" />
   <Project Path="src/ClipMaker.Media.Core/ClipMaker.Media.Core.csproj" />
   <Project Path="src/ClipMaker.Media.Infrastructure/ClipMaker.Media.Infrastructure.csproj" />
   <Project Path="src/ClipDownloader.Application/ClipDownloader.Application.csproj" />
   <Project Path="src/ClipDownloader.Infrastructure/ClipDownloader.Infrastructure.csproj" />
   <Project Path="tests/ClipMaker.Media.Infrastructure.Tests/ClipMaker.Media.Infrastructure.Tests.csproj" />
+  <Project Path="tests/ClipMaker.Media.Core.Tests/ClipMaker.Media.Core.Tests.csproj" />
+  <Project Path="tests/ClipDownloader.Infrastructure.Tests/ClipDownloader.Infrastructure.Tests.csproj" />
 </Solution>

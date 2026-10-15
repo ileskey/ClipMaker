@@ -1,0 +1,11 @@
+[in#0 @ 0000029e1e4390c0] Opening '[REDACTED_URL]' for reading
+[in#0 @ 0000029e1e4390c0] Opening '[REDACTED_URL]' for reading
+[in#0 @ 0000029e1e4390c0] Opening '[REDACTED_URL]' for reading
+[in#0 @ 0000029e1e4390c0] detected format mov,mp4,m4a,3gp,3g2,mj2 extension mov,mp4,m4a,3gp,3g2,mj2,psp,m4b,ism,ismv,isma,f4v,avif,heic,heif mismatches allowed extensions in url [REDACTED_URL]
+[in#0 @ 0000029e1e4390c0] Error when loading first segment '[REDACTED_URL]'
+[in#0 @ 0000029e1e438e00] Error opening input: Invalid data found when processing input
+Error opening input file [REDACTED_URL]
+Error opening input files: Invalid data found when processing input
+
+
+ERROR: ffmpeg exited with code 3199971767

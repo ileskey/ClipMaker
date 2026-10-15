@@ -1,0 +1,16 @@
+[debug] Encodings: locale cp949, fs utf-8, pref cp949, out cp949 (dumb,No ANSI), error cp949 (dumb,No ANSI), screen cp949 (dumb,No ANSI)
+" -ss 88 -t 14 -extension_picky 0 -i "[REDACTED_URL]" -c copy -f mp4 file:<experiment-root>\c1080.mp4.part
+Input #0, hls, from '[REDACTED_URL]':
+  Duration: 00:44:27.56, start: 1.998646, bitrate: 0 kb/s
+  Stream #0:0[0x0](und): Video: h264 (High), 1 reference frame (avc1 / 0x31637661), yuv420p(tv, bt709, left), 1920x1080 [SAR 1:1 DAR 16:9], 8000 kb/s, 59.94 fps, 60 tbr, 6k tbn, start 2.000000 (default)
+  Stream #0:1[0x0](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s, start 1.998646 (default)
+  Stream #0:0 -> #0:0 (copy)
+  Stream #0:1 -> #0:1 (copy)
+Output #0, mp4, to 'file:<experiment-root>\c1080.mp4.part':
+  Stream #0:0(und): Video: h264 (High), 1 reference frame (avc1 / 0x31637661), yuv420p(tv, bt709, left), 1920x1080 [SAR 1:1 DAR 16:9], q=2-31, 8000 kb/s, 59.94 fps, 60 tbr, 12k tbn (default)
+  Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 192 kb/s (default)
+[out#0/mp4 @ 000001ae27d6f6c0]   Output stream #0:0 (video): 840 packets muxed (14001059 bytes); 
+[out#0/mp4 @ 000001ae27d6f6c0]   Output stream #0:1 (audio): 610 packets muxed (312030 bytes); 
+[in#0/hls @ 000001ae272f8f80]   Input stream #0:0 (video): 841 packets read (14174535 bytes); 
+[in#0/hls @ 000001ae272f8f80]   Input stream #0:1 (audio): 611 packets read (312484 bytes); 
+Exiting with exit code 0
