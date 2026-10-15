@@ -153,7 +153,9 @@ public sealed partial class MainViewModel
                 ValidateInputs();
                 ThumbnailStatus = info.ThumbnailUrl is null ? "썸네일 없음" : "썸네일 획득 연결 대기";
                 MetadataState = MetadataState.Ready;
+                if (Lifetime != AppLifetime.Running || generation != current || !ReferenceEquals(metadata, info) || token.IsCancellationRequested) return;
                 StatusText = "영상 조회 완료. 종료 시간과 MP4 출력 경로를 지정하세요.";
+                StartThumbnail(info);
             }
             else
             {

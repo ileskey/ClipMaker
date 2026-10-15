@@ -56,6 +56,8 @@ public static class ServiceRegistration
                 s.GetRequiredService<IOutputWorkspace>(), source, source, source, s.GetRequiredService<IClipMediaService>(), budget);
         });
         services.AddSingleton<IOutputFileDialog, OutputFileDialog>();
+        services.AddSingleton<IThumbnailContentService, Infrastructure.Thumbnails.HttpThumbnailContentService>();
+        services.AddSingleton<Imaging.IThumbnailDecoder, Imaging.WpfThumbnailDecoder>();
         services.AddSingleton<MainViewModel>();
         services.AddSingleton<MainWindow>();
         return services.BuildServiceProvider(new ServiceProviderOptions

@@ -29,7 +29,7 @@ public sealed partial class MainViewModel
     public IAsyncRelayCommand PrepareCommand { get; private set; } = null!;
     public IAsyncRelayCommand ConfirmExecuteCommand { get; private set; } = null!;
     public IRelayCommand BackCommand { get; private set; } = null!;
-    public bool CanAcknowledgeClose => Lifetime == AppLifetime.Closing && activeTask.IsCompleted && pathTask.IsCompleted && RequiresCloseAcknowledgement;
+    public bool CanAcknowledgeClose => Lifetime == AppLifetime.Closing && activeTask.IsCompleted && pathTask.IsCompleted && thumbnailTask.IsCompleted && RequiresCloseAcknowledgement;
 
     private bool CanPrepare => CanLoad && InputsValid && !SessionLocked && JobState != ClipState.AwaitingConfirmation;
     private bool CanConfirm => CanEdit && ShowingConfirmation && !SessionLocked && !preparedConsumed &&

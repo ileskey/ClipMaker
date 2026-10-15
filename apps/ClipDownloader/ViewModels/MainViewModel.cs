@@ -35,7 +35,8 @@ public sealed partial class MainViewModel : ValidatingViewModel
 
     public MainViewModel(IToolDiagnosticsService diagnostics, ILogger<MainViewModel> logger,
         IVideoInfoService videoInfo, IVideoSourceParser sourceParser, IOutputPathValidator outputValidator,
-        Dialogs.IOutputFileDialog outputDialog, IClipJobService jobs)
+        Dialogs.IOutputFileDialog outputDialog, IClipJobService jobs,
+        IThumbnailContentService thumbnails, Imaging.IThumbnailDecoder thumbnailDecoder)
     {
         this.diagnostics = diagnostics;
         this.logger = logger;
@@ -44,6 +45,9 @@ public sealed partial class MainViewModel : ValidatingViewModel
         this.outputValidator = outputValidator;
         this.outputDialog = outputDialog;
         this.jobs = jobs;
+        this.thumbnails = thumbnails;
+        this.thumbnailDecoder = thumbnailDecoder;
+        CancelThumbnailCommand = new RelayCommand(CancelThumbnail, CanCancelThumbnail);
         RefreshToolsCommand = new AsyncRelayCommand(() => StartOperationAsync(RefreshToolsAsync), () => CanEdit);
         InitializeClipCommands();
         PropertyChanged += (_, e) =>
@@ -58,6 +62,7 @@ public sealed partial class MainViewModel : ValidatingViewModel
         OnPropertyChanged(nameof(IsBusy));
         OnPropertyChanged(nameof(CanEdit));
         RefreshToolsCommand.NotifyCanExecuteChanged();
+        CancelThumbnailCommand.NotifyCanExecuteChanged();
         NotifyClipCommands();
     }
 
@@ -113,13 +118,22 @@ public sealed partial class MainViewModel : ValidatingViewModel
     public Task ShutdownAsync()
     {
         if (shutdownTask is not null) return shutdownTask;
+        var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        shutdownTask = completion.Task;
         Lifetime = AppLifetime.Closing;
+        InvalidateThumbnail();
         InvalidateForShutdown();
         StatusText = "종료 요청 · 취소와 정리가 끝날 때까지 기다립니다.";
         if (JobState == ClipState.Executing) JobState = ClipState.Cancelling;
         activeCancellation?.Cancel();
-        shutdownTask = AwaitShutdownAsync();
+        _ = FinishShutdownAsync();
         return shutdownTask;
+
+        async Task FinishShutdownAsync()
+        {
+            try { await AwaitShutdownAsync(); completion.TrySetResult(); }
+            catch (Exception error) { completion.TrySetException(error); }
+        }
     }
 
     partial void InvalidateForShutdown();
@@ -128,6 +142,7 @@ public sealed partial class MainViewModel : ValidatingViewModel
     {
         await activeTask;
         await pathTask;
+        await thumbnailTask;
         StatusText = RequiresCloseAcknowledgement ? "종료 전 경고와 잔존 자원을 확인하세요." : "작업과 정리가 종료되었습니다.";
         NotifyCommands();
     }

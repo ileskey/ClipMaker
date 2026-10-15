@@ -13,7 +13,7 @@
 
 ## 검증 상태
 
-단위 3~4 구현·검증은 아직 수행하지 않았다. 새 패키지·도구 설치·원격 push·기존 태그 변경 없음.
+단위 4 실제 통합·최종 검증은 아직 수행하지 않았다. 새 패키지·도구 설치·원격 push·기존 태그 변경 없음.
 
 ## 단위 1 — 상세 텍스트·선택 projection
 
@@ -32,3 +32,13 @@
 - `dotnet build ClipMaker.slnx --no-restore --nologo`: 최종 경고/오류 0. 새 TLS 테스트의 CA2022 경고는 반환 읽기 수를 명시적으로 버리도록 수정했다.
 - Infrastructure `dotnet test ... --no-build --no-restore --nologo`: 940 통과, 실패/skip 0 (기존 859 + 신규 81). URI·주소 경계·mixed DNS·고정 IP·헤더/본문 timeout·caller 취소·MIME/encoding/길이·4 MiB/+1·정리 및 기존 CLI/parser 회귀 포함.
 - 실제 socket/TLS 제어 endpoint: 테스트 내부 connector만 승인 fixture IP를 loopback listener로 연결, 실제 SslStream에서 SNI images.example.com 관찰 및 자체 서명 인증서 거절 확인. production gate/인증서 callback은 완화하지 않았다. 실제 신뢰 인증서 성공과 양 사이트 이미지는 단위 4에서 확인한다.
+
+## 단위 3 — WPF decode·이미지 수명·DI
+
+- bounded PNG/JPEG 헤더 preflight(양축 4096, 8 MP), PNG chunk 길이/CRC/animation 거절, JPEG SOF와 끝 검사, WIC 원본 치수/단일 frame 대조, 최대 640×360 aspect decode, OnLoad/Freeze/stream 해제를 추가했다.
+- metadata revision/독립 epoch/slot/token/lifetime guard와 CTS owner를 연결했다. 이전 작업 실제 반환 뒤 새 worker 획득/decode를 직렬 실행한다. 이미지 Loading/실패/취소는 Prepare·입력·확인 identity에 영향을 주지 않는다. 별도 취소·상태/이미지 접근성 binding을 추가했다.
+- shutdown은 이미지 참조 제거/취소 후 foreground/path/image 완료를 기다리며 경고 확인도 이미지 완료까지 금지한다. 수명 알림 전에 shutdown task를 등록해 재진입에도 같은 task를 돌려준다. App의 Dispatcher 지연 Close → DI → 종료 로그 → logger/SelfLog 순서는 변경하지 않았다.
+- 최초 신규 테스트: 59개 중 3실패. WIC가 CRC 손상 PNG를 수용해 preflight CRC 검사를 추가했다. 재조회 시간 Reset이 inputRevision을 바꾸므로 초기 요청 revision guard를 이미지 시작에 그대로 쓰면 새 이미지도 막혔다. 성공 snapshot identity/metadata revision 기반으로 보완해 재실행 59통과, 추가 경고/재진입/실패 재조회 검사 후 최종 61통과·실패/skip 0.
+- 최종 `dotnet build ClipMaker.slnx --no-restore --nologo` 경고/오류 0 및 WPF `dotnet test ... --no-build --no-restore --nologo` 61개 통과. 작은 JPEG/PNG·큰 정상/4096/8 MP·초과/손상/animation·frozen 픽셀 접근, Dispatcher worker, 이미지 대기 중 Prepare/확인/동일 객체 실행, stale URL/동일 URL·실패 재조회·취소 무시 decode 직렬화, 실제 Window.Show/Close 두 번과 이미지 종료 전 닫기 금지, 경고 확인·reentrant Shutdown 포함.
+- in-process WIC 강제 중단/전체 메모리 상한은 보장하지 않는다. 동기 decode가 돌아올 때까지 종료도 기다린다. UI 실작업 테스트와 실제 원격 관찰은 구분한다.
+- 7.3 영향 분석: selector/시간 변환/Prepare/Execute/media-source DI/원본 예산·미디어 정리 코드는 그대로다. 새 DI는 이미지 전용이며 기존 정리 완료 대기에 이미지 owner만 추가했다. 기존 미디어 정리 계약을 교체하지 않았다. 따라서 네 클립 재생성은 요구하지 않고 Phase 2 증거를 유지하며, 단위 4에서 실제 WPF 준비 연결·종료와 전체 회귀를 수행한다.

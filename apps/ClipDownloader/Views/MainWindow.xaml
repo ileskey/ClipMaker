@@ -20,8 +20,10 @@
             <GroupBox Header="영상 정보" Margin="0,0,0,12" Padding="8">
                 <StackPanel>
                     <Border Width="240" Height="135" HorizontalAlignment="Left" Background="#EEEEEE">
-                        <TextBlock Text="{Binding ThumbnailStatus}" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" AutomationProperties.Name="썸네일" AutomationProperties.AutomationId="ThumbnailPlaceholder" />
+                        <Image Source="{Binding ThumbnailImage}" Stretch="Uniform" AutomationProperties.Name="현재 영상 썸네일" AutomationProperties.AutomationId="ThumbnailImage" />
                     </Border>
+                    <TextBlock Text="{Binding ThumbnailStatus}" TextWrapping="Wrap" AutomationProperties.Name="썸네일 상태" AutomationProperties.AutomationId="ThumbnailPlaceholder" AutomationProperties.LiveSetting="Polite" />
+                    <Button Content="썸네일 로딩 취소" Command="{Binding CancelThumbnailCommand}" HorizontalAlignment="Left" AutomationProperties.AutomationId="CancelThumbnail" />
                     <TextBlock Text="제목" Margin="0,8,0,0" />
                     <TextBox Text="{Binding MetadataPresentation.Title, Mode=OneWay}" IsReadOnly="True" TextWrapping="Wrap" MaxHeight="110" VerticalScrollBarVisibility="Auto" AutomationProperties.Name="제목" AutomationProperties.AutomationId="MetadataTitle" />
                     <TextBlock Text="업로더 / 채널" />

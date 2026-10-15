@@ -17,7 +17,8 @@ internal sealed class TestServices
     public FakeJobs Jobs { get; }
     public FakeDialog Dialog { get; } = new();
     public MainViewModel Vm { get; }
-    public TestServices(IToolDiagnosticsService? diagnostics = null, IOutputPathValidator? validator = null)
+    public TestServices(IToolDiagnosticsService? diagnostics = null, IOutputPathValidator? validator = null,
+        IThumbnailContentService? thumbnails = null, Imaging.IThumbnailDecoder? decoder = null)
     {
         var metadata = new Metadata(this);
         var paths = validator ?? new OutputPathValidator(Environment.CurrentDirectory);
@@ -27,7 +28,7 @@ internal sealed class TestServices
             new OutputWorkspace(paths), pipeline, pipeline, pipeline, pipeline, new(64 * 1024 * 1024, span!));
         Jobs = new(service);
         Vm = new(diagnostics ?? new ToolDiagnostics(), NullLogger<MainViewModel>.Instance, metadata,
-            new SupportedVideoSourceParser(), paths, Dialog, Jobs);
+            new SupportedVideoSourceParser(), paths, Dialog, Jobs, thumbnails ?? new NoThumbnails(), decoder ?? new Imaging.WpfThumbnailDecoder());
     }
 
     public async Task ReadyAsync()
@@ -55,6 +56,11 @@ internal sealed class TestServices
     {
         public Task<OperationResult<VideoInfo>> GetVideoInfoAsync(Uri uri, CancellationToken token) =>
             owner.Load?.Invoke(uri, token) ?? Task.FromResult(OperationResult<VideoInfo>.Succeeded(owner.Info));
+    }
+    private sealed class NoThumbnails : IThumbnailContentService
+    {
+        public Task<ThumbnailContentResult> GetAsync(Uri uri, CancellationToken token) =>
+            Task.FromResult(ThumbnailContentResult.Failed(ThumbnailFailure.HttpFailure));
     }
     private sealed class ToolDiagnostics : IToolDiagnosticsService
     {
