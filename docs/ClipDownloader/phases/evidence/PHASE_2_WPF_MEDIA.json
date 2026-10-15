@@ -1,0 +1,145 @@
+{
+  "Date": "2026-10-15",
+  "Branch": "phase/2",
+  "StartingHead": "c0b37774e68c92464b3691c0ea12502a8cf5ba99",
+  "Workflow": "Actual WPF Load -> Prepare -> explicit confirmation -> Execute",
+  "Outputs": [
+    {
+      "Name": "youtube-fast",
+      "JobId": "4aaf654f-0e7f-4761-8df8-ceceaa960083",
+      "Path": ".artifacts/phase2-integration/youtube-fast.mp4",
+      "Sha256": "7B30C8CB2B91EC52E71395F1A5D03636F5634AF2A2A7965706A52670CF01695A",
+      "Bytes": 1584743,
+      "FullAudioVideoDecodeExitCode": 0,
+      "HumanPlayback": "Passed",
+      "Probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "avg_frame_rate": "30/1",
+            "duration": "35.500000"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "44100",
+            "avg_frame_rate": "0/0",
+            "duration": "35.474649"
+          }
+        ],
+        "format": {
+          "duration": "35.500000",
+          "size": "1584743"
+        }
+      }
+    },
+    {
+      "Name": "youtube-accurate",
+      "JobId": "45af7e61-e5d5-41dc-b0f5-06cfe2bb3165",
+      "Path": ".artifacts/phase2-integration/youtube-accurate.mp4",
+      "Sha256": "54CC74D562FBB5C34C97AFB326427AB2857ABF27F03780CEF71E9E3E8A108261",
+      "Bytes": 2636718,
+      "FullAudioVideoDecodeExitCode": 0,
+      "HumanPlayback": "Passed",
+      "Probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "avg_frame_rate": "30/1",
+            "duration": "30.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "44100",
+            "avg_frame_rate": "0/0",
+            "duration": "30.000000"
+          }
+        ],
+        "format": {
+          "duration": "30.000000",
+          "size": "2636718"
+        }
+      }
+    },
+    {
+      "Name": "chzzk-accurate",
+      "JobId": "f09e8ea2-5c82-445f-90eb-4909a8ee703f",
+      "Path": ".artifacts/phase2-integration/chzzk-accurate.mp4",
+      "Sha256": "EF45E221E887C29A3EFF11BA92D56515C780D9FBD8E918900EA4C8384FD03B2C",
+      "Bytes": 2883050,
+      "FullAudioVideoDecodeExitCode": 0,
+      "HumanPlayback": "Passed",
+      "Probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "avg_frame_rate": "60/1",
+            "duration": "10.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "avg_frame_rate": "0/0",
+            "duration": "10.000000"
+          }
+        ],
+        "format": {
+          "duration": "10.001354",
+          "size": "2883050"
+        }
+      }
+    },
+    {
+      "Name": "chzzk-fast",
+      "JobId": "219d710f-0797-4f6c-bb45-19a9d5bec265",
+      "Path": ".artifacts/phase2-integration/chzzk-fast.mp4",
+      "Sha256": "D72595BB505FB3DADCBEF1A7588860F78DB9C745D473C7FA4C3BCA079466F796",
+      "Bytes": 11282809,
+      "FullAudioVideoDecodeExitCode": 0,
+      "HumanPlayback": "Passed",
+      "Probe": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "index": 0,
+            "codec_name": "h264",
+            "codec_type": "video",
+            "avg_frame_rate": "60/1",
+            "duration": "11.000000"
+          },
+          {
+            "index": 1,
+            "codec_name": "aac",
+            "codec_type": "audio",
+            "sample_rate": "48000",
+            "avg_frame_rate": "0/0",
+            "duration": "11.017312"
+          }
+        ],
+        "format": {
+          "duration": "11.017313",
+          "size": "11282809"
+        }
+      }
+    }
+  ],
+  "HumanConfirmation": "YouTube: 둘 다 통과야. CHZZK: 두 클립 모두 정상. Confirmed in this implementation conversation on 2026-10-15."
+}
