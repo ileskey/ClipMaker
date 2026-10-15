@@ -1,10 +1,10 @@
 {
-  "Date": "2026-10-15",
+  "Date": "2026-10-16",
   "Branch": "phase/3",
   "Base": "5d5a06e6a6d0b8ec8ea952e738ecf99756a53712",
-  "ValidatedProductCommit": "c4612f7",
-  "PhaseStatus": "In Progress",
-  "Verification": "Pending",
+  "ValidatedProductCommit": "e784af4471592c793933dc5051343b8fade21dcf",
+  "PhaseStatus": "Required verification complete; completion commit pending",
+  "Verification": "Passed",
   "Completion": null,
   "Environment": {
     "OS": "Windows 11 Pro 10.0.26200",
@@ -12,7 +12,17 @@
     "FFmpegAndFFprobe": "8.1",
     "Node": "22.14.0",
     "ObservedWindowDpi": 144,
-    "WpfRenderDpi": [96, 144, 192]
+    "WpfRenderDpi": [
+      96,
+      144,
+      192
+    ],
+    "NativeWindowDpiObserved": [
+      96,
+      192,
+      144
+    ],
+    "WindowsScaleRestoredPercent": 150
   },
   "AutomatedRegression": {
     "Core": 143,
@@ -27,7 +37,7 @@
   },
   "RemoteAcquisitionAndDecode": [
     {
-      "ObservedAt": "2026-10-15T16:22:51.5296140+09:00",
+      "ObservedAt": "2026-10-15T16:22:51.529614+09:00",
       "Platform": "YouTube",
       "SourceId": "qnjEE-wkw8k",
       "MetadataStatus": "Succeeded",
@@ -37,7 +47,14 @@
       "SelectedVideo": "137",
       "SelectedAudio": "140",
       "SelectedFrameRate": "30/1",
-      "Resolutions": [1080, 720, 480, 360, 240, 144],
+      "Resolutions": [
+        1080,
+        720,
+        480,
+        360,
+        240,
+        144
+      ],
       "ThumbnailUriAccepted": true,
       "HttpResult": "Succeeded",
       "ImageKind": "Jpeg",
@@ -59,7 +76,13 @@
       "SelectedVideo": "hls-8384",
       "SelectedAudio": "combined in hls-8384",
       "SelectedFrameRate": "60/1",
-      "Resolutions": [1080, 720, 480, 360, 144],
+      "Resolutions": [
+        1080,
+        720,
+        480,
+        360,
+        144
+      ],
       "ThumbnailUriAccepted": true,
       "HttpResult": "Succeeded",
       "ImageKind": "Jpeg",
@@ -79,11 +102,53 @@
     "ExecutePerformed": false,
     "ExitLog": "2026-10-15 16:10:22.502 +09:00 Application exiting with code 0",
     "AppAndMediaToolProcessesAbsentAfterExit": true,
-    "FinalProductWpfRecheck": "Not completed: user stopped Computer Use with physical Escape"
+    "FinalProductWpfRecheck": "Completed after user authorized resumption; see FinalWpfObservation"
   },
   "MediaGeneration": "Not repeated; Phase 3 design 7.3 impact analysis retains Phase 2 four-clip evidence",
-  "RemainingRequiredVerification": [
-    "Actual WPF recheck on the final product build",
-    "Native OS/monitor 100% and 200% DPI observation; target-DPI rendering is separate evidence"
-  ]
+  "RemainingRequiredVerification": [],
+  "RemoteMeasurementProductCommit": "c4612f7",
+  "NativeDpiLayoutTests": {
+    "MinimumWindow": "620x480",
+    "PassedPerScale": 3,
+    "Failed": 0,
+    "Skipped": 0,
+    "ScalesInOrder": [
+      100,
+      200,
+      150
+    ],
+    "Artifacts": ".artifacts/phase3-verification/native-100, native-200, native-150-restored"
+  },
+  "FinalWpfObservation": {
+    "ObservedDate": "2026-10-15",
+    "FunctionalSourceCommit": "c4612f7",
+    "BothSitesMetadataAndRemoteImageDisplayed": true,
+    "Native100And200PercentObserved": true,
+    "CopyPasteKeyboardAndScrollObserved": true,
+    "UrlChangeClearedMetadataAndImage": true,
+    "SameUrlReloadResetEndAndQuality": true,
+    "ChzzkPrepareJobId": "3b8e6c97-4f3d-4498-b822-f7bfb3f79721",
+    "PrepareRange": "[0/1,10/1)",
+    "BudgetBytes": 67108864,
+    "BudgetSeconds": 60,
+    "BestFormatAndFps": "hls-8384 / 60/1",
+    "Quality360FormatAndFps": "hls-696 / 30/1",
+    "QualityChangeInvalidatedConfirmation": true,
+    "ExecutePerformed": false,
+    "ExistingUnsupportedMpdSourceId": "14327648",
+    "UnsupportedMpdResult": "ProcessFailed; safe error; fields cleared; Prepare disabled",
+    "ExitLog": "2026-10-15 16:45:00.919 +09:00 Application exiting with code 0",
+    "AppAndMediaToolProcessesAbsentAfterExit": true,
+    "PreparedOutputAbsent": true,
+    "LiveSlowCancellationOrRepeatedCloseReproduced": false,
+    "SlowCancellationAndRepeatedCloseEvidence": "Controlled fake and real STA Window tests"
+  },
+  "AdditionalInitialWindowSmoke": {
+    "SourceCommit": "e784af4471592c793933dc5051343b8fade21dcf",
+    "StartedAt": "2026-10-15T16:48:27.674+09:00",
+    "OnlyInitialWindowObserved": true,
+    "ExitLog": "2026-10-15 17:26:32.103 +09:00 Application exiting with code 0",
+    "ExitInitiator": "Not observed",
+    "NoCurrentAppOrMediaToolProcesses": true
+  }
 }

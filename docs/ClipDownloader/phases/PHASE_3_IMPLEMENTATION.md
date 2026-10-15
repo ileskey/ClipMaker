@@ -1,6 +1,6 @@
 # ClipDownloader Phase 3 구현·검증 기록
 
-2026-10-15 (Asia/Seoul). **In Progress / Pending**. 필수 실제 검증 전 Completion/Passed를 부여하지 않는다.
+2026-10-16 (Asia/Seoul) 결과 정리. **필수 검증 Passed / Git 완료점 확정 대기**. 실제 실행일은 아래 관찰 시각을 따른다. 앞선 Pending 기록은 당시 상태이며 마지막 재개 기록에서 해소했다.
 
 ## 단위 0 — Git 기준 확인
 
@@ -13,7 +13,7 @@
 
 ## 검증 상태
 
-제품 구현·자동 회귀·양 사이트 실제 metadata/HTTP/decode 및 초기 실제 WPF 표시/준비/종료를 검증했다. **최종 보완 빌드의 실제 UI 재확인과 OS 100%/200% native DPI 관찰은 미완료**다. 사용자 물리 Escape로 Computer Use가 중지되어 추가 UI 조작을 중단했다. 따라서 In Progress / Pending이며 Completion/tag를 만들지 않는다. 새 패키지·도구 설치·원격 push·기존 태그 변경 없음.
+제품 구현·자동 회귀·양 사이트 실제 metadata/HTTP/decode와 최종 보완 제품의 실제 WPF 표시/준비/종료, OS 100%/200% native DPI 관찰을 완료했다. 이전 물리 Escape 중지는 사용자 재개 승인 뒤 해소했다. 지연 응답·취소·반복 종료는 실제 Window와 제어 fake 검증으로 구분한다. 새 패키지·도구 설치·원격 push·기존 태그 변경 없음. 상세 근거와 지원 제약은 아래 재개 기록을 따른다.
 
 ## 단위 1 — 상세 텍스트·선택 projection
 
@@ -109,10 +109,32 @@
 
 기존 1,230 + 신규 HTTP/연결 81 + 신규 WPF 42 = 1,353이다. WPF 직렬 실행은 32초였고 병렬 pack-resource 실패의 확정 원인을 입증한 것은 아니다. 공유 자원 경합 가설에 따른 검증 환경 보완이며 실패 이력을 보존한다.
 
-### 유지한 경계와 남은 완료 조건
+### 유지한 경계와 당시 남은 완료 조건 (재개 전 기록)
 
 - Core/Media Infrastructure/Application selector·UseCases/기존 source Downloads/CLI의 제품 diff는 0이다. media/source DI와 원본 예산도 유지한다. PreparedClip 동일 객체 1회·모든 실행 입력 무효화·최종 ClipJobResult 성공·FPS null Range=null·잔존 경고 누적 회귀를 통과했다.
 - 설계 7.3에 따라 기존 네 클립/사용자 A/V 증거는 Phase 2 기록을 유지한다. 새 미디어 생성·A/V 재생 확인을 했다고 주장하지 않는다. 일부 CHZZK MPD metadata 실패, 먼 Accurate 위치, playlist 2 MiB/계획 64 segment, SourceEndVerified=false와 codec/clock 경계는 해결된 것으로 표시하지 않는다.
 - **남음:** 최종 보완 빌드의 실제 WPF Load/이미지/입력/종료 재확인, OS 100%와 200% native DPI에서 실제 화면·키보드/복사/스크롤 관찰. 150% actual + 96/144/192 렌더/STA 검증을 이 조건의 완전 대체로 세지 않는다. 남은 조건 때문에 Baseline In Progress / Pending·Completion/tag 없음.
 - 설계 정책 변경은 없다. 주소 차단표·PNG CRC·알림 재진입 guard·테스트 직렬화는 경계의 구체화/검증 보완이며 각 근거와 trade-off는 위 단위에 기록했다. Queue/Player/ClipEditor/새 패키지/도구 설치를 추가하지 않았다.
 - 사용자 원본 설계/인계 두 untracked 파일은 수정하지 않았으며 `.artifacts/phase3-verification/inputs`에도 사본을 보존했다. 설계 원본 SHA256 `E7452BB9E99D3094CB37ACECB169F1C0299DB223173F5208FE7E3262CA819484`, 인계 원본 `382BE2106D08C3DE3A49CA6DCABE9DFCE81BA83A394EFC4050AAC6DD226F92F0`. 이 미추적 문서가 HEAD에 포함됐다고 가정하지 않는다.
+
+## 단위 4 재개 — 최종 실제 UI·native DPI·완료 검증
+
+2026-10-16 사용 한도 중단 후 기록을 재대조했다. 아래 UI·회귀 실행은 2026-10-15에 완료했고, 사용 한도로 미반영된 결과를 지금 기록한다. 재개 시작 HEAD `e784af4471592c793933dc5051343b8fade21dcf`, branch `phase/3`, tracked staged/unstaged 변경 없음, 사용자 설계/인계 두 파일만 untracked, Phase 3 tag 없음이었다. `.artifacts`와 원본 사본 SHA256을 다시 확인해 보존했다.
+
+### 실제 최종 보완 제품 관찰
+
+- 16:27:13.908 +09:00 실행, 16:27:15.942 초기화. `c4612f7`의 최종 기능 소스이며 `e784af4`는 문서 및 AssemblyInfo 빈 줄 복원만 추가한다. YouTube qnjEE-wkw8k와 CHZZK 15537558의 실제 metadata·원격 thumbnail을 다시 표시했다. 제목·업로더·길이·선택 FPS·해상도는 위 원격 표와 일치했다.
+- Windows 설정의 실제 배율을 원래 150%에서 100%, 이어 200%로 변경했다. 각 배율에서 실제 WPF 화면을 확인했다. 배율별 `dotnet test tests/ClipDownloader.Tests/ClipDownloader.Tests.csproj --no-build --no-restore --nologo --filter FullyQualifiedName~MetadataLayoutTests`는 각각 3통과·실패/skip 0, 실제 최소 620×480 Window의 `GetDpi` 관찰값은 96과 192였다. target DPI bitmap만으로 대체하지 않았다. 테스트 생성 PNG와 관찰값은 ignored `native-100`, `native-200`에 보존했다.
+- 100%에서 양 사이트 필드/이미지와 URL 변경 즉시 초기화를 관찰했다. 200%에서 CHZZK의 전체 화면과 하단 스크롤, readonly 제목 전체 선택·Ctrl+C·Tab 이동을 확인했다. 복사한 제목을 URL 입력에 Ctrl+V로 붙여 실제 복사 결과를 확인했고, 이전 정보 제거·잘못된 URL 안내·Prepare 차단을 관찰했다. 정상 URL 복구 후 필드/이미지도 복구됐다.
+- 200% 실제 CHZZK 준비: JobId `3b8e6c97-4f3d-4498-b822-f7bfb3f79721`, Fast `[0/1,10/1)`, 67,108,864 bytes/60초 예산, 명시 실행 확인 대기. Execute는 수행하지 않았다. Quality를 Best에서 360p로 바꾸면 End=10초는 유지되고 선택이 hls-696 / **30/1 FPS**로 바뀌며 기존 확인은 폐기되고 새 Prepare가 가능했다. Best의 hls-8384 / **60/1 FPS**와 다름을 실제 확인했으며 대표 FPS를 가정하지 않았다.
+- Windows 배율을 원래 **150%(권장)**로 복원하고 설정 창을 닫았다. 복원 후 같은 최소 Window 테스트 3통과, 관찰 DPI144; `native-150-restored`에 보존했다. 동일 URL 재조회 후 End=0·Best/60/1 복원, Output/Mode 유지와 정상 이미지 표시를 다시 확인했다.
+- 기존 미지원 CHZZK MPD 사례 14327648은 실제 metadata 실행 실패(`ProcessFailed`)로 안전한 한국어 안내를 표시하고 필드/이미지를 비우며 Prepare를 차단했다. 지원 확대나 thumbnail 우회로 해결하지 않았다.
+- 16:45:00.919 +09:00 `Application exiting with code 0`. 이후 앱/yt-dlp/ffmpeg/ffprobe 프로세스 없음, 설정 창 없음, `final-ui-prepare.mp4` 없음. DI/logger 순서와 지연 작업 완료 전 Close 차단은 위 소스/STA 테스트 근거와 구별한다. live 느린 이미지 취소·반복 Close·자식 강제 종료 실패를 새로 재현했다고 주장하지 않는다.
+- UI 도구의 배율 전환 중 입력 감지/좌표 오류는 새 상태 조회와 세션 재초기화로 복구했다. 설정 실행 파일 직접 실행 실패와 Explorer 주소 set_value 미입력은 성공으로 세지 않았다. 정상 설정 URI 입력으로 설정을 열었고 최종 복원 상태를 실제 확인했다. 제품 코드 변경 없음.
+
+### 마지막 전체 회귀와 중단 후 확인
+
+- 위 UI 종료 뒤 정확한 `e784af4471592c793933dc5051343b8fade21dcf`에서 `dotnet build ClipMaker.slnx --no-restore --nologo`: 성공, 경고/오류 0. 네 csproj에 위 `dotnet test ... --no-build --no-restore --nologo`를 다시 실행해 **143 + 193 + 940 + 77 = 1,353통과, 실패/skip 0**. Media Infrastructure는 기존 named pipe 제약 때문에 일반 권한에서 실행했다. 이후 제품 소스 변경 없음.
+- 추가 실행은 16:48:27.674 시작·16:48:30.746 초기화, 빈 초기 창만 관찰했다. 추가 원격 Load 검증으로 세지 않는다. 사용 한도 후 로그를 재확인한 결과 17:26:32.103 +09:00 정상 종료 코드0이며 현재 관련 프로세스와 준비 출력 파일은 없다. 이 추가 실행의 종료 조작 주체는 확인하지 않았다.
+- 기존 HTTP/decode 경계·stale/취소·반복 종료·FPS 미확인·PreparedClip 1회·최종 반환 성공 검증을 유지한다. 설계 7.3에 따라 미디어 네 클립/A-V는 Phase 2 증거를 유지하며 새 미디어 실행·재생을 주장하지 않는다. CHZZK MPD·먼 Accurate·codec/clock·원본 획득 예산 등 기존 제약도 유지한다.
+- **미완료 필수 검증 없음.** 구현·필수 검증 결과를 담는 완료 커밋과 새 `phase-3-complete` 태그를 확정하고, 그 실제 hash만 후속 문서 커밋으로 기록한다. 기존 태그 이동·push 없음. 사용자 설계/인계는 원문을 사본에 보존하고 역사적 설명에 현재 결과 링크만 덧붙여 함께 버전 관리한다.
