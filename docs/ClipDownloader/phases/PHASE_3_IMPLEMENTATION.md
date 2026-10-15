@@ -42,3 +42,10 @@
 - 최종 `dotnet build ClipMaker.slnx --no-restore --nologo` 경고/오류 0 및 WPF `dotnet test ... --no-build --no-restore --nologo` 61개 통과. 작은 JPEG/PNG·큰 정상/4096/8 MP·초과/손상/animation·frozen 픽셀 접근, Dispatcher worker, 이미지 대기 중 Prepare/확인/동일 객체 실행, stale URL/동일 URL·실패 재조회·취소 무시 decode 직렬화, 실제 Window.Show/Close 두 번과 이미지 종료 전 닫기 금지, 경고 확인·reentrant Shutdown 포함.
 - in-process WIC 강제 중단/전체 메모리 상한은 보장하지 않는다. 동기 decode가 돌아올 때까지 종료도 기다린다. UI 실작업 테스트와 실제 원격 관찰은 구분한다.
 - 7.3 영향 분석: selector/시간 변환/Prepare/Execute/media-source DI/원본 예산·미디어 정리 코드는 그대로다. 새 DI는 이미지 전용이며 기존 정리 완료 대기에 이미지 owner만 추가했다. 기존 미디어 정리 계약을 교체하지 않았다. 따라서 네 클립 재생성은 요구하지 않고 Phase 2 증거를 유지하며, 단위 4에서 실제 WPF 준비 연결·종료와 전체 회귀를 수행한다.
+
+## 단위 4 보완 — 알림 재진입 guard
+
+- 실제 양 사이트 검증 후 소스 재검토에서 PropertyChanged 수신자가 URL을 바꾸면 이미지/metadata의 여러 순차 알림 사이에 snapshot이 바뀔 수 있음을 확인했다. 채택 전 guard만으로는 이어지는 Ready/상태 알림을 보호하지 못하므로 각 채택 알림 뒤 snapshot identity를 다시 검사한다. 이미지 작업 등록/직렬 대기는 그대로 유지한다.
+- 조회 초기 알림 중 URL 변경도 원래 요청과 대조한다. 성공 시 시간 Reset에 따른 정상 inputRevision 변경과 metadata identity 변경을 구별한다. 선택·Prepare·미디어 계약 변경은 없다.
+- 새 재진입 사례 5개 포함 WPF 66개 통과·실패/skip 0 (`dotnet test ... --no-restore --nologo`, build 포함). 이미지 대입/Ready 알림, Qualities/projection/thumbnail placeholder 알림에서 URL을 바꿔도 Empty snapshot을 유지한다.
+- 실제 remote 성공/정상 종료 관찰은 이 guard 보완 전 `9989a31` 빌드에서 수행했다. 최종 코드의 원격/화면 재확인 및 전체 회귀는 아래 후속 검증에 구별해 기록한다.

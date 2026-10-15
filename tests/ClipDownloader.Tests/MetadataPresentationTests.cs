@@ -8,6 +8,25 @@ namespace ClipDownloader.Tests;
 
 public sealed class MetadataPresentationTests
 {
+    [Theory]
+    [InlineData("Qualities")]
+    [InlineData("MetadataPresentation")]
+    [InlineData("ThumbnailStatus")]
+    public async Task ReentrantUrlChangeDuringMetadataAdoptionLeavesEmptySnapshot(string property)
+    {
+        var s = new TestServices(); await s.Vm.RefreshToolsCommand.ExecuteAsync(null);
+        s.Vm.Url = s.Info.Source.PageUrl.ToString(); bool changed = false;
+        s.Vm.PropertyChanged += (_, e) =>
+        {
+            if (!changed && e.PropertyName == property &&
+                (property == "Qualities" ? s.Vm.Qualities.Count > 1 : s.Vm.MetadataPresentation != MetadataPresentation.Empty))
+            { changed = true; s.Vm.Url = "https://youtu.be/abcdefghijk"; }
+        };
+        await s.Vm.LoadMetadataCommand.ExecuteAsync(null);
+        Assert.True(changed); Assert.Equal(MetadataState.Empty, s.Vm.MetadataState);
+        Assert.Equal(MetadataPresentation.Empty, s.Vm.MetadataPresentation); Assert.Single(s.Vm.Qualities);
+        Assert.Equal("영상 정보 없음", s.Vm.ThumbnailStatus); await s.Vm.ShutdownAsync();
+    }
     [Fact]
     public void MissingFieldsFractionalLongDurationAndSafeIssues()
     {

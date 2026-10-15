@@ -62,18 +62,19 @@ public sealed partial class MainViewModel
 
     private void StartThumbnail(VideoInfo info)
     {
-        if (Lifetime != AppLifetime.Running || MetadataState != MetadataState.Ready || !ReferenceEquals(metadata, info)) return;
+        bool IsMetadataCurrent() => Lifetime == AppLifetime.Running && MetadataState == MetadataState.Ready && ReferenceEquals(metadata, info);
+        if (!IsMetadataCurrent()) return;
         if (info.ThumbnailUrl is null)
         {
-            ThumbnailState = ThumbnailState.Unavailable; ThumbnailStatus = "썸네일 없음 · 제공되지 않았거나 주소 정책에 따라 제외됨"; return;
+            ThumbnailState = ThumbnailState.Unavailable;
+            if (IsMetadataCurrent()) ThumbnailStatus = "썸네일 없음 · 제공되지 않았거나 주소 정책에 따라 제외됨";
+            return;
         }
         Task previous = thumbnailTask;
         var slot = new ThumbnailSlot(metadataRevision, ++thumbnailEpoch, info.ThumbnailUrl);
         var completion = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
         // Register task and identity before the first notification or await.
         thumbnailSlot = slot; thumbnailTask = completion.Task;
-        ThumbnailImage = null; ThumbnailState = ThumbnailState.Loading; ThumbnailStatus = "썸네일 로딩 중…";
-        CancelThumbnailCommand.NotifyCanExecuteChanged();
         _ = RunAsync();
 
         bool IsCurrent() => Lifetime == AppLifetime.Running && MetadataState == MetadataState.Ready &&
@@ -84,6 +85,11 @@ public sealed partial class MainViewModel
             var token = slot.Cancellation.Token;
             try
             {
+                ThumbnailImage = null;
+                if (IsCurrent()) ThumbnailState = ThumbnailState.Loading;
+                if (IsCurrent()) ThumbnailStatus = "썸네일 로딩 중…";
+                CancelThumbnailCommand.NotifyCanExecuteChanged();
+                // Even notification-triggered invalidation must keep the previous operation in this chain.
                 await previous;
                 if (!IsCurrent() || token.IsCancellationRequested) return;
                 var result = await Task.Run(async () =>
@@ -97,24 +103,35 @@ public sealed partial class MainViewModel
                 if (!IsCurrent() || token.IsCancellationRequested) return;
                 if (result.Image is { IsFrozen: true } image)
                 {
-                    ThumbnailImage = image; ThumbnailState = ThumbnailState.Ready; ThumbnailStatus = "썸네일 표시 완료";
+                    ThumbnailImage = image;
+                    if (!IsCurrent() || token.IsCancellationRequested) return;
+                    ThumbnailState = ThumbnailState.Ready;
+                    if (IsCurrent() && !token.IsCancellationRequested) ThumbnailStatus = "썸네일 표시 완료";
                 }
                 else
                 {
                     ThumbnailState = ThumbnailState.Failed;
-                    ThumbnailStatus = FailureText(result.Failure ?? ThumbnailFailure.InvalidImage) + " · 영상 불러오기로 다시 조회하세요.";
+                    if (IsCurrent() && !token.IsCancellationRequested)
+                        ThumbnailStatus = FailureText(result.Failure ?? ThumbnailFailure.InvalidImage) + " · 영상 불러오기로 다시 조회하세요.";
                 }
             }
             catch (OperationCanceledException) when (token.IsCancellationRequested) { }
             catch (Exception)
             {
                 if (IsCurrent() && !token.IsCancellationRequested)
-                { ThumbnailState = ThumbnailState.Failed; ThumbnailStatus = "썸네일 처리 실패 · 영상 불러오기로 다시 조회하세요."; }
+                {
+                    ThumbnailState = ThumbnailState.Failed;
+                    if (IsCurrent() && !token.IsCancellationRequested) ThumbnailStatus = "썸네일 처리 실패 · 영상 불러오기로 다시 조회하세요.";
+                }
             }
             finally
             {
                 if (IsCurrent() && token.IsCancellationRequested)
-                { ThumbnailImage = null; ThumbnailState = ThumbnailState.Cancelled; ThumbnailStatus = "썸네일 로딩 취소됨 · 영상 불러오기로 다시 조회하세요."; }
+                {
+                    ThumbnailImage = null;
+                    if (IsCurrent()) ThumbnailState = ThumbnailState.Cancelled;
+                    if (IsCurrent()) ThumbnailStatus = "썸네일 로딩 취소됨 · 영상 불러오기로 다시 조회하세요.";
+                }
                 if (ReferenceEquals(thumbnailSlot, slot)) thumbnailSlot = null;
                 slot.Cancellation.Dispose();
                 completion.TrySetResult();

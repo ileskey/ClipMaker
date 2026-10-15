@@ -14,6 +14,25 @@ public sealed class ThumbnailLifetimeTests
     private static TaskCompletionSource NewSignal() => new(TaskCreationOptions.RunContinuationsAsynchronously);
     private static async Task Wait(Task task) => await task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
 
+    [Theory]
+    [InlineData("ThumbnailImage")]
+    [InlineData("ThumbnailState")]
+    public Task ReentrantUrlChangeDuringAdoptionCannotRestoreOldImageState(string property) => DispatcherTest.Run(async () =>
+    {
+        var service = new DelayedService(); var s = new TestServices(thumbnails: service); s.Info = WithThumbnail(s.Info);
+        await s.ReadyAsync(); await Wait(service.Started.Task);
+        bool changed = false;
+        s.Vm.PropertyChanged += (_, e) =>
+        {
+            if (!changed && e.PropertyName == property && (s.Vm.ThumbnailImage is not null || s.Vm.ThumbnailState == ThumbnailState.Ready))
+            { changed = true; s.Vm.Url = "https://youtu.be/abcdefghijk"; }
+        };
+        service.Finish.SetResult(ThumbnailContentResult.Success(ThumbnailDecodeTests.Image(16, 9), ThumbnailImageKind.Png));
+        await Wait(s.Vm.ThumbnailCompletion);
+        Assert.True(changed); Assert.Null(s.Vm.ThumbnailImage); Assert.Equal(ThumbnailState.Empty, s.Vm.ThumbnailState);
+        Assert.Equal("영상 정보 없음", s.Vm.ThumbnailStatus); await s.Vm.ShutdownAsync();
+    });
+
     [Fact]
     public Task WarningAcknowledgementAndReentrantShutdownWaitForImage() => DispatcherTest.Run(async () =>
     {

@@ -120,6 +120,7 @@ public sealed partial class MainViewModel
 
     private async Task LoadMetadataAsync(CancellationToken token, long current)
     {
+        string requestedUrl = Url;
         var parsed = ParseUrl();
         InputChanged();
         metadata = null; selection = null; metadataRevision++;
@@ -129,6 +130,7 @@ public sealed partial class MainViewModel
         Quality = QualityOption.Best;
         Qualities = [QualityOption.Best];
         ValidateInputs();
+        if (!string.Equals(Url, requestedUrl, StringComparison.Ordinal) || Lifetime != AppLifetime.Running || token.IsCancellationRequested) return;
         if (parsed.Data is null) { StatusText = parsed.Error!.Message; FocusErrorRequested?.Invoke(this, EventArgs.Empty); return; }
         long revision = inputRevision;
         bool IsCurrent() => Lifetime == AppLifetime.Running && generation == current && revision == inputRevision;
@@ -147,13 +149,25 @@ public sealed partial class MainViewModel
             if (result.Data is { } info && info.State == VideoState.Completed && info.Duration > TimeSpan.Zero)
             {
                 metadata = info; metadataRevision++;
-                Start.Reset(); End.Reset(); Quality = QualityOption.Best;
+                long acceptedRevision = metadataRevision;
+                bool IsAccepted() => Lifetime == AppLifetime.Running && generation == current && metadataRevision == acceptedRevision &&
+                    ReferenceEquals(metadata, info) && !token.IsCancellationRequested;
+                Start.Reset();
+                if (!IsAccepted()) return;
+                End.Reset();
+                if (!IsAccepted()) return;
+                Quality = QualityOption.Best;
+                if (!IsAccepted()) return;
                 Qualities = MetadataPresentation.QualityOptions(info);
+                if (!IsAccepted()) return;
                 MetadataText = $"{info.Source.Platform} / {info.Source.Id}\n{info.Title ?? "제목 미확인"} · {info.Uploader ?? "업로더 미확인"}\n길이: {info.Duration}";
+                if (!IsAccepted()) return;
                 ValidateInputs();
+                if (!IsAccepted()) return;
                 ThumbnailStatus = info.ThumbnailUrl is null ? "썸네일 없음" : "썸네일 획득 연결 대기";
+                if (!IsAccepted()) return;
                 MetadataState = MetadataState.Ready;
-                if (Lifetime != AppLifetime.Running || generation != current || !ReferenceEquals(metadata, info) || token.IsCancellationRequested) return;
+                if (!IsAccepted()) return;
                 StatusText = "영상 조회 완료. 종료 시간과 MP4 출력 경로를 지정하세요.";
                 StartThumbnail(info);
             }
