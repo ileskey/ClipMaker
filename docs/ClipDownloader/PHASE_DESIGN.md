@@ -134,4 +134,6 @@ Phase 0은 요구사항과 전체 구조를 기준으로 새 context를 시작�
 
 이 문서는 Phase 설계 운영 규칙을 정의하며, 각 Phase의 실제 완료 여부는 [Phase Baseline](PHASE_BASELINE.md)과 해당 Phase의 실제 검증 기록을 따른다.
 
+다음 설계 context의 시작 자료는 [Phase 3 Metadata UI 설계 인계](phases/PHASE_3_DESIGN_HANDOFF.md)를 따른다. 이 인계는 기존 계약·증거·설계 과제를 정리하며 Phase 3 상세 설계 확정이나 구현 착수를 의미하지 않는다.
+
 2026-10-15 기준 Phase 1과 Phase 2는 구현·필수 검증을 완료했다. Phase 1 완료점과 지원 제약은 [Phase 1 최종 인계](phases/PHASE_1_FINAL_VERIFICATION_HANDOFF.md)를 따른다. Phase 2는 `phase/2`, Base `3cbb04ed09df07d75dc5b963905b497909d8daeb`, Completion `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f`, 태그 `phase-2-complete`로 확정했으며 상태는 Completed / Passed다. 검증된 제품 소스는 `86fd9f8014aba1135fe30ba6d5b14be4df3ab152`이며 이후 완료 기록·문서 정합성 커밋은 제품 소스를 변경하지 않는다. 범위와 설계는 [Phase 2 상세 설계](phases/PHASE_2_DESIGN.md), 실제 결과·해시 대응·유지할 지원 경계는 [구현·검증 기록](phases/PHASE_2_IMPLEMENTATION.md)을 따른다. 이 갱신으로 Phase 3 구현이나 상세 설계를 시작하지 않는다.
