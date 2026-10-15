@@ -56,3 +56,10 @@
 - 최초 3개 layout 테스트는 접힌 Expander의 진단 TextBox가 visual tree에 아직 없어 6개 대신 5개로 실패했다. 테스트에서 진단을 펼쳐 layout 갱신 후 검사하도록 수정했다. 투명 배경의 첫 렌더가 검정으로 보이는 문제도 검증 renderer에 흰 배경과 명시 viewbox를 적용해 수정했다. 제품 XAML을 이 때문에 변경하지 않았다.
 - WPF 전체 75통과·실패/skip 0. 렌더 viewbox 보완 후 관련 layout 3개를 재실행해 통과했다. 완료 상태/양수 duration gate 및 Ready+선택 실패의 Prepare 차단 검사도 추가했다.
 - `VisualTreeHelper.GetDpi(window).PixelsPerInchX` 실제 관찰값은 144(150%). 96/192 렌더는 OS/모니터의 실제 100%/200% 전환 관찰과 다르다. 해당 native DPI 관찰은 미완료이며 Phase 완료/Passed로 표시하지 않는다. OS 배율 설정은 변경하지 않았다.
+
+## 단위 4 보완 — 실패 알림·UI 테스트 공유 자원
+
+- 일반 실패 진단/Failed 상태의 PropertyChanged에서도 URL 변경을 재검사한다. 취소 표시도 동일 current guard로 처리하며 안전상 자원 경고 누적은 그대로 유지한다. 새 실패 알림 재진입 2개를 추가했다.
+- 병렬 실행 77개 중 기존 WindowClosing 1개가 `PackagePart.CleanUpRequestedStreamsList` → `Application.LoadComponent`의 NullReferenceException으로 실패했다. 별도 STA라도 WPF pack-resource cache/데스크톱 focus가 같은 프로세스에서 공유되는 환경임을 고려해 이 WPF 테스트 어셈블리만 직렬 실행한다. 제품은 단일 UI Dispatcher를 사용한다. 이는 실패를 삭제하거나 창 닫기 검사를 생략하는 변경이 아니다.
+- 최초 설정은 설치된 xUnit 4에서 obsolete error(CS0619)를 낸 CollectionBehavior 속성이었다. 패키지의 로컬 XML API를 확인해 `Xunit.v3.Parallelization(Mode = ParallelMode.None)`으로 수정했다. 패키지 버전 변경 없음.
+- 수정 후 `dotnet test tests/ClipDownloader.Tests/ClipDownloader.Tests.csproj --no-restore --nologo`: 77통과·실패/skip 0, 31초. 해당 build에서 경고/오류 없음. 느려진 실행을 수용하고 실제 Window·이미지 취소/종료·재진입 검사를 모두 유지했다.

@@ -9,6 +9,24 @@ namespace ClipDownloader.Tests;
 public sealed class MetadataPresentationTests
 {
     [Theory]
+    [InlineData("OperationDetails")]
+    [InlineData("MetadataState")]
+    public async Task ReentrantUrlChangeFromFailureNotificationCannotPublishOldStatus(string property)
+    {
+        var s = new TestServices(); await s.ReadyAsync(); bool changed = false;
+        s.Load = (_, _) => Task.FromResult(OperationResult<VideoInfo>.Failed(new(OperationErrorCode.ProcessFailed, OperationErrorCategory.Execution, "old failure")));
+        s.Vm.PropertyChanged += (_, e) =>
+        {
+            if (!changed && e.PropertyName == property &&
+                (property == "OperationDetails" ? s.Vm.OperationDetails.Length > 0 : s.Vm.MetadataState == MetadataState.Failed))
+            { changed = true; s.Vm.Url = "https://youtu.be/abcdefghijk"; s.Vm.StatusText = "new input"; }
+        };
+        await s.Vm.LoadMetadataCommand.ExecuteAsync(null);
+        Assert.True(changed); Assert.Equal(MetadataState.Empty, s.Vm.MetadataState);
+        Assert.Equal("new input", s.Vm.StatusText); Assert.Equal(MetadataPresentation.Empty, s.Vm.MetadataPresentation);
+        await s.Vm.ShutdownAsync();
+    }
+    [Theory]
     [InlineData(VideoState.Unknown, 42)] [InlineData(VideoState.Live, 42)] [InlineData(VideoState.Upcoming, 42)]
     [InlineData(VideoState.Completed, 0)] [InlineData(VideoState.Completed, -1)]
     public async Task IncompleteStateOrNonpositiveDurationCannotBecomeReady(VideoState state, int seconds)

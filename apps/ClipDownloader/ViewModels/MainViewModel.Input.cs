@@ -134,6 +134,12 @@ public sealed partial class MainViewModel
         if (parsed.Data is null) { StatusText = parsed.Error!.Message; FocusErrorRequested?.Invoke(this, EventArgs.Empty); return; }
         long revision = inputRevision;
         bool IsCurrent() => Lifetime == AppLifetime.Running && generation == current && revision == inputRevision;
+        void PublishCancellation()
+        {
+            if (!IsCurrent()) return;
+            MetadataState = MetadataState.Empty;
+            if (IsCurrent()) StatusText = "조회를 취소했습니다.";
+        }
         MetadataState = MetadataState.Loading;
         OperationDetails = "";
         JobState = ClipState.Idle;
@@ -144,8 +150,10 @@ public sealed partial class MainViewModel
             ObserveError(result.Error);
             RetainResources(result.RemainingTemporaryPaths);
             if (!IsCurrent()) return;
-            if (token.IsCancellationRequested) { MetadataState = MetadataState.Empty; StatusText = "조회를 취소했습니다."; return; }
+            if (token.IsCancellationRequested) { PublishCancellation(); return; }
             RecordOperationDetails(result);
+            if (!IsCurrent()) return;
+            if (token.IsCancellationRequested) { PublishCancellation(); return; }
             if (result.Data is { } info && info.State == VideoState.Completed && info.Duration > TimeSpan.Zero)
             {
                 metadata = info; metadataRevision++;
@@ -174,15 +182,19 @@ public sealed partial class MainViewModel
             else
             {
                 MetadataState = result.Status == OperationStatus.Cancelled ? MetadataState.Empty : MetadataState.Failed;
+                if (!IsCurrent()) return;
                 StatusText = result.Error?.Message ?? "완료 상태와 양의 길이를 확인한 영상이 필요합니다.";
                 FocusErrorRequested?.Invoke(this, EventArgs.Empty);
             }
         }
-        catch (OperationCanceledException) when (token.IsCancellationRequested) { if (IsCurrent()) { MetadataState = MetadataState.Empty; StatusText = "조회를 취소했습니다."; } }
+        catch (OperationCanceledException) when (token.IsCancellationRequested)
+        {
+            PublishCancellation();
+        }
         catch (Exception)
         {
             logger.LogError("Unexpected metadata failure");
-            if (IsCurrent()) { MetadataState = MetadataState.Failed; StatusText = "영상 정보 조회 중 예상하지 못한 오류가 발생했습니다."; }
+            if (IsCurrent()) { MetadataState = MetadataState.Failed; if (IsCurrent()) StatusText = "영상 정보 조회 중 예상하지 못한 오류가 발생했습니다."; }
         }
         finally { if (IsCurrent()) ValidateInputs(); else if (Lifetime != AppLifetime.Running) MetadataState = MetadataState.Empty; }
     }
