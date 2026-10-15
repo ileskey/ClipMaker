@@ -79,6 +79,7 @@ Tag는 Phase 완료점을 쉽게 찾기 위한 이름이며, Base와 Completion�
 | Phase 0 | Completed | `fc96883b18c1d6856c92ad6b029d45e095e41e69` | `0759dc52475538df848f765ce30c005cf755107f` | `phase-0-complete` | `main` | Passed | [Phase 0 상세 설계·구현 및 검증 결과](phases/PHASE_0_DESIGN.md) |
 | Phase 1 | Completed | `0759dc52475538df848f765ce30c005cf755107f` | `4509f54dadbf140f787bdfd4a16dcc2b1f964c48` | `phase-1-complete` | `phase/1` | Passed (2026-10-15: 양 사이트·양 모드 사용자 확인, 최종 build 및1195개 회귀) | [최종 검증 인계](phases/PHASE_1_FINAL_VERIFICATION_HANDOFF.md), [설계·이력](phases/PHASE_1_DESIGN.md), [6단계](phases/PHASE_1_STAGE_6_VERIFICATION.md) |
 | Phase 2 | Completed | `3cbb04ed09df07d75dc5b963905b497909d8daeb` | `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f` | `phase-2-complete` | `phase/2` | Passed (build 경고/오류 0, 1230개 테스트, 양 사이트·양 모드 실제 WPF 생성·사용자 재생/동기 확인) | [상세 설계](phases/PHASE_2_DESIGN.md), [구현·검증 기록](phases/PHASE_2_IMPLEMENTATION.md), [설계 context 인계](phases/PHASE_2_DESIGN_HANDOFF.md) |
+| Phase 3 | In Progress | `5d5a06e6a6d0b8ec8ea952e738ecf99756a53712` | — | — | `phase/3` | Pending | [상세 설계](phases/PHASE_3_DESIGN.md), [구현·검증 기록](phases/PHASE_3_IMPLEMENTATION.md) |
 
 2026-10-15 Phase 2 Git 준비 당시: 실제 시작 Base는 `phase/1`을 병합한 `3cbb04e`다. Phase 1 Completion `4509f54`는 이 Base의 ancestor이며 두 commit의 차이는 인계 문서 6개뿐이었다. 준비 시점에는 Phase 2 완료 태그를 생성하지 않았다.
 
