@@ -49,3 +49,10 @@
 - 조회 초기 알림 중 URL 변경도 원래 요청과 대조한다. 성공 시 시간 Reset에 따른 정상 inputRevision 변경과 metadata identity 변경을 구별한다. 선택·Prepare·미디어 계약 변경은 없다.
 - 새 재진입 사례 5개 포함 WPF 66개 통과·실패/skip 0 (`dotnet test ... --no-restore --nologo`, build 포함). 이미지 대입/Ready 알림, Qualities/projection/thumbnail placeholder 알림에서 URL을 바꿔도 Empty snapshot을 유지한다.
 - 실제 remote 성공/정상 종료 관찰은 이 guard 보완 전 `9989a31` 빌드에서 수행했다. 최종 코드의 원격/화면 재확인 및 전체 회귀는 아래 후속 검증에 구별해 기록한다.
+
+## 단위 4 검증 보강 — 최소 크기·문자열·렌더 DPI
+
+- 실제 STA Window.Show를 620×480으로 실행해 장문 한글/줄바꿈/emoji 제목과 장문 업로더, 30시간 길이, rational FPS, 펼친 진단의 readonly/wrap/내부 스크롤·전체 선택·접근성 Name·binding 오류 부재·가로 폭 제한을 검사했다. 96/144/192 DPI WPF RenderTargetBitmap을 상단/중간/하단에 생성해 시각 확인했다. bitmap은 ignored test bin의 `phase3-layout`에 보존한다.
+- 최초 3개 layout 테스트는 접힌 Expander의 진단 TextBox가 visual tree에 아직 없어 6개 대신 5개로 실패했다. 테스트에서 진단을 펼쳐 layout 갱신 후 검사하도록 수정했다. 투명 배경의 첫 렌더가 검정으로 보이는 문제도 검증 renderer에 흰 배경과 명시 viewbox를 적용해 수정했다. 제품 XAML을 이 때문에 변경하지 않았다.
+- WPF 전체 75통과·실패/skip 0. 렌더 viewbox 보완 후 관련 layout 3개를 재실행해 통과했다. 완료 상태/양수 duration gate 및 Ready+선택 실패의 Prepare 차단 검사도 추가했다.
+- `VisualTreeHelper.GetDpi(window).PixelsPerInchX` 실제 관찰값은 144(150%). 96/192 렌더는 OS/모니터의 실제 100%/200% 전환 관찰과 다르다. 해당 native DPI 관찰은 미완료이며 Phase 완료/Passed로 표시하지 않는다. OS 배율 설정은 변경하지 않았다.

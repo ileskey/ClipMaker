@@ -9,6 +9,29 @@ namespace ClipDownloader.Tests;
 public sealed class MetadataPresentationTests
 {
     [Theory]
+    [InlineData(VideoState.Unknown, 42)] [InlineData(VideoState.Live, 42)] [InlineData(VideoState.Upcoming, 42)]
+    [InlineData(VideoState.Completed, 0)] [InlineData(VideoState.Completed, -1)]
+    public async Task IncompleteStateOrNonpositiveDurationCannotBecomeReady(VideoState state, int seconds)
+    {
+        var s = new TestServices(); var info = s.Info;
+        s.Info = new(info.Source, info.Title, TimeSpan.FromSeconds(seconds), info.Uploader, info.ThumbnailUrl, null, state, info.Formats, []);
+        await s.Vm.RefreshToolsCommand.ExecuteAsync(null); s.Vm.Url = info.Source.PageUrl.ToString();
+        await s.Vm.LoadMetadataCommand.ExecuteAsync(null);
+        Assert.Equal(MetadataState.Failed, s.Vm.MetadataState); Assert.Equal(MetadataPresentation.Empty, s.Vm.MetadataPresentation);
+        Assert.False(s.Vm.PrepareCommand.CanExecute(null)); await s.Vm.ShutdownAsync();
+    }
+
+    [Fact]
+    public async Task MetadataReadyWithNoSelectionRetainsFieldsAndBlocksPreparation()
+    {
+        var s = new TestServices(); var info = s.Info;
+        s.Info = new(info.Source, info.Title, info.Duration, info.Uploader, null, null, info.State, [], []);
+        await s.ReadyAsync(); Assert.Equal(MetadataState.Ready, s.Vm.MetadataState);
+        Assert.Equal(info.Title, s.Vm.MetadataPresentation.Title); Assert.Equal("선택 포맷 없음", s.Vm.MetadataPresentation.FrameRate);
+        Assert.Equal("해상도 미확인", s.Vm.MetadataPresentation.Resolutions); Assert.False(s.Vm.PrepareCommand.CanExecute(null));
+        await s.Vm.ShutdownAsync();
+    }
+    [Theory]
     [InlineData("Qualities")]
     [InlineData("MetadataPresentation")]
     [InlineData("ThumbnailStatus")]
