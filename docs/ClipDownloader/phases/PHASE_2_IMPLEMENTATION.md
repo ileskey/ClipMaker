@@ -1,6 +1,6 @@
 # Phase 2 구현·검증 기록
 
-2026-10-15 (Asia/Seoul). **WPF MVP 구현·필수 검증 및 논리 단위 커밋 완료**. 검증된 제품 소스는 `9a01d56a5fbddd74f21d10accf2ace36aed2138f`다. Git Completion/완료 태그 지정은 별도로 남겨둔다. 아래 단계별 실패·수정·통과 기록과 최종 결과를 구분한다.
+2026-10-15 (Asia/Seoul). **Completed / Passed**. Completion은 `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f`, 완료 태그는 `phase-2-complete`다. 검증된 제품 소스는 `86fd9f8014aba1135fe30ba6d5b14be4df3ab152`다. 아래 단계별 실패·수정·통과 기록과 최종 결과를 구분하며, 이전 검증 커밋과 현재 커밋의 대응은 마지막 절에 기록한다.
 
 ## 시작 상태
 
@@ -110,12 +110,24 @@ Prepare/Execute 계약 연결 코드는 입력 검증의 컴파일 의존성과 
 
 | 단위 | 커밋/범위 | 커밋 직전 실제 검증 |
 |---|---|---|
-| 입력·파일 선택 기반 | `9eeafc9` — 필드 오류·TimecodeInputViewModel·파일명 정리·dialog 계약/구현, 5개 파일 | staged-only 스냅샷 솔루션 build 경고/오류 0, 해당 스냅샷을 참조하는 직접 helper 검사 9개 통과 |
-| WPF 통합·종료·테스트 | `9a01d56a5fbddd74f21d10accf2ace36aed2138f` — metadata/Prepare/Execute·DI·화면·종료·호스트 테스트, 17개 파일 | staged-only 스냅샷 build 경고/오류 0, Core 143 / Media Infrastructure 193 / Downloader Infrastructure 859 / WPF 35, 총 1230개 통과·실패/skip 0 |
-| 검증·설계·Baseline 기록 | 이 절과 실제 미디어 증거·설계 상태를 포함하는 문서 커밋 | JSON 구조·미디어 네 파일 SHA256/크기·신규 문서 링크·staged whitespace 확인. 제품 소스 변경 없음 |
+| 입력·파일 선택 기반 | `61652d280b4fc1992410358fbb928fbe4c6d0fd3` — 필드 오류·TimecodeInputViewModel·파일명 정리·dialog 계약/구현, 5개 파일 | staged-only 스냅샷 솔루션 build 경고/오류 0, 해당 스냅샷을 참조하는 직접 helper 검사 9개 통과 |
+| WPF 통합·종료·테스트 | `86fd9f8014aba1135fe30ba6d5b14be4df3ab152` — metadata/Prepare/Execute·DI·화면·종료·호스트 테스트, 17개 파일 | staged-only 스냅샷 build 경고/오류 0, Core 143 / Media Infrastructure 193 / Downloader Infrastructure 859 / WPF 35, 총 1230개 통과·실패/skip 0 |
+| 검증·설계·Baseline 기록 | `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f` — 커밋 정리와 실제 미디어 증거·설계 상태를 포함하는 완료 기록 | JSON 구조·미디어 네 파일 SHA256/크기·신규 문서 링크·staged whitespace 확인. 제품 소스 변경 없음 |
 
 단위 1과 2는 `git checkout-index --all --prefix=...`로 인덱스의 파일만 ignored `.artifacts/phase2-commit-validation/01-input-foundation`, `02-wpf-workflow`에 추출했다. 두 번째 스냅샷 내부를 작업 디렉터리로 하여 각 테스트 프로젝트를 실행했다. 미스테이징 제품 코드나 기존 bin/obj에 의존해 통과한 결과가 아니다. 첫 단위의 helper 검사는 `.artifacts/phase2-commit-validation/input-helper-checks`에 보존하며 영구 xUnit 1230개와 별도 검사다.
 
 첫 격리 빌드의 기본 병렬 restore/build는 exit 1·표시 오류 0으로 끝나 원인을 확정하지 않았다. 별도 프로젝트 restore에서 네트워크 제한으로 NuGet 취약성 데이터 조회 경고 NU1900도 관찰했다. 이후 기존 패키지 캐시로 `dotnet restore ... --ignore-failed-sources -p:NuGetAudit=false -m:1`, `dotnet build ... --no-restore --disable-build-servers -m:1`을 실행해 두 스냅샷 모두 경고/오류 0을 확인했다. 이는 격리 검증 명령의 일회성 옵션이며 저장소 패키지/보안 설정은 변경하지 않았다. 취약성 데이터 조회를 수행한 것으로 주장하지 않는다.
 
-현재 검증된 제품 소스 기준은 `9a01d56a5fbddd74f21d10accf2ace36aed2138f`이고 후속 문서 커밋은 이 제품 소스를 변경하지 않는다. 구현·검증 및 커밋과 공식 Phase Completion/태그 지정을 구별한다. Baseline에는 검증된 제품 기준을 명시하되 Completion/태그는 임의 지정하지 않으며, 원격 push도 수행하지 않는다.
+위 커밋 표는 현재 Git 식별자로 갱신한 것이다. 실제 staged-only 검증 당시의 식별자는 아래 대응 표에 보존한다. 검증을 수행한 시점이나 결과를 새로 실행한 것처럼 바꾸지 않는다.
+
+### 완료 태그·현재 커밋 대응 확인 (2026-10-15)
+
+| 이전 검증/기록 커밋 | 현재 커밋 | 실제 tree 비교 |
+|---|---|---|
+| `9eeafc9` | `61652d2` | `6ac7d08df9ffca35355397ed4e81f7790e357496` — 동일 |
+| `9a01d56` | `86fd9f8` | `18f157db999263dfcd76695b80f115096ea2b860` — 동일 |
+| `cd1b0dc` | `b4ef126` | `22378a2027b13eac30c8a1c2044f6b0f4e7ebffb` — 동일 |
+
+`git rev-parse phase-2-complete^{commit}`가 `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f`임을 확인했다. 확인 시 HEAD와 로컬 원격 추적 참조 `origin/phase/2`도 같았고 작업 트리는 clean이었다. 실제 원격 서버 재조회는 하지 않았다. Base `3cbb04e`와 제품 소스 `86fd9f8`는 Completion의 ancestor다. 같은 tree이므로 이전 build/test와 실제 동작 검증 기록을 해당 현재 커밋의 검증 근거로 유지한다.
+
+기존 완료 태그를 기준으로 사용자 요청에 따라 Baseline·운영 규칙·상세 설계·이 기록 및 증거 JSON을 Completed / Passed와 현재 해시로 정합화했다. 최초 설계 인계에는 현재 완료 기록을 가리키는 안내를 추가하고 당시 이력은 보존했다. 이번 갱신은 문서와 증거의 Git 메타데이터 변경뿐이며 제품 코드·미디어 hash/재생 결과를 변경하거나 build/test를 재실행하지 않았다. 문서 상대 링크·JSON 필드·Git ancestry/tree·공백을 확인했다. 후속 문서 정합성 커밋은 Completion/태그를 이동하지 않으며, 새 태그 생성·원격 push도 수행하지 않는다.

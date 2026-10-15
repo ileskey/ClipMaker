@@ -1,5 +1,7 @@
 # ClipDownloader Phase 2 설계 context 인계
 
+현재 상태 (2026-10-15): Phase 2는 **Completed / Passed**, Completion `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f`, 태그 `phase-2-complete`다. 최종 결과·지원 경계·검증된 제품 기준은 [구현·검증 기록](PHASE_2_IMPLEMENTATION.md)을 따른다. 아래 내용은 Phase 2 설계 시작 전의 역사적 인계이며, 당시 branch/미구현 설명을 현재 상태로 해석하지 않는다.
+
 작성일: 2026-10-15 (Asia/Seoul). 대상은 **Phase2 — WPF MVP 상세 설계**다. Phase1 구현 context에서 완료 결과·실제 계약·제약을 정리한 준비 자료이며 Phase2 상세 설계안의 채택이나 제품 구현 착수 기록이 아니다.
 
 ## 1. 기준 소스와 보존 조건

@@ -78,9 +78,11 @@ Tag는 Phase 완료점을 쉽게 찾기 위한 이름이며, Base와 Completion�
 |---|---|---|---|---|---|---|---|
 | Phase 0 | Completed | `fc96883b18c1d6856c92ad6b029d45e095e41e69` | `0759dc52475538df848f765ce30c005cf755107f` | `phase-0-complete` | `main` | Passed | [Phase 0 상세 설계·구현 및 검증 결과](phases/PHASE_0_DESIGN.md) |
 | Phase 1 | Completed | `0759dc52475538df848f765ce30c005cf755107f` | `4509f54dadbf140f787bdfd4a16dcc2b1f964c48` | `phase-1-complete` | `phase/1` | Passed (2026-10-15: 양 사이트·양 모드 사용자 확인, 최종 build 및1195개 회귀) | [최종 검증 인계](phases/PHASE_1_FINAL_VERIFICATION_HANDOFF.md), [설계·이력](phases/PHASE_1_DESIGN.md), [6단계](phases/PHASE_1_STAGE_6_VERIFICATION.md) |
-| Phase 2 | In Progress (구현·필수 검증·커밋 완료, 공식 완료점 미지정) | `3cbb04ed09df07d75dc5b963905b497909d8daeb` | — | — | `phase/2` | Pending (제품 기준 `9a01d56` 검증 통과, Completion 지정 대기) | [상세 설계](phases/PHASE_2_DESIGN.md), [구현·검증 기록](phases/PHASE_2_IMPLEMENTATION.md), [설계 context 인계](phases/PHASE_2_DESIGN_HANDOFF.md) |
+| Phase 2 | Completed | `3cbb04ed09df07d75dc5b963905b497909d8daeb` | `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f` | `phase-2-complete` | `phase/2` | Passed (build 경고/오류 0, 1230개 테스트, 양 사이트·양 모드 실제 WPF 생성·사용자 재생/동기 확인) | [상세 설계](phases/PHASE_2_DESIGN.md), [구현·검증 기록](phases/PHASE_2_IMPLEMENTATION.md), [설계 context 인계](phases/PHASE_2_DESIGN_HANDOFF.md) |
 
-2026-10-15 Phase 2 Git 준비: 실제 시작 Base는 `phase/1`을 병합한 `3cbb04e`다. Phase 1 Completion `4509f54`는 이 Base의 ancestor이며 두 commit의 차이는 인계 문서 6개뿐이다. 제품 소스 기준은 기존 Completion을 유지하고 실제 Phase 2 분기점을 별도 기록한다. Phase 2 완료 태그는 생성하지 않는다.
+2026-10-15 Phase 2 Git 준비 당시: 실제 시작 Base는 `phase/1`을 병합한 `3cbb04e`다. Phase 1 Completion `4509f54`는 이 Base의 ancestor이며 두 commit의 차이는 인계 문서 6개뿐이었다. 준비 시점에는 Phase 2 완료 태그를 생성하지 않았다.
+
+2026-10-15 Phase 2 완료 확정: 기존 `phase-2-complete`의 dereferenced commit이 `b4ef12692da9268c72c2a42e6c0ab73351d7bb9f`임을 확인했다. 검증된 제품 소스 `86fd9f8014aba1135fe30ba6d5b14be4df3ab152`는 Completion의 ancestor다. 이전 검증 기록의 커밋과 현재 커밋은 각각 tree가 동일하며, 해시 대응과 실제 검증 범위는 구현·검증 기록을 따른다. 후속 문서 정합성 커밋은 Completion이나 태그를 이동하지 않는다.
 
 2026-10-14 Git 보완: 기록된 Phase 0 Completion/Phase 1 Base `0759dc5`는 현재 HEAD의 ancestor가 아니며 실제 선행 Phase 0 commit은 `1ca2547`이다. 두 commit의 parent와 source tree는 같고 소스 diff는0이다. 기록 hash를 임의 교체하거나 이력을 변경하지 않는다. [4단계 Git 대조](phases/PHASE_1_STAGE_4_VERIFICATION.md)에서 기준 snapshot과 실제 ancestry를 구별한다.
 
