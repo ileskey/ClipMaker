@@ -3,9 +3,9 @@
   "Branch": "phase/3",
   "Base": "5d5a06e6a6d0b8ec8ea952e738ecf99756a53712",
   "ValidatedProductCommit": "e784af4471592c793933dc5051343b8fade21dcf",
-  "PhaseStatus": "Required verification complete; completion commit pending",
+  "PhaseStatus": "Completed",
   "Verification": "Passed",
-  "Completion": null,
+  "Completion": "a6b6177ad8969a3eaf919deaaf497132728a8613",
   "Environment": {
     "OS": "Windows 11 Pro 10.0.26200",
     "YtDlp": "2026.08.19",
@@ -150,5 +150,6 @@
     "ExitLog": "2026-10-15 17:26:32.103 +09:00 Application exiting with code 0",
     "ExitInitiator": "Not observed",
     "NoCurrentAppOrMediaToolProcesses": true
-  }
+  },
+  "Tag": "phase-3-complete"
 }
